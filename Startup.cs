@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data;
 using TelegramClone.Hubs;
+using Microsoft.AspNetCore.Http;
 
 namespace TelegramClone
 {
@@ -32,6 +33,8 @@ namespace TelegramClone
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 
+            services.AddCors();
+           
             services.AddSignalR();
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
@@ -48,11 +51,18 @@ namespace TelegramClone
                 app.UseDeveloperExceptionPage();
             }
 
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors(options => options
+                .WithOrigins(new[] { "http://localhost:3000" })
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials());
 
             app.UseAuthorization();
 
