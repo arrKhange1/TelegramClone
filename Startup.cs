@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data;
+using TelegramClone.Hubs;
 
 namespace TelegramClone
 {
@@ -31,6 +32,7 @@ namespace TelegramClone
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 
+            services.AddSignalR();
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
@@ -57,6 +59,7 @@ namespace TelegramClone
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
 
             app.UseSpa(spa =>
