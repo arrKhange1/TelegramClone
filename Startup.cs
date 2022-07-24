@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 using TelegramClone.Data;
 using TelegramClone.Hubs;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace TelegramClone
 {
@@ -34,9 +37,28 @@ namespace TelegramClone
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 
             services.AddCors();
-           
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                            Configuration["Jwt:Key"]))
+                    };
+
+                });
+
             services.AddSignalR();
+
+            services.AddMvc();
             services.AddControllers();
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "telegram_client/build";
@@ -64,6 +86,7 @@ namespace TelegramClone
                 .AllowAnyMethod()
                 .AllowCredentials());
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
