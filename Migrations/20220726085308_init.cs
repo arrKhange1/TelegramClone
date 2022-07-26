@@ -95,6 +95,16 @@ namespace TelegramClone.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "RoleId", "RoleName" },
+                values: new object[] { new Guid("a2a23111-bc87-44de-8ca8-e13cface8c45"), "admin" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserId", "Password", "RoleId", "UserName" },
+                values: new object[] { new Guid("e12b3dda-d688-43ee-a04b-28d064d4aab4"), "AQAAAAEAACcQAAAAEGH6iBe7yNyxLRDFBPupFqNTXl7aF++8zubImX84SBZc9kkWBJdfbVsNsTFUbJinjA==", new Guid("a2a23111-bc87-44de-8ca8-e13cface8c45"), "admin" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ChatUsers_ChatId",
                 table: "ChatUsers",

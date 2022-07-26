@@ -86,6 +86,13 @@ namespace TelegramClone.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = new Guid("a2a23111-bc87-44de-8ca8-e13cface8c45"),
+                            RoleName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("TelegramClone.Models.User", b =>
@@ -108,6 +115,15 @@ namespace TelegramClone.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("e12b3dda-d688-43ee-a04b-28d064d4aab4"),
+                            Password = "AQAAAAEAACcQAAAAEGH6iBe7yNyxLRDFBPupFqNTXl7aF++8zubImX84SBZc9kkWBJdfbVsNsTFUbJinjA==",
+                            RoleId = new Guid("a2a23111-bc87-44de-8ca8-e13cface8c45"),
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("TelegramClone.Models.ChatUser", b =>

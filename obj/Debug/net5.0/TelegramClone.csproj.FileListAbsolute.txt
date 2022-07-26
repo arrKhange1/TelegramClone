@@ -58,3 +58,4 @@ C:\Users\Артур\source\repos\TelegramClone\TelegramClone\bin\Debug\net5.0\Mi
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\bin\Debug\net5.0\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\obj\Debug\net5.0\TelegramClone.csproj.AssemblyReference.cache
+C:\Users\Артур\source\repos\TelegramClone\TelegramClone\bin\Debug\net5.0\BouncyCastle.Crypto.dll

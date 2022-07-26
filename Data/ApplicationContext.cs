@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,25 @@ namespace TelegramClone.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            // admin
+            var adminRole = new Role
+            {
+                RoleId = Guid.NewGuid(),
+                RoleName = "admin"
+            };
+            var admin = modelBuilder.Entity<Role>().HasData(adminRole);
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                UserId = Guid.NewGuid(),
+                UserName = "admin",
+                Password = "123456",
+                RoleId = adminRole.RoleId
+            });
+            //
+
             modelBuilder.Entity<ChatUser>()
                 .HasOne(chat => chat.Chat)
                 .WithMany(cu => cu.ChatUsers)
@@ -27,6 +47,7 @@ namespace TelegramClone.Data
                 .HasOne(user => user.User)
                 .WithMany(cu => cu.ChatUsers)
                 .HasForeignKey(cu => cu.UserId);
+
 
 
         }
