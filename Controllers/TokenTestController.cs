@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TelegramClone.Data;
 using TelegramClone.Models;
+using TelegramClone.Services;
 
 namespace TelegramClone.Controllers
 {
@@ -22,6 +23,7 @@ namespace TelegramClone.Controllers
         }
 
        [HttpGet("Public")]
+       [AllowAnonymous]
        public IActionResult Public()
         {
             return Ok("Hi, Public");
@@ -31,7 +33,7 @@ namespace TelegramClone.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult Admin()
         {
-            var user = GetCurrentUser();
+            var user = new UserService(_context).GetCurrentUser(HttpContext);
             return Ok($"Hi, {user.UserName}, {user.RoleId}");
         }
 
@@ -39,28 +41,22 @@ namespace TelegramClone.Controllers
         [Authorize(Roles = "user")]
         public IActionResult Users()
         {
-            var user = GetCurrentUser();
+            var user = new UserService(_context).GetCurrentUser(HttpContext);
+
+
             return Ok($"Hi, {user.UserName}, {user.RoleId}");
         }
 
-        private User GetCurrentUser()
+        [HttpGet("Authorized")]
+        [Authorize]
+        public IActionResult Authorized()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var user = new UserService(_context).GetCurrentUser(HttpContext);
 
-            if (identity != null)
-            {
-                var userClaims = identity.Claims;
-                var roleName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role).Value;
 
-                return new User
-                {
-                    UserName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value,
-                    RoleId = _context.Roles.FirstOrDefault(role => role.RoleName == roleName).RoleId
-
-                };
-            }
-
-            return null;
+            return Ok($"Hi, {user.UserName}, {user.RoleId}");
         }
+
+        
     }
 }
