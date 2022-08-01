@@ -39,7 +39,7 @@ namespace TelegramClone.Controllers
             if (user != null)
             {
                 var token = Generate(user);
-                return Ok(token);
+                return Ok(new {token = token, userName = user.UserName, role = _context.Roles.FirstOrDefault(role => role.RoleId == user.RoleId).RoleName });
             }
 
             return NotFound("User not found");
