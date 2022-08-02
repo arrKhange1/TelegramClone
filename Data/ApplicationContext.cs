@@ -27,7 +27,14 @@ namespace TelegramClone.Data
                 RoleId = Guid.NewGuid(),
                 RoleName = "admin"
             };
+            // user
+            var userRole = new Role
+            {
+                RoleId = Guid.NewGuid(),
+                RoleName = "user"
+            };
             var admin = modelBuilder.Entity<Role>().HasData(adminRole);
+            var user = modelBuilder.Entity<Role>().HasData(userRole);
 
             modelBuilder.Entity<User>().HasData(new User
             {

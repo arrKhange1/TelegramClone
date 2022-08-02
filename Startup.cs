@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TelegramClone.Data.Interfaces;
+using TelegramClone.Data.Implementations;
 
 namespace TelegramClone
 {
@@ -35,6 +37,9 @@ namespace TelegramClone
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+
+            services.AddScoped<IRoleRepository, RoleMSSQLRepository>();
+            services.AddScoped<IUserRepository, UserMSSQLRepository>();
 
             services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

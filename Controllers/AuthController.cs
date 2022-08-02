@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TelegramClone.Data;
+using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
 using TelegramClone.Models.DTO;
 
@@ -22,34 +23,68 @@ namespace TelegramClone.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly ApplicationContext _context;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IUserRepository _userRepository;
+        
 
-        public AuthController(ApplicationContext context, IConfiguration config)
+        public AuthController(ApplicationContext context, IConfiguration config,
+            IRoleRepository roleRepository, IUserRepository userRepository)
         {
             _config = config;
-            _context = context;
-
+            _roleRepository = roleRepository;
+            _userRepository = userRepository;
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost ("login")]
         public IActionResult Login([FromBody] UserLogin userLogin)
         {
             var user = Authenticate(userLogin);
             if (user != null)
             {
                 var token = Generate(user);
-                return Ok(new {token = token, userName = user.UserName, role = _context.Roles.FirstOrDefault(role => role.RoleId == user.RoleId).RoleName });
+                return Ok(new {
+                    token = token,
+                    userName = user.UserName, 
+                    role = _roleRepository.GetRoleById(user).RoleName });
             }
 
             return NotFound("User not found");
+        }
+
+        [AllowAnonymous]
+        [HttpPost ("register")]
+        public async Task<IActionResult> Register([FromBody] UserLogin userLogin)
+        {
+            var user = _userRepository.GetUserByUsername(userLogin);
+            if (user == null)
+            {
+                Guid userRole = _roleRepository.GetRoleByName("user").RoleId;
+                var createdUser = new User 
+                {
+                    UserName = userLogin.UserName,
+                    Password = userLogin.Password,
+                    RoleId = userRole,
+                };
+                await _userRepository.AddUser(createdUser);
+
+                var token = Generate(createdUser);
+                return Ok(new
+                {
+                    token = token,
+                    userName = createdUser.UserName,
+                    role = "user"
+                });
+            }
+
+            return BadRequest("User already exists");
         }
 
         private string Generate(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var userRole = _context.Roles.FirstOrDefault(role => role.RoleId == user.RoleId);
+            var userRole = _roleRepository.GetRoleById(user);
 
             var claims = new[]
             {
@@ -69,11 +104,10 @@ namespace TelegramClone.Controllers
 
         private User Authenticate(UserLogin userLogin)
         {
-            var authenticatedUser = _context.Users.FirstOrDefault(user => user.UserName == userLogin.UserName &&
-                user.Password == userLogin.Password);
+            var authenticatedUser = _userRepository.GetUserByUsernameAndPassword(userLogin);
             if (authenticatedUser != null)
                 return authenticatedUser;
-            return null; // на продакшене так не аутентифицировать
+            return null;
         }
     }
 }

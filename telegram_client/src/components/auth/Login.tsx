@@ -8,16 +8,13 @@ import axios, { AxiosError } from 'axios';
 import { ILoginResponse } from '../../@types/IUser';
 import { useAuth } from '../../hooks/useAuth';
 
-interface CustomizedState {
-    myState: string
-  }
 
 function Login() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const user = useAuth();
 
-    const LogIn = async (e: FormEvent<HTMLFormElement>) => {
+    const login = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
         const formData = new FormData(e.currentTarget);
@@ -26,7 +23,7 @@ function Login() {
             Password: formData.get('password')
         }
         try {
-            const response = await axios.post<ILoginResponse>('auth', body);
+            const response = await axios.post<ILoginResponse>('auth/login', body);
             await dispatch(signIn({...response.data, isAuthenticated:true}));
             console.log(user);
             navigate('/');
@@ -39,10 +36,11 @@ function Login() {
     }
 
     return (
-        <form onSubmit={LogIn}>
+        <form onSubmit={login}>
             <input type="text" placeholder='username' name='username'/>
             <input type="password" placeholder='password' name='password' />
             <button type='submit'>Log In</button>
+            <Link to='/register'>Нет аккаунта? Регистрируйся!</Link>
         </form>
     );
 }
