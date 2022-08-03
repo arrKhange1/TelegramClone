@@ -58,6 +58,11 @@ namespace TelegramClone.Controllers
                 return Unauthorized("Invalid attempt!");
             }
 
+            if (savedRefreshToken.ExpireDate.Value.ToUniversalTime() <= DateTime.UtcNow)
+            {
+                return Unauthorized("Refresh token expired");
+            }
+
             var newRefreshToken = _jwtService.GenerateRefreshToken();
 
             if (newRefreshToken == null)
@@ -65,11 +70,13 @@ namespace TelegramClone.Controllers
                 return Unauthorized("Invalid attempt!");
             }
 
+
             // saving refresh token to the db
             RefreshToken newUserToken = new RefreshToken
             {
                 Token = newRefreshToken,
-                UserId = user.UserId
+                UserId = user.UserId,
+                ExpireDate = DateTime.Now.AddMinutes(2)
             };
 
             await _userRefreshTokensRepository.DeleteUserRefreshTokens(user.UserId, token.RefreshToken);
@@ -83,7 +90,7 @@ namespace TelegramClone.Controllers
 
         [AllowAnonymous]
         [HttpPost ("login")]
-        public IActionResult Login([FromBody] UserLogin userLogin)
+        public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
         {
             var user = Authenticate(userLogin);
             if (user != null)
@@ -94,10 +101,12 @@ namespace TelegramClone.Controllers
                 RefreshToken userToken = new RefreshToken
                 {
                     Token = refreshToken,
-                    UserId = user.UserId
+                    UserId = user.UserId,
+                    ExpireDate = DateTime.Now.AddMinutes(2)
                 };
 
-                _userRefreshTokensRepository.AddUserRefreshTokens(userToken);
+                await _userRefreshTokensRepository.DeleteAllUserRefreshTokens(user.UserId);
+                await _userRefreshTokensRepository.AddUserRefreshTokens(userToken);
 
                 return Ok(new {
                     accessToken = accessToken,
@@ -131,7 +140,8 @@ namespace TelegramClone.Controllers
                 RefreshToken userToken = new RefreshToken
                 {
                     Token = refreshToken,
-                    UserId = createdUser.UserId
+                    UserId = createdUser.UserId,
+                    ExpireDate = DateTime.Now.AddMinutes(2)
                 };
 
                 await _userRefreshTokensRepository.AddUserRefreshTokens(userToken);

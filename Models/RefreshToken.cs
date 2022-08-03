@@ -12,5 +12,6 @@ namespace TelegramClone.Models
         public User User { get; set; }
         public string Token { get; set; }
         public bool isActive { get; set; } = true;
+        public DateTime? ExpireDate { get; set; }
     }
 }

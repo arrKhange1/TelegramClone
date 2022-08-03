@@ -23,7 +23,20 @@ namespace TelegramClone.Data.Implementations
 			return user;
 		}
 
-		public async Task<RefreshToken> DeleteUserRefreshTokens(Guid userId, string refreshToken)
+        public async Task<RefreshToken> DeleteAllUserRefreshTokens(Guid userId)
+        {
+			var userToken = _context.RefreshTokens.FirstOrDefault(u => u.UserId == userId);
+			if (userToken != null)
+            {
+				_context.RefreshTokens.Remove(userToken);
+				await _context.SaveChangesAsync();
+			}
+			return userToken;
+
+
+		}
+
+		public async Task<RefreshToken> DeleteUserRefreshTokens(Guid userId, string refreshToken) 
 		{
 			var userToken = _context.RefreshTokens.FirstOrDefault(u => u.UserId == userId && u.Token == refreshToken);
 			if (userToken != null)

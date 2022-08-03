@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelegramClone.Data;
 
 namespace TelegramClone.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20220803132315_add_exp_date")]
+    partial class add_exp_date
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +82,7 @@ namespace TelegramClone.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("ExpireDate")
+                    b.Property<DateTime>("ExpireDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Token")
@@ -115,12 +117,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = new Guid("a4af6202-9dc9-4414-b07c-608e32dd366e"),
+                            RoleId = new Guid("ca96e9a8-fc22-4b03-a531-4d01815e562b"),
                             RoleName = "admin"
                         },
                         new
                         {
-                            RoleId = new Guid("860fa9c5-df14-494a-91f9-f8c930f6e8f3"),
+                            RoleId = new Guid("2a1f3701-5aea-4670-8cc9-cebe6a7d04b1"),
                             RoleName = "user"
                         });
                 });
@@ -149,9 +151,9 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("65780ee3-3075-44b0-a659-90585bee5af8"),
+                            UserId = new Guid("a73d9867-80a8-4e2e-84d8-ef49eb556b8a"),
                             Password = "123456",
-                            RoleId = new Guid("a4af6202-9dc9-4414-b07c-608e32dd366e"),
+                            RoleId = new Guid("ca96e9a8-fc22-4b03-a531-4d01815e562b"),
                             UserName = "admin"
                         });
                 });
