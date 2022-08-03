@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Data.Implementations;
+using TelegramClone.Services;
 
 namespace TelegramClone
 {
@@ -36,25 +37,29 @@ namespace TelegramClone
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection), ServiceLifetime.Transient);
 
             services.AddScoped<IRoleRepository, RoleMSSQLRepository>();
             services.AddScoped<IUserRepository, UserMSSQLRepository>();
+            services.AddScoped<IUserRefreshTokensRepository, UserRefreshTokensMSSQLRepository>();
+            services.AddScoped<JWTService>();
 
             services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = Configuration["Jwt:Issuer"],
                         ValidAudience = Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                            Configuration["Jwt:Key"]))
+                            Configuration["Jwt:Key"])),
+                        ClockSkew = TimeSpan.Zero
                     };
                     // для сигнал р токена
                     options.Events = new JwtBearerEvents
@@ -71,8 +76,17 @@ namespace TelegramClone
                                 context.Token = accessToken;
                             }
                             return Task.CompletedTask;
+                        },
+
+                        OnAuthenticationFailed = context => {
+                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
+                            }
+                            return Task.CompletedTask;
                         }
                     };
+                    
 
                 });
 

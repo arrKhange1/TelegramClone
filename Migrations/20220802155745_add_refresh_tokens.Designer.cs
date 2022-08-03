@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelegramClone.Data;
 
 namespace TelegramClone.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20220802155745_add_refresh_tokens")]
+    partial class add_refresh_tokens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,28 +76,6 @@ namespace TelegramClone.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.RefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("isActive")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens");
-                });
-
             modelBuilder.Entity("TelegramClone.Models.Role", b =>
                 {
                     b.Property<Guid>("RoleId")
@@ -112,12 +92,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = new Guid("6222d624-675e-4af2-8086-c65c4b539656"),
+                            RoleId = new Guid("e49e1570-4c96-4471-8cc8-943680d10ef2"),
                             RoleName = "admin"
                         },
                         new
                         {
-                            RoleId = new Guid("85848541-1e30-4697-9ce1-5456ddde9718"),
+                            RoleId = new Guid("887d1112-fc89-49cd-a7f9-9ec747e8bf17"),
                             RoleName = "user"
                         });
                 });
@@ -146,11 +126,34 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("27f0df77-b564-4677-910f-d7b89849539c"),
+                            UserId = new Guid("f4590a0f-04af-4275-b3ad-2f51b38ec5fd"),
                             Password = "123456",
-                            RoleId = new Guid("6222d624-675e-4af2-8086-c65c4b539656"),
+                            RoleId = new Guid("e49e1570-4c96-4471-8cc8-943680d10ef2"),
                             UserName = "admin"
                         });
+                });
+
+            modelBuilder.Entity("TelegramClone.Models.UserRefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserRefreshTokens");
                 });
 
             modelBuilder.Entity("TelegramClone.Models.ChatUser", b =>
@@ -180,17 +183,6 @@ namespace TelegramClone.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.RefreshToken", b =>
-                {
-                    b.HasOne("TelegramClone.Models.User", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TelegramClone.Models.User", b =>
                 {
                     b.HasOne("TelegramClone.Models.Role", "Role")
@@ -198,6 +190,17 @@ namespace TelegramClone.Migrations
                         .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("TelegramClone.Models.UserRefreshToken", b =>
+                {
+                    b.HasOne("TelegramClone.Models.User", "User")
+                        .WithOne("UserRefreshToken")
+                        .HasForeignKey("TelegramClone.Models.UserRefreshToken", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TelegramClone.Models.Chat", b =>
@@ -219,7 +222,7 @@ namespace TelegramClone.Migrations
                 {
                     b.Navigation("ChatUsers");
 
-                    b.Navigation("RefreshTokens");
+                    b.Navigation("UserRefreshToken");
                 });
 #pragma warning restore 612, 618
         }

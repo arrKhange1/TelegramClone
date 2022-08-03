@@ -10,7 +10,7 @@ namespace TelegramClone.Data.Interfaces
     public interface IUserRepository
     {
         public User GetUserByUsernameAndPassword(UserLogin newUser);
-        public User GetUserByUsername(UserLogin newUser);
+        public User GetUserByUsername(string userName);
         public Task<User> AddUser(User user);
 
 

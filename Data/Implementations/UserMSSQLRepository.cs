@@ -20,9 +20,9 @@ namespace TelegramClone.Data.Implementations
             return _context.Users.FirstOrDefault(user => user.UserName == userLogin.UserName &&
                 user.Password == userLogin.Password);
         }
-        public User GetUserByUsername(UserLogin userLogin)
+        public User GetUserByUsername(string userName)
         {
-            return _context.Users.FirstOrDefault(user => user.UserName == userLogin.UserName);
+            return _context.Users.FirstOrDefault(user => user.UserName == userName);
         }
 
         public async Task<User> AddUser(User createdUser)
@@ -31,5 +31,7 @@ namespace TelegramClone.Data.Implementations
             await _context.SaveChangesAsync();
             return createdUser;
         }
+
+
     }
 }

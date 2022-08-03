@@ -14,6 +14,12 @@ namespace TelegramClone.Models
         public Guid? RoleId { get; set; }
         public Role Role { get; set; }
 
+        public List<RefreshToken> RefreshTokens { get; set; }
+        public User()
+        {
+            RefreshTokens = new List<RefreshToken>();
+        }
+        
         public List<ChatUser> ChatUsers { get; set; }
 
 

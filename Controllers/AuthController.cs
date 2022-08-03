@@ -15,6 +15,7 @@ using TelegramClone.Data;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
 using TelegramClone.Models.DTO;
+using TelegramClone.Services;
 
 namespace TelegramClone.Controllers
 {
@@ -25,14 +26,59 @@ namespace TelegramClone.Controllers
         private readonly IConfiguration _config;
         private readonly IRoleRepository _roleRepository;
         private readonly IUserRepository _userRepository;
-        
+        private readonly IUserRefreshTokensRepository _userRefreshTokensRepository;
+        private readonly JWTService _jwtService;
 
         public AuthController(ApplicationContext context, IConfiguration config,
-            IRoleRepository roleRepository, IUserRepository userRepository)
+            IRoleRepository roleRepository, IUserRepository userRepository, IUserRefreshTokensRepository userRefreshTokensRepository,
+            JWTService jwtService)
         {
             _config = config;
             _roleRepository = roleRepository;
             _userRepository = userRepository;
+            _userRefreshTokensRepository = userRefreshTokensRepository;
+            _jwtService = jwtService;
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] Tokens token)
+        {
+            var principal = _jwtService.GetPrincipalFromExpiredToken(token.AccessToken);
+            var userName = principal.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
+            var user = _userRepository.GetUserByUsername(userName);
+
+            //retrieve the saved refresh token from database
+            var savedRefreshToken = _userRefreshTokensRepository.GetSavedRefreshTokens(user.UserId, token.RefreshToken);
+
+            if (savedRefreshToken == null)
+            {
+                return Unauthorized("Invalid attempt!");
+            }
+
+            var newRefreshToken = _jwtService.GenerateRefreshToken();
+
+            if (newRefreshToken == null)
+            {
+                return Unauthorized("Invalid attempt!");
+            }
+
+            // saving refresh token to the db
+            RefreshToken newUserToken = new RefreshToken
+            {
+                Token = newRefreshToken,
+                UserId = user.UserId
+            };
+
+            await _userRefreshTokensRepository.DeleteUserRefreshTokens(user.UserId, token.RefreshToken);
+            await _userRefreshTokensRepository.AddUserRefreshTokens(newUserToken);
+
+            return Ok(new Tokens { 
+                AccessToken = _jwtService.GenerateAccessToken(user),
+                RefreshToken = newRefreshToken
+            });
         }
 
         [AllowAnonymous]
@@ -42,9 +88,20 @@ namespace TelegramClone.Controllers
             var user = Authenticate(userLogin);
             if (user != null)
             {
-                var token = Generate(user);
+                var accessToken = _jwtService.GenerateAccessToken(user);
+                var refreshToken = _jwtService.GenerateRefreshToken();
+
+                RefreshToken userToken = new RefreshToken
+                {
+                    Token = refreshToken,
+                    UserId = user.UserId
+                };
+
+                _userRefreshTokensRepository.AddUserRefreshTokens(userToken);
+
                 return Ok(new {
-                    token = token,
+                    accessToken = accessToken,
+                    refreshToken = refreshToken,
                     userName = user.UserName, 
                     role = _roleRepository.GetRoleById(user).RoleName });
             }
@@ -56,7 +113,7 @@ namespace TelegramClone.Controllers
         [HttpPost ("register")]
         public async Task<IActionResult> Register([FromBody] UserLogin userLogin)
         {
-            var user = _userRepository.GetUserByUsername(userLogin);
+            var user = _userRepository.GetUserByUsername(userLogin.UserName);
             if (user == null)
             {
                 Guid userRole = _roleRepository.GetRoleByName("user").RoleId;
@@ -68,10 +125,21 @@ namespace TelegramClone.Controllers
                 };
                 await _userRepository.AddUser(createdUser);
 
-                var token = Generate(createdUser);
+                var accessToken = _jwtService.GenerateAccessToken(createdUser);
+                var refreshToken = _jwtService.GenerateRefreshToken();
+
+                RefreshToken userToken = new RefreshToken
+                {
+                    Token = refreshToken,
+                    UserId = createdUser.UserId
+                };
+
+                await _userRefreshTokensRepository.AddUserRefreshTokens(userToken);
+
                 return Ok(new
                 {
-                    token = token,
+                    ccessToken = accessToken,
+                    refreshToken = refreshToken,
                     userName = createdUser.UserName,
                     role = "user"
                 });
@@ -80,27 +148,7 @@ namespace TelegramClone.Controllers
             return BadRequest("User already exists");
         }
 
-        private string Generate(User user)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var userRole = _roleRepository.GetRoleById(user);
-
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.UserName),
-                new Claim(ClaimTypes.Role, userRole.RoleName)
-
-            };
-
-            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-                _config["Jwt:Audience"],
-                claims,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        
 
         private User Authenticate(UserLogin userLogin)
         {
