@@ -46,18 +46,18 @@ namespace TelegramClone.Services
             return _userRepository.GetUserByUsername(userName);
         }
 
-        public async Task<User> CreateUserFromModel(User user)
+        public async Task<User> CreateUserFromDTO(UserLogin userLogin)
         {
-            var userRole = _roleRepository.GetRoleById(user);
-            var createdUser = new User
+            var userRole = _roleRepository.GetRoleByName("user");
+            var user = new User
             {
-                UserName = user.UserName,
-                Password = user.Password,
+                UserName = userLogin.UserName,
+                Password = userLogin.Password,
                 RoleId = userRole.RoleId,
             };
-            await _userRepository.AddUser(createdUser);
+            var createdUser = await _userRepository.AddUser(user);
 
-            return user;
+            return createdUser;
         }
 
         public User GetUserByUsernameAndPassword(UserLogin userLogin)

@@ -90,7 +90,7 @@ namespace TelegramClone.Controllers
             var user = _userService.GetUserByUserName(userLogin.UserName);
             if (user == null)
             {
-                var createdUser = await _userService.CreateUserFromModel(user);
+                var createdUser = await _userService.CreateUserFromDTO(userLogin);
 
                 return Ok(new
                 {
