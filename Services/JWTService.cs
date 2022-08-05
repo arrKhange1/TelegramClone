@@ -18,22 +18,16 @@ namespace TelegramClone.Services
     {
 		private readonly IConfiguration _config;
 		private readonly IRoleRepository _roleRepository;
+		private readonly IUserRepository _userRepository;
 
-		public JWTService(IConfiguration configuration, IRoleRepository roleRepository)
+		public JWTService(IConfiguration configuration,
+			IRoleRepository roleRepository,
+			IUserRepository userRepository)
 		{
 			_config = configuration;
 			_roleRepository = roleRepository;
+			_userRepository = userRepository;
 
-		}
-
-		public string GenerateRefreshToken()
-		{
-			var randomNumber = new byte[32];
-			using (var rng = RandomNumberGenerator.Create())
-			{
-				rng.GetBytes(randomNumber);
-				return Convert.ToBase64String(randomNumber);
-			}
 		}
 
 		public string GenerateAccessToken(User user)
@@ -87,6 +81,14 @@ namespace TelegramClone.Services
 
 
 			return principal;
+		}
+
+		public User GetUserFromToken(string token)
+        {
+			var principal = GetPrincipalFromExpiredToken(token);
+			var userName = principal.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+			var user = _userRepository.GetUserByUsername(userName);
+			return user;
 		}
 	}
 }

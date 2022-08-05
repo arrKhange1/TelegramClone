@@ -16,10 +16,10 @@ namespace TelegramClone.Controllers
     [ApiController]
     public class TokenTestController : ControllerBase
     {
-        private readonly ApplicationContext _context;
-        public TokenTestController(ApplicationContext context)
+        private readonly UserService _userService;
+        public TokenTestController(UserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
        [HttpGet("Public")]
@@ -33,7 +33,7 @@ namespace TelegramClone.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult Admin()
         {
-            var user = new UserService(_context).GetCurrentUser(HttpContext);
+            var user = _userService.GetCurrentUser(HttpContext);
             return Ok($"Hi, {user.UserName}, {user.RoleId}");
         }
 
@@ -41,7 +41,7 @@ namespace TelegramClone.Controllers
         [Authorize(Roles = "user")]
         public IActionResult Users()
         {
-            var user = new UserService(_context).GetCurrentUser(HttpContext);
+            var user = _userService.GetCurrentUser(HttpContext);
 
 
             return Ok($"Hi, {user.UserName}, {user.RoleId}");
@@ -51,7 +51,7 @@ namespace TelegramClone.Controllers
         [Authorize]
         public IActionResult Authorized()
         {
-            var user = new UserService(_context).GetCurrentUser(HttpContext);
+            var user = _userService.GetCurrentUser(HttpContext);
 
 
             return Ok($"Hi, {user.UserName}, {user.RoleId}");

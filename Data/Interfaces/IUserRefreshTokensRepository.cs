@@ -9,7 +9,7 @@ namespace TelegramClone.Data.Interfaces
     public interface IUserRefreshTokensRepository
     {
         public Task<RefreshToken> AddUserRefreshTokens(RefreshToken user);
-        public Task<RefreshToken> DeleteUserRefreshTokens(Guid userId, string refreshToken);
+        public Task<RefreshToken> DeleteUserRefreshTokens(Guid userId);
         public Task<RefreshToken> DeleteAllUserRefreshTokens(Guid userId);
         public RefreshToken GetSavedRefreshTokens(Guid userId, string refreshToken);
     }

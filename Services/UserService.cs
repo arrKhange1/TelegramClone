@@ -6,16 +6,21 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TelegramClone.Data;
+using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
+using TelegramClone.Models.DTO;
 
 namespace TelegramClone.Services
 {
     public class UserService
     {
-        private readonly ApplicationContext _context; // заменить все контексты на репозитории
-        public UserService(ApplicationContext context)
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
+        public UserService(IUserRepository userRepository,
+            IRoleRepository roleRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
         }
         public User GetCurrentUser(HttpContext httpContext)
         {
@@ -29,11 +34,42 @@ namespace TelegramClone.Services
                 return new User
                 {
                     UserName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value,
-                    RoleId = _context.Roles.FirstOrDefault(role => role.RoleName == roleName).RoleId
+                    RoleId = _roleRepository.GetRoleByName(roleName).RoleId
 
                 };
             }
 
+            return null;
+        }
+
+        public User GetUserByUserName (string userName) {
+            return _userRepository.GetUserByUsername(userName);
+        }
+
+        public async Task<User> CreateUserFromModel(User user)
+        {
+            var userRole = _roleRepository.GetRoleById(user);
+            var createdUser = new User
+            {
+                UserName = user.UserName,
+                Password = user.Password,
+                RoleId = userRole.RoleId,
+            };
+            await _userRepository.AddUser(createdUser);
+
+            return user;
+        }
+
+        public User GetUserByUsernameAndPassword(UserLogin userLogin)
+        {
+            return _userRepository.GetUserByUsernameAndPassword(userLogin);
+        }
+
+        public User Authenticate(UserLogin userLogin)
+        {
+            var authenticatedUser = _userRepository.GetUserByUsernameAndPassword(userLogin);
+            if (authenticatedUser != null)
+                return authenticatedUser;
             return null;
         }
     }
