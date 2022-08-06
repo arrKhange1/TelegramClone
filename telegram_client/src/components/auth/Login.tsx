@@ -10,9 +10,11 @@ import { useAuth } from '../../hooks/useAuth';
 
 
 function Login() {
+
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const user = useAuth();
+
 
     const login = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -24,12 +26,13 @@ function Login() {
         }
         try {
             const response = await axios.post<ILoginResponse>('auth/login', body);
+            await localStorage.setItem('userInfo', JSON.stringify({...response.data, isAuthenticated:true}));
             await dispatch(signIn({...response.data, isAuthenticated:true}));
             console.log(user);
             navigate('/');
         }
         catch(error:any) {
-            
+
         }
         
 

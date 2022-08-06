@@ -1,7 +1,8 @@
 export interface ILoginResponse {
     userName:string,
     role:string,
-    token:string
+    accessToken:string,
+    refreshToken:string
 }
 
 export interface IUser extends ILoginResponse {

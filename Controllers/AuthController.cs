@@ -42,11 +42,12 @@ namespace TelegramClone.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] Tokens token)
+        public async Task<IActionResult> Refresh([FromBody] string accessToken)
         {
-            var user = _jwtService.GetUserFromToken(token.AccessToken);
+            var user = _jwtService.GetUserFromToken(accessToken);
 
-            var savedRefreshToken = _refreshTokenService.GetSavedRefreshToken(user, token.RefreshToken);
+
+            var savedRefreshToken = _refreshTokenService.GetSavedRefreshToken(user, _refreshTokenService.GetRefreshTokenFromCookie(HttpContext));
 
             if (savedRefreshToken == null)
                 return Unauthorized("Invalid attempt!");
@@ -56,9 +57,13 @@ namespace TelegramClone.Controllers
 
             string newToken = await _refreshTokenService.RefreshToken(user);
 
-            return Ok(new Tokens { 
-                AccessToken = _jwtService.GenerateAccessToken(user),
-                RefreshToken = newToken
+            _refreshTokenService.AddRefreshTokenInCookie(HttpContext, newToken);
+
+            return Ok(new
+            {
+                accessToken = _jwtService.GenerateAccessToken(user),
+                userName = user.UserName,
+                role = _roleService.GetRoleById(user).RoleName
             });
         }
 
@@ -73,9 +78,10 @@ namespace TelegramClone.Controllers
                 
                 string newRefreshToken = await _refreshTokenService.RefreshToken(user);
 
+                _refreshTokenService.AddRefreshTokenInCookie(HttpContext, newRefreshToken);
+
                 return Ok(new {
                     accessToken = accessToken,
-                    refreshToken = newRefreshToken,
                     userName = user.UserName, 
                     role = _roleService.GetRoleById(user).RoleName });
             }
@@ -92,10 +98,14 @@ namespace TelegramClone.Controllers
             {
                 var createdUser = await _userService.CreateUserFromDTO(userLogin);
 
+                var accessToken = _jwtService.GenerateAccessToken(createdUser);
+                var refreshToken = await _refreshTokenService.AddNewRefreshToken(createdUser);
+
+                _refreshTokenService.AddRefreshTokenInCookie(HttpContext, refreshToken);
+
                 return Ok(new
                 {
-                    accessToken = _jwtService.GenerateAccessToken(createdUser),
-                    refreshToken = await _refreshTokenService.AddNewRefreshToken(createdUser),
+                    accessToken = accessToken,
                     userName = createdUser.UserName,
                     role = "user"
                 });

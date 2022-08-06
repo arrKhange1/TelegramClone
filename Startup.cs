@@ -21,6 +21,7 @@ using System.Text;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Data.Implementations;
 using TelegramClone.Services;
+using Microsoft.AspNetCore.CookiePolicy;
 
 namespace TelegramClone
 {
@@ -111,6 +112,14 @@ namespace TelegramClone
             {
                 app.UseDeveloperExceptionPage();
             }
+
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always
+            });
 
 
             app.UseHttpsRedirection();

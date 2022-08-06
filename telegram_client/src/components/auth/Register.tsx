@@ -21,6 +21,7 @@ function Register() {
 
         try {
             const response = await axios.post<ILoginResponse>("auth/register", body);
+            await localStorage.setItem('userInfo', JSON.stringify({...response.data, isAuthenticated:true}));
             await dispatch(signIn({...response.data, isAuthenticated:true}));
             navigate('/');
         }

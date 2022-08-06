@@ -54,7 +54,8 @@ namespace TelegramClone.Controllers
             var user = _userService.GetCurrentUser(HttpContext);
 
 
-            return Ok($"Hi, {user.UserName}, {user.RoleId}");
+
+            return Ok($"Hi, {user.UserName}, {user.RoleId}, Refresh: {HttpContext.Request.Cookies["refresh"]}");
         }
 
         

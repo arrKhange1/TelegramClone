@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -20,6 +21,20 @@ namespace TelegramClone.Services
             _userRepository = userRepository;
             _refreshTokenRepository = refreshTokenRepository;
             _roleRepository = roleRepository;
+        }
+
+        public void AddRefreshTokenInCookie(HttpContext httpContext, string token)
+        {
+            httpContext.Response.Cookies.Append("refresh", token,
+            new CookieOptions
+            {
+                MaxAge = TimeSpan.FromMinutes(1)
+            });
+        }
+
+        public string GetRefreshTokenFromCookie(HttpContext httpContext)
+        {
+            return httpContext.Request.Cookies["refresh"];
         }
 
         public string GenerateRefreshToken()
