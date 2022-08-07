@@ -64,11 +64,7 @@ namespace TelegramClone.Controllers
             _refreshTokenService.AddRefreshTokenInCookie(HttpContext, refreshToken);
             _jwtService.AddAccessTokenInCookie(HttpContext, accessToken);
 
-            return Ok(new
-            {
-                userName = user.UserName,
-                role = _roleService.GetRoleById(user).RoleName
-            });
+            return Ok();
         }
 
         [AllowAnonymous]

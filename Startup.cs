@@ -70,7 +70,7 @@ namespace TelegramClone
                     {
                         OnMessageReceived = context =>
                         {
-                            var accessToken = context.Request.Query["access_token"];
+                            var accessToken = context.Request.Query["access"];
 
                             // если запрос направлен хабу
                             var path = context.HttpContext.Request.Path;

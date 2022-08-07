@@ -33,11 +33,11 @@ namespace TelegramClone.Services
 
 		public void AddAccessTokenInCookie(HttpContext httpContext, string token)
 		{
-			httpContext.Response.Cookies.Append("access", token,
-			new CookieOptions
-			{
-				MaxAge = TimeSpan.FromSeconds(30)
-			});
+			httpContext.Response.Cookies.Append("access", token);
+			//new CookieOptions
+			//{
+			//	MaxAge = TimeSpan.FromSeconds(10)
+			//});
 		}
 
 		public string GetAccessTokenFromCookie(HttpContext httpContext)
@@ -60,7 +60,7 @@ namespace TelegramClone.Services
 						new Claim(ClaimTypes.Role, userRole.RoleName)
 
 				  }),
-					Expires = DateTime.Now.AddMinutes(1),
+					Expires = DateTime.Now.AddSeconds(10),
 					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
 				};
 				var token = tokenHandler.CreateToken(tokenDescriptor);

@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import { ILoginResponse } from '../../@types/IUser';
 import { useAuth } from '../../hooks/useAuth';
+import { $api } from '../../http/axios';
 
 
 function Login() {
@@ -25,9 +26,9 @@ function Login() {
             Password: formData.get('password')
         }
         try {
-            const response = await axios.post<ILoginResponse>('auth/login', body);
-            await localStorage.setItem('userInfo', JSON.stringify({...response.data, isAuthenticated:true}));
-            await dispatch(signIn({...response.data, isAuthenticated:true}));
+            const response = await $api.post<ILoginResponse>('auth/login', body);
+            await localStorage.setItem('userInfo', JSON.stringify({...response.data, isAuthenticated: true}));
+            await dispatch(signIn({...response.data, isAuthenticated: true}));
             console.log(user);
             navigate('/');
         }

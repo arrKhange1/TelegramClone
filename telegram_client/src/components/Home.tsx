@@ -18,7 +18,7 @@ function Home() {
 
   useEffect(() => {
     const hubConnection = new signalR.HubConnectionBuilder()
-                      .withUrl("/chat", { accessTokenFactory: () => user.accessToken})
+                      .withUrl("/chat")
                       .build();
     setConnection(hubConnection);
   }, []);

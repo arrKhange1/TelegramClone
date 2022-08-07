@@ -25,11 +25,11 @@ namespace TelegramClone.Services
 
         public void AddRefreshTokenInCookie(HttpContext httpContext, string token)
         {
-            httpContext.Response.Cookies.Append("refresh", token,
-            new CookieOptions
-            {
-                MaxAge = TimeSpan.FromMinutes(1)
-            });
+            httpContext.Response.Cookies.Append("refresh", token);
+            //new CookieOptions
+            //{
+            //    MaxAge = TimeSpan.FromMinutes(1)
+            //});
         }
 
         public string GetRefreshTokenFromCookie(HttpContext httpContext)
@@ -54,7 +54,7 @@ namespace TelegramClone.Services
             {
                 Token = newRefreshToken,
                 UserId = user.UserId,
-                ExpireDate = DateTime.Now.AddMinutes(2)
+                ExpireDate = DateTime.Now.AddMinutes(1)
             };
 
             await _refreshTokenRepository.DeleteUserRefreshTokens(user.UserId);
