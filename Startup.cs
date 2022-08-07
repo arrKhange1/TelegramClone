@@ -134,6 +134,14 @@ namespace TelegramClone
                 .AllowAnyMethod()
                 .AllowCredentials());
 
+            app.Use(async (context, next) =>
+            {
+                var token = context.Request.Cookies["access"];
+                if (!string.IsNullOrEmpty(token))
+                    context.Request.Headers.Add("Authorization", "Bearer " + token);
+
+                await next();
+            });
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -42,10 +42,13 @@ namespace TelegramClone.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] string accessToken)
+        public async Task<IActionResult> Refresh()
         {
-            var user = _jwtService.GetUserFromToken(accessToken);
+            var expiredAccessToken = _jwtService.GetAccessTokenFromCookie(HttpContext);
+            if (string.IsNullOrEmpty(expiredAccessToken))
+                return Unauthorized("Invalid attempt!");
 
+            var user = _jwtService.GetUserFromToken(expiredAccessToken);
 
             var savedRefreshToken = _refreshTokenService.GetSavedRefreshToken(user, _refreshTokenService.GetRefreshTokenFromCookie(HttpContext));
 
@@ -55,13 +58,14 @@ namespace TelegramClone.Controllers
             if (savedRefreshToken.IsExpired)
                 return Unauthorized("Refresh token expired");
 
-            string newToken = await _refreshTokenService.RefreshToken(user);
+            string refreshToken = await _refreshTokenService.RefreshToken(user);
+            string accessToken = _jwtService.GenerateAccessToken(user);
 
-            _refreshTokenService.AddRefreshTokenInCookie(HttpContext, newToken);
+            _refreshTokenService.AddRefreshTokenInCookie(HttpContext, refreshToken);
+            _jwtService.AddAccessTokenInCookie(HttpContext, accessToken);
 
             return Ok(new
             {
-                accessToken = _jwtService.GenerateAccessToken(user),
                 userName = user.UserName,
                 role = _roleService.GetRoleById(user).RoleName
             });
@@ -75,13 +79,12 @@ namespace TelegramClone.Controllers
             if (user != null)
             {
                 var accessToken = _jwtService.GenerateAccessToken(user);
-                
                 string newRefreshToken = await _refreshTokenService.RefreshToken(user);
 
+                _jwtService.AddAccessTokenInCookie(HttpContext, accessToken);
                 _refreshTokenService.AddRefreshTokenInCookie(HttpContext, newRefreshToken);
 
                 return Ok(new {
-                    accessToken = accessToken,
                     userName = user.UserName, 
                     role = _roleService.GetRoleById(user).RoleName });
             }
@@ -101,11 +104,11 @@ namespace TelegramClone.Controllers
                 var accessToken = _jwtService.GenerateAccessToken(createdUser);
                 var refreshToken = await _refreshTokenService.AddNewRefreshToken(createdUser);
 
+                _jwtService.AddAccessTokenInCookie(HttpContext, accessToken);
                 _refreshTokenService.AddRefreshTokenInCookie(HttpContext, refreshToken);
 
                 return Ok(new
                 {
-                    accessToken = accessToken,
                     userName = createdUser.UserName,
                     role = "user"
                 });
@@ -114,8 +117,17 @@ namespace TelegramClone.Controllers
             return BadRequest("User already exists");
         }
 
-        
+        [AllowAnonymous]
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Response.Cookies.Delete("access");
+            HttpContext.Response.Cookies.Delete("refresh");
 
-   
+            return Ok();
+        }
+
+
+
     }
 }

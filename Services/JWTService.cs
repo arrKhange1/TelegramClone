@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,20 @@ namespace TelegramClone.Services
 			_roleRepository = roleRepository;
 			_userRepository = userRepository;
 
+		}
+
+		public void AddAccessTokenInCookie(HttpContext httpContext, string token)
+		{
+			httpContext.Response.Cookies.Append("access", token,
+			new CookieOptions
+			{
+				MaxAge = TimeSpan.FromSeconds(30)
+			});
+		}
+
+		public string GetAccessTokenFromCookie(HttpContext httpContext)
+		{
+			return httpContext.Request.Cookies["access"];
 		}
 
 		public string GenerateAccessToken(User user)
