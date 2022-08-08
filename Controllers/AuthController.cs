@@ -90,7 +90,7 @@ namespace TelegramClone.Controllers
 
         [AllowAnonymous]
         [HttpPost ("register")]
-        public async Task<IActionResult> Register([FromBody] UserLogin userLogin)
+        public async Task<IActionResult> Register([FromBody] UserRegister userLogin)
         {
             var user = _userService.GetUserByUserName(userLogin.UserName);
             if (user == null)

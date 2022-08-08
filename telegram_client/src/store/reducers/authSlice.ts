@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from './../../@types/IUser.d';
 
@@ -11,14 +12,22 @@ export const authSlice = createSlice({
     name:'auth',
     initialState,
     reducers: {
-        signIn(state, action:PayloadAction<IUser>) {
-            state.isAuthenticated = action.payload.isAuthenticated;
+
+        authenticate(state, action:PayloadAction<IUser>) {
             state.role = action.payload.role;
             state.userName = action.payload.userName;
+            state.isAuthenticated = action.payload.isAuthenticated;
+        },
+
+        signOut(state) {
+            state.role = '';
+            state.userName = '';
+            state.isAuthenticated = false;
+
         }
     }
 });
 
-export const {signIn} = authSlice.actions;
+export const {authenticate, signOut} = authSlice.actions;
 
 export default authSlice.reducer;

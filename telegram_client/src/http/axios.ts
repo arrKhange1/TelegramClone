@@ -1,4 +1,7 @@
 import axios, { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
+import AuthService from '../services/AuthService';
+import { setupStore } from '../store/store';
 
 export const API_URL = 'https://localhost:44351';
 
@@ -18,6 +21,7 @@ $api.interceptors.response.use(config => {
             console.log('access token expired, new pair generated');
         } catch(e) {
             console.log('refresh error'); // force logout
+            await AuthService.logout();
         }
         
     }

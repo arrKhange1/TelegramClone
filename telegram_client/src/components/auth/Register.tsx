@@ -3,32 +3,28 @@ import React, { FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { ILoginResponse } from '../../@types/IUser';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { signIn } from '../../store/reducers/authSlice';
+import { useAuth } from '../../hooks/useAuth';
+import AuthService from '../../services/AuthService';
+import { authenticate } from '../../store/reducers/authSlice';
 
 function Register() {
 
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+
+    // for dev purposes
+    const userRedux = useAuth();
+    const userLocalStorage = localStorage.getItem('userInfo');
 
     const register = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const formData = new FormData(e.currentTarget); // туду: мб сделать в один метод логин и рег
-        const body = {
-            UserName: formData.get('username'),
-            Password: formData.get('password')
-        };
-
-        try {
-            const response = await axios.post<ILoginResponse>("auth/register", body);
-            await localStorage.setItem('userInfo', JSON.stringify({...response.data, isAuthenticated:true}));
-            await dispatch(signIn({...response.data, isAuthenticated:true}));
-            navigate('/');
-        }
-        catch (e:any) {
-
-        }
+        await AuthService.register(e);
+        navigate('/');
     }
+
+     // for dev purposes
+    console.log('Login (redux):', userRedux);
+    console.log('Login (localStorage): ', userLocalStorage);
 
     return (
         <form onSubmit={register}>

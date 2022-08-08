@@ -34,10 +34,7 @@ namespace TelegramClone.Services
 		public void AddAccessTokenInCookie(HttpContext httpContext, string token)
 		{
 			httpContext.Response.Cookies.Append("access", token);
-			//new CookieOptions
-			//{
-			//	MaxAge = TimeSpan.FromSeconds(10)
-			//});
+			
 		}
 
 		public string GetAccessTokenFromCookie(HttpContext httpContext)
