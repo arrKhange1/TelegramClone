@@ -1,0 +1,19 @@
+.auth {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #34B0DF;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.tg_logo {
+    width: 12em;
+}

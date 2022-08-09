@@ -9,7 +9,9 @@ import { ILoginResponse } from '../../@types/IUser';
 import { useAuth } from '../../hooks/useAuth';
 import { $api } from '../../http/axios';
 import AuthService from '../../services/AuthService';
-
+import classes from '../../styles/auth/auth.module.css';
+import CustomInput from '../UI/CustomInput/CustomInput';
+import CustomButton from '../UI/CustomButton/CustomButton';
 
 function Login() {
 
@@ -30,11 +32,11 @@ function Login() {
     console.log('Login (localStorage): ', userLocalStorage);
 
     return (
-        <form onSubmit={login}>
-            <input type="text" placeholder='username' name='username'/>
-            <input type="password" placeholder='password' name='password' />
-            <button type='submit'>Log In</button>
-            <Link to='/register'>Нет аккаунта? Регистрируйся!</Link>
+        <form onSubmit={login} className={classes.form}>
+            <CustomInput type="text" placeholder='username' name='username'/>
+            <CustomInput type="password" placeholder='password' name='password' />
+            <CustomButton type='submit' value='Sign In'/>
+            <Link to='/auth/reg'>Don't have an account yet?</Link>
         </form>
     );
 }

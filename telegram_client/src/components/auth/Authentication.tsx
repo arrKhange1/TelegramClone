@@ -1,10 +1,15 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import classes from '../../styles/auth/auth.module.css';
 
 function Authentication() {
-    
+
     return (
-        <div style={{background:'blue'}}>
+        <div className={classes.auth}>
+            <img  src="/imgs/telegram_logo.png"
+             alt="Telegram Logo"
+             className={classes.tg_logo}
+             />
             <Outlet/>
         </div>
     );
