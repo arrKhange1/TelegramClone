@@ -8,7 +8,7 @@ function RequireAuth({children} : {children: JSX.Element}) {
     const isAuth = useAuth().isAuthenticated;
 
     if (!isAuth) {
-        return <Navigate to='/login' />
+        return <Navigate to='/auth' />
     }
 
     return children;
