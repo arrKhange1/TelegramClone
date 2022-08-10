@@ -8,7 +8,7 @@ export interface IMessage {
     msg: string
   }
 
-function Home() {
+function TestChat() {
   const user = useAuth();
 
   const [connection, setConnection ] = useState<signalR.HubConnection>();
@@ -92,4 +92,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default TestChat;

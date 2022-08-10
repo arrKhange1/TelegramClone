@@ -3,6 +3,7 @@ import Authentication from './components/auth/Authentication';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import RequireAuth from './components/auth/RequireAuth';
+import Home from './components/Home/Home';
 import TestPrivate from './components/TestPrivate';
 
 
@@ -15,7 +16,7 @@ function App() {
        path='/'
        element={
         <RequireAuth>
-          <TestPrivate/> 
+          <Home/> 
         </RequireAuth>
        } />
        
