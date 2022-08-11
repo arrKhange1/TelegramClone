@@ -33,6 +33,13 @@
     overflow: hidden;
 }
 
+.border {
+    height: 100%;
+    background-color: black;
+    width: 2px;
+    cursor:col-resize;
+}
+
 .chats:hover {
     overflow-y: auto;
 }
