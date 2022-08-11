@@ -1,11 +1,11 @@
-import classes from '../styles/home/home.module.css';
+import chats from '../styles/chats_panel/chats.module.css';
 
 let lastX: number;
 let chat_panel: any;
 
 export const resize = (e: any) => {
-    chat_panel = document.querySelector('.' + classes.chat_panel)!;
-    console.log('.' + classes.chat_panel, chat_panel);
+    chat_panel = document.querySelector('.' + chats.chat_panel)!;
+    console.log('.' + chats.chat_panel, chat_panel);
     if (e.button === 0) {
         lastX = e.clientX;
         console.log(lastX);
