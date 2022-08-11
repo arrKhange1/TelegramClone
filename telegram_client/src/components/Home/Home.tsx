@@ -10,7 +10,7 @@ function Home() {
                 <div className={classes.search}></div>
                 <div className={classes.chats}>
                     {[...Array<string>(1000)].map((chat,i) => 
-                        <div key={i}>#WELCOMETOCHATS</div>
+                        <div key={i}>#WELCOMETOCHATSВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВВ</div>
                     )}
                 </div>
             </div>

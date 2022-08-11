@@ -30,5 +30,9 @@
 .chats {
     height: 95%;
     background-color: white;
+    overflow: hidden;
+}
+
+.chats:hover {
     overflow-y: auto;
 }
