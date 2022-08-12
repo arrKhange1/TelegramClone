@@ -18,7 +18,7 @@ function TestChat() {
 
   useEffect(() => {
     const hubConnection = new signalR.HubConnectionBuilder()
-                      .withUrl("/chat")
+                      .withUrl("/testchat")
                       .build();
     setConnection(hubConnection);
   }, []);

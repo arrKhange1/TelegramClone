@@ -3,6 +3,7 @@ import Authentication from './components/auth/Authentication';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import RequireAuth from './components/auth/RequireAuth';
+import Chat from './components/Home/Chat';
 import Home from './components/Home/Home';
 import TestPrivate from './components/TestPrivate';
 
@@ -18,7 +19,9 @@ function App() {
         <RequireAuth>
           <Home/> 
         </RequireAuth>
-       } />
+       } >
+          <Route path=':chatId' element={<Chat/>} />
+       </Route>
        
        <Route path='auth' element={<Authentication/>}>
           <Route index element={<Login/>} />

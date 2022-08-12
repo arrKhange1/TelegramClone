@@ -14,6 +14,9 @@
 }
 
 .chats {
+    display: flex;
+    flex-direction: column;
+
     height: 95%;
     background-color: white;
     overflow: hidden;
