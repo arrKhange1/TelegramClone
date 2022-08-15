@@ -1,0 +1,34 @@
+.popup {
+    position: relative;
+}
+
+.butt {
+    
+}
+
+
+.content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100px;
+    opacity: 0;
+    transition: opacity 150ms ease-in-out;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+

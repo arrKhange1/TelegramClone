@@ -1,10 +1,11 @@
 .search {
-    position: sticky;
     height: 5%;
     background-color: violet;
+    display: flex;
+    align-items: center;
 }
 
-.chat_panel {
+.side_panel {
 
     height: 100%;
     background-color: white;
