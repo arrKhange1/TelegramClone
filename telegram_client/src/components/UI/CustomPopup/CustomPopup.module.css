@@ -1,5 +1,6 @@
 .popup {
     position: relative;
+    margin: 0.25rem;
 }
 
 .butt {
@@ -8,19 +9,36 @@
 
 
 .content {
+    border-radius: 10px;
     position: absolute;
-    top: 100%;
+    top: calc(100% + 0.25rem);
     left: 0;
-    width: 100px;
     opacity: 0;
     transition: opacity 150ms ease-in-out;
-    z-index: 1000;
     pointer-events: none;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.2);
+}
+
+.element {
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    gap: 1em;
+    padding: 0.75em;
+    font-size: 1.20rem;
+    font-family: sans-serif;
+}
+
+.element:hover {
+    transition: background-color 150ms ease-in-out;
+    background-color: #F4F4F4;
 }
 
 .active {
     opacity: 1;
     pointer-events: auto;
+    cursor: pointer;
+    z-index: 1001;
 }
 
 .backdrop {
@@ -29,6 +47,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 1000;
 }
 
 

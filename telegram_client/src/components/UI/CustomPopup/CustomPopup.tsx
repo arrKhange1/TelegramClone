@@ -27,7 +27,7 @@ function CustomPopup({setIsContacts} : {
                 </div>
                 
             </div>
-            <div className={isActive ? popup.backdrop : ''} onClick={(e:any) => { setIsActive(false)}}>
+            <div className={isActive ? popup.backdrop : ''} onClick={(e:any) => { setIsActive(false) }}>
             </div>
         </div>
         
