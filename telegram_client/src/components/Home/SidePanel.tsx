@@ -16,7 +16,7 @@ function SidePanel() {
     return (
         <div className={side.side_panel}> 
 
-            <SidePanelHeader setSelectedOption={setSelectedOption}/>
+            <SidePanelHeader selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
             
             {selectedOption === 'Contacts' && <Contacts/>}
             {selectedOption === '' && <Chats/>}
