@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { IOption } from '../../../@types/IOption';
 import popup from './CustomPopup.module.css';
 import PopupElement from './PopupElement';
 
-function CustomPopup({setIsContacts} : { 
-    setIsContacts:any}) {
+function CustomPopup({setSelectedOption, options} : {setSelectedOption:React.Dispatch<React.SetStateAction<string>>,
+    options:IOption[]}) {
     
     const [isActive, setIsActive] = useState(false);
 
@@ -21,9 +22,10 @@ function CustomPopup({setIsContacts} : {
                     >
                     popup
                 </button>
-                {/* content */}
                 <div className={activePopup.join(' ')}>
-                    <PopupElement img='img' text='Contacts' onClick={(e:any) => { setIsContacts(true); setIsActive(false)}}/>
+                    {options.map(option => 
+                        <PopupElement img='img' text={option.name} onClick={(e:any) => { setSelectedOption(option.name); setIsActive(false)}}/>    
+                    )}
                 </div>
                 
             </div>
