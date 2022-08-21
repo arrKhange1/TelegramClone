@@ -1,6 +1,6 @@
 .search {
     height: 5%;
-    background-color: violet;
+    background-color: white;
     display: flex;
     align-items: center;
 }
@@ -23,11 +23,3 @@
     overflow-y: auto;
 }
 
-.back_button {
-    transform: translateX(45deg);
-    transition: transform 1s ease-in-out;
-}
-
-/* .chats:hover {
-    overflow-y: auto;
-} */

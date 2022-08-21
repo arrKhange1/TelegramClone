@@ -10,7 +10,7 @@ function Chats() {
     return (
         <div className={side.chats + custom_scroll}>
             {[...Array<string>(1000)].map((chat,i) => 
-                    <Link to={'/' + i}>#WELCOMETOCHATS</Link>
+                    <Link key={i} to={'/' + i}>#WELCOMETOCHATS</Link>
             )}
         </div>
     );

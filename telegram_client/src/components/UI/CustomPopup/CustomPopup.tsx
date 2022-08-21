@@ -15,16 +15,15 @@ function CustomPopup({setSelectedOption, options} : {setSelectedOption:React.Dis
     return (
         <div>
             <div className={popup.popup}>
-                <button 
-                    type='button' 
-                    className={popup.butt}
-                    onClick={(e:any) => { setIsActive(true); e.stopPropagation() } }
-                    >
-                    popup
-                </button>
+                <img src="imgs/burger_icon.png" 
+                className={popup.butt} 
+                alt=""
+                onClick={(e:any) => {setIsActive(true); e.stopPropagation()}}
+                />
+                
                 <div className={activePopup.join(' ')}>
-                    {options.map(option => 
-                        <PopupElement img='img' text={option.name} onClick={(e:any) => { setSelectedOption(option.name); setIsActive(false)}}/>    
+                    {options.map((option,i) => 
+                        <PopupElement key={i} img='img' text={option.name} onClick={(e:any) => { setSelectedOption(option.name); setIsActive(false)}}/>    
                     )}
                 </div>
                 

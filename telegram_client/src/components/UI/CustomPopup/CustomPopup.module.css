@@ -1,14 +1,21 @@
 .popup {
     position: relative;
-    margin: 0.25rem;
 }
 
 .butt {
-    
+    width: 1.5em;
+    cursor: pointer;
+    margin-left: 1em;
 }
 
+.butt:hover {
+    transition: all 200ms ease-in-out;
+    border-radius: 50%;
+    background: rgba(128, 130, 131, 0.2);
+}
 
 .content {
+    margin-left: 1em;
     border-radius: 10px;
     position: absolute;
     top: calc(100% + 0.25rem);
