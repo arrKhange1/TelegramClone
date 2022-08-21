@@ -12,7 +12,7 @@ function SidePanelHeader({selectedOption, setSelectedOption} : {setSelectedOptio
 
     return (
         <div className={side.search}>
-            {selectedOption ? <button type='button' onClick={() => setSelectedOption('')}>back</button> :
+            {selectedOption ? <button type='button' className={side.back_button} onClick={() => setSelectedOption('')}>back</button> :
                 <CustomPopup setSelectedOption={setSelectedOption} options={options}/>
             }
         </div>

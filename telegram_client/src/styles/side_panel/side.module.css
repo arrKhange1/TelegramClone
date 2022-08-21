@@ -23,6 +23,11 @@
     overflow-y: auto;
 }
 
+.back_button {
+    transform: translateX(45deg);
+    transition: transform 1s ease-in-out;
+}
+
 /* .chats:hover {
     overflow-y: auto;
 } */
