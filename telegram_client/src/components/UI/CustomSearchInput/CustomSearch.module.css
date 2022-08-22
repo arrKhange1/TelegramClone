@@ -1,0 +1,31 @@
+.search_svg {
+    width: 24px;
+    height: 24px;
+    fill: #707991;
+}
+
+.search_svg-active {
+    fill: #007AFF;
+}
+
+.search_input {
+    display: flex;
+    gap: 1em;
+    padding: 0.5em 1em;
+    background-color: #F5F5F5;
+    border-radius: 22px;
+    flex-grow: 1;
+    margin-right: 0.5em;
+}
+
+.search_input-active {
+    outline: 2px solid #007AFF;
+}
+
+#input {
+    border: none;
+    outline: none;
+    background-color: #F5F5F5;
+    font-size: 1rem;
+    width: 100%;
+}
