@@ -16,7 +16,7 @@ function SidePanelHeader({selectedOption, setSelectedOption} :
     ];
 
     return (
-        <div className={side.search} onClick={() => setIsSearchActive(false)}>
+        <div className={side.search} >
             {selectedOption || isSearchActive ? <PopupBackArrow setSelectedOption={setSelectedOption}/>  :
                 <CustomPopup setSelectedOption={setSelectedOption} options={options}/>
             }
