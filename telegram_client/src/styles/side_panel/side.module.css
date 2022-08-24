@@ -17,7 +17,7 @@
 .chats {
     display: flex;
     flex-direction: column;
-
+    padding: 0 0.5em;
     height: 95%;
     background-color: white;
     overflow: hidden;
@@ -25,11 +25,17 @@
 }
 
 .chat {
+    border-radius: 20px;
     padding: 1em;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 0.5em;
+}
+
+.chat:hover {
+    background-color: #F5F5F5;
+    transition: background 200ms ease-in-out;
 }
 
 .chat_open_link {

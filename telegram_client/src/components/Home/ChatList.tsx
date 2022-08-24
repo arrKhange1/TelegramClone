@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import home from '../../styles/home/home.module.css';
 import side from '../../styles/side_panel/side.module.css';
-import ReusableList from '../UI/ReusableList/ReusableList';
 import ChatListElement from './ChatListElement';
 
 export interface IChat {
@@ -26,6 +25,10 @@ function ChatList() {
          last_msg_date:'last_msg_date3', unread_msgs:3},
          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name4', last_msg:'last_msg4',
          last_msg_date:'last_msg_date4', unread_msgs:4},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name5', last_msg:'last_msg5',
+         last_msg_date:'last_msg_date5', unread_msgs:5},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name5', last_msg:'last_msg5',
+         last_msg_date:'last_msg_date5', unread_msgs:5},
          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name5', last_msg:'last_msg5',
          last_msg_date:'last_msg_date5', unread_msgs:5},
          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name5', last_msg:'last_msg5',
