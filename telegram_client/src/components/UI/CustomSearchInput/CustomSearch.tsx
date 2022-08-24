@@ -14,15 +14,17 @@ function CustomSearch({isSearchActive, setIsSearchActive}:
     }
 
     useEffect(() => {
-
         function toggleOffSearch() {
             setIsSearchActive(false);
         }
+
         document.addEventListener('click', toggleOffSearch);
+        
         return function cleanup() {
             document.removeEventListener('click', toggleOffSearch);
         }
     }, [])
+
 
     return (
         <label htmlFor={search.input} className={searchClasses.join(' ')} onClick={(e:any) => {setIsSearchActive(true); e.stopPropagation()}}>

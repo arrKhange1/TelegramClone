@@ -3,7 +3,7 @@ import Authentication from './components/auth/Authentication';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import RequireAuth from './components/auth/RequireAuth';
-import Chat from './components/Home/Chat';
+import ExpandedChat from './components/Home/ExpandedChat';
 import Home from './components/Home/Home';
 import TestPrivate from './components/TestPrivate';
 
@@ -20,7 +20,7 @@ function App() {
           <Home/> 
         </RequireAuth>
        } >
-          <Route path=':chatId' element={<Chat/>} />
+          <Route path=':chatId' element={<ExpandedChat/>} />
        </Route>
        
        <Route path='auth' element={<Authentication/>}>

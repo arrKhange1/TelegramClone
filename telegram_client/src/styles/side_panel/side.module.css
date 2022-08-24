@@ -24,3 +24,29 @@
     overflow-y: auto;
 }
 
+.chat {
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.chat_img {
+    width: 48px;
+    height:48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.chat_content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    flex-grow: 1;
+    overflow: hidden;
+    text-decoration:none;
+}
+
+.chat_content + .chat_content { 
+    text-align: end;
+}
