@@ -9,9 +9,6 @@ function Chat(props:any ) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isNaN(parseInt(params.chatId!))) // for dev purposes
-            navigate('/');
-
         document.getElementById(msgs.msgs_wrapper)!.scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
     }, []);
 

@@ -18,8 +18,8 @@ function ChatList() {
     const custom_scroll: string = ' ' + home.bar_back + ' ' + home.bar_thumb;
 
     const chats: IChat[] = [
-        {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name1', last_msg:'last_msg1sdsqwqwqwwwwwwwwwwwwwwwwwwwwww',
-         last_msg_date:'last_msg_date1', unread_msgs:1},
+        {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Vitya', last_msg:'last_msg1sdsqwqwqwwwwwwwwwwwwwwwwwwwwww',
+         last_msg_date:'last_msg_date1', unread_msgs:100},
          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name2', last_msg:'last_msg2',
          last_msg_date:'last_msg_date2', unread_msgs:2},
          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name3', last_msg:'last_msg3',
@@ -43,7 +43,7 @@ function ChatList() {
     return (
         <div className={side.chats + custom_scroll}>
             {chats.map(chat => 
-                <Link to={chat.name} style={{ color: 'inherit', textDecoration: 'inherit'}} >
+                <Link to={chat.name} className={side.chat_open_link} >
                     <ChatListElement chat={chat}/>
                 </Link>
                 
