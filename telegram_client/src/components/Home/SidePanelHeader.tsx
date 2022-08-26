@@ -12,7 +12,7 @@ function SidePanelHeader({selectedOption, setSelectedOption} :
     const [isSearchActive, setIsSearchActive] = useState(false);
     
     const options: IOption[] = [
-        {name: 'Contacts'}
+        {img: 'imgs/contacts_icon.png', name: 'Contacts'}
     ];
 
     return (

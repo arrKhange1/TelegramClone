@@ -23,7 +23,7 @@ function CustomPopup({setSelectedOption, options} : {setSelectedOption:React.Dis
                 
                 <div className={activePopup.join(' ')}>
                     {options.map((option,i) => 
-                        <PopupElement key={i} img='img' text={option.name} onClick={(e:any) => { setSelectedOption(option.name); setIsActive(false)}}/>    
+                        <PopupElement key={i} img={option.img} text={option.name} onClick={(e:any) => { setSelectedOption(option.name); setIsActive(false)}}/>    
                     )}
                 </div>
                 
