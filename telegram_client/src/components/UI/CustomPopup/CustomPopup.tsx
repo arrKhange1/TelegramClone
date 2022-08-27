@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IOption } from '../../../@types/IOption';
 import popup from './CustomPopup.module.css';
 import PopupElement from './PopupElement';

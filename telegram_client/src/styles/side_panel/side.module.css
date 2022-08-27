@@ -33,6 +33,13 @@
     gap: 0.5em;
 }
 
+/* for chat */
+.active, .active *{
+    background-color: #3390EC;
+    color: white !important;
+    pointer-events: none;
+}
+
 .chat:hover {
     background-color: #F5F5F5;
     transition: background 200ms ease-in-out;
