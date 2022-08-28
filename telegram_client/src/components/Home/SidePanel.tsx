@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import side from '../../styles/side_panel/side.module.css';
-import Contacts from './Contacts';
+import ContactList from './ContactList';
 import ChatList from './ChatList';
 import SidePanelHeader from './SidePanelHeader';
 
@@ -13,7 +13,7 @@ function SidePanel() {
 
             <SidePanelHeader selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
             
-            {selectedOption === 'Contacts' && <Contacts/>}
+            {selectedOption === 'Contacts' && <ContactList/>}
             {selectedOption === '' && <ChatList/>}
         </div>
     );

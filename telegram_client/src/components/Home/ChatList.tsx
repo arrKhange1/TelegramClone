@@ -41,7 +41,6 @@ function ChatList() {
          last_msg_date:'last_msg_date5', unread_msgs:5},
     ]
 
-     // temp
     const chatId = useParams().chatId!;
     const [activeChat, setActiveChat] = useState(chatId);
     useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IOption } from '../../@types/IOption';
 import side from '../../styles/side_panel/side.module.css';
 import CustomPopup from '../UI/CustomPopup/CustomPopup';
