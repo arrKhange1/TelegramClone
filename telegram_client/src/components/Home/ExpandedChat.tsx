@@ -3,24 +3,26 @@ import msgs from '../../styles/messages_panel/messages.module.css';
 import home from '../../styles/home/home.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function Chat() {
+function ExpandedChat() {
 
     const params = useParams();
     const navigate = useNavigate();
+
+    const closeChat = (e:KeyboardEvent) => {
+        if (e.key === 'Escape')
+            navigate('/');
+    }
 
     useEffect(() => {
         document.getElementById(msgs.msgs_wrapper)!
         .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
 
-        const closeChat = (e:any) => {
-            if (e.key === 'Escape')
-                navigate('/');
-        }
 
         window.addEventListener('keydown', closeChat);
+        return () => window.removeEventListener('keydown', closeChat);
     }, []);
 
-    const custom_scroll: string = ' ' + home.bar_back + ' ' + home.bar_thumb;
+    const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
 
     return (
 
@@ -38,4 +40,4 @@ function Chat() {
     );
 }
 
-export default Chat;
+export default ExpandedChat;

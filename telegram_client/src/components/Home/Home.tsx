@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import home from '../../styles/home/home.module.css';
 import {resize} from '../../services/ResizeService';
 import SidePanel from './SidePanel';

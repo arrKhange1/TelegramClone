@@ -5,7 +5,7 @@ import { useAppSelector } from '../../hooks/useAppSelector';
 import { Location } from "history";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
-import { ILoginResponse } from '../../@types/IUser';
+import { ILoginResponse, IUser } from '../../@types/IUser';
 import { useAuth } from '../../hooks/useAuth';
 import { $api } from '../../http/axios';
 import AuthService from '../../services/AuthService';
@@ -18,7 +18,7 @@ function Login() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-     const userRedux = useAuth();
+     const userRedux: IUser = useAuth();
      const userLocalStorage = localStorage.getItem('userInfo');
 
     const login = async (e: FormEvent<HTMLFormElement>) => {

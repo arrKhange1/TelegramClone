@@ -6,7 +6,7 @@ import SidePanelHeader from './SidePanelHeader';
 
 function SidePanel() {
 
-    const [selectedOption, setSelectedOption] = useState('');
+    const [selectedOption, setSelectedOption] = useState<string>('');
 
     return (
         <div className={side.side_panel}> 

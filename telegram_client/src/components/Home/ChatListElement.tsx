@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { IChat } from './ChatList';
+import IChat from '../../@types/IChat';
 import side from '../../styles/side_panel/side.module.css';
-import { useParams } from 'react-router-dom';
 
 function ChatListElement({activeChat, chat} : {activeChat: string,
     chat: IChat}) {

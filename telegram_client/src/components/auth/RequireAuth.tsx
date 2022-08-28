@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 
 function RequireAuth({children} : {children: JSX.Element}) {
 
-    const isAuth = useAuth().isAuthenticated;
+    const isAuth: boolean = useAuth().isAuthenticated;
 
     if (!isAuth) {
         return <Navigate to='/auth' />

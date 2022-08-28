@@ -9,7 +9,7 @@ function SidePanelHeader({selectedOption, setSelectedOption} :
      {setSelectedOption:React.Dispatch<React.SetStateAction<string>>,
     selectedOption: string}) {
 
-    const [isSearchActive, setIsSearchActive] = useState(false);
+    const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
     
     const options: IOption[] = [
         {img: 'imgs/contacts_icon.png', name: 'Contacts'}

@@ -3,12 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import home from '../../styles/home/home.module.css';
 import side from '../../styles/side_panel/side.module.css';
 import ContactListElement from './ContactListElement';
-
-export interface IContact { // chat id also
-    img: string,
-    name: string,
-    last_seen: string
-}
+import IContact from '../../@types/IContact';
 
 function ContactList() {
 
@@ -29,9 +24,9 @@ function ContactList() {
           last_seen: 'today'},
     ]
 
-    const custom_scroll: string = ' ' + home.bar_back + ' ' + home.bar_thumb;
+    const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
 
-    const chatId = useParams().chatId!;
+    const chatId: string = useParams().chatId!;
     const [activeChat, setActiveChat] = useState(chatId);
     useEffect(() => {
         setActiveChat(chatId);

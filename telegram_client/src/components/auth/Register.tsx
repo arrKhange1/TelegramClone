@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { FormEvent } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { ILoginResponse } from '../../@types/IUser';
+import { ILoginResponse, IUser } from '../../@types/IUser';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAuth } from '../../hooks/useAuth';
 import AuthService from '../../services/AuthService';
@@ -15,7 +15,7 @@ function Register() {
     const navigate = useNavigate();
 
     // for dev purposes
-    const userRedux = useAuth();
+    const userRedux: IUser = useAuth();
     const userLocalStorage = localStorage.getItem('userInfo');
 
     const register = async (e: FormEvent<HTMLFormElement>) => {

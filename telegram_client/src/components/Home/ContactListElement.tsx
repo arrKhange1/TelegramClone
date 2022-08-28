@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { IChat } from './ChatList';
+import IChat from '../../@types/IChat';
 import side from '../../styles/side_panel/side.module.css';
 import { useParams } from 'react-router-dom';
-import { IContact } from './ContactList';
+import IContact from '../../@types/IContact';
 
 function ContactListElement({activeChat, contact} : {activeChat: string,
     contact: IContact}) {
