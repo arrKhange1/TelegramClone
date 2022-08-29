@@ -6,12 +6,13 @@
     width: 1.5em;
     cursor: pointer;
     margin-left: 1em;
+    border-radius: 50%;
 }
 
 .butt:hover {
-    transition: all 200ms ease-in-out;
-    border-radius: 50%;
-    background: rgba(128, 130, 131, 0.2);
+    background: #D9DCE0;
+    outline: 5px solid #D9DCE0;
+    transition: background 200ms ease-in-out, outline 200ms ease-in-out ;
 }
 
 .content {

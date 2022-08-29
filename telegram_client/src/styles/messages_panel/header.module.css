@@ -1,0 +1,56 @@
+.header {
+    height: 5%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1em;
+}
+
+.info { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.info_img {
+    width: 40px;
+    border-radius: 50%;
+}
+
+.info_text {
+    display: flex;
+    flex-direction: column;
+}
+
+.info_text :first-child {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.info_text :last-child {
+    font-size: 0.9rem;
+    color: #707991;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.controls svg {
+    width: 24px;
+    height: 24px;
+    fill: #707991;
+    border-radius: 50%;
+}
+
+.controls svg:hover {
+    background-color: #D9DCE0;
+    outline: 5px solid #D9DCE0;
+    transition: all 200ms ease-in-out;
+}
+
+

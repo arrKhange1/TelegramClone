@@ -3,6 +3,7 @@ import msgs from '../../styles/messages_panel/messages.module.css';
 import home from '../../styles/home/home.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import IChat from '../../@types/IChat';
+import Header from './Header';
 
 function ExpandedChat() {
 
@@ -29,7 +30,7 @@ function ExpandedChat() {
     return (
 
         <div className={msgs.messages_panel}>
-            <div className={msgs.msgs_header}>HEADER OF CHAT</div>
+            <Header/>
             <div id={msgs.msgs_wrapper} className={custom_scroll}>
                 <div className={msgs.msgs}>
                     {[...Array<string>(100)].map((chat,i) => 
