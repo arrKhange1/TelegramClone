@@ -1,6 +1,7 @@
 .home {
     height: 100%;
     display: flex;
+    background-image: url(/public/imgs/telegram_background.png);
 }
 
 /* customization of scroll bar */
@@ -15,7 +16,6 @@
 
 .border {
     height: 100%;
-    background: black;
     width: 2px;
     cursor: col-resize;
 }

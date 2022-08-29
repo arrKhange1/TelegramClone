@@ -1,7 +1,6 @@
 .messages_panel {
     flex-grow: 1;
     height: 100%;
-    background-color: red;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -17,11 +16,6 @@
     overflow-y: auto;
 }
 
-/* #msgs_wrapper:hover {
-    overflow-y: auto;
-    padding-left: 5px;
-} */
-
 .msgs {
     height: 100%;
     background: none;
@@ -32,12 +26,12 @@
 .msgs_footer {
     height: 10%;
     position: sticky;
-    background: violet;
+    background: white;
 }
 
 .msgs_header {
     top: 0;
     width: 100%;
     height: 5%;
-    background: green;
+    background: white;
 }
