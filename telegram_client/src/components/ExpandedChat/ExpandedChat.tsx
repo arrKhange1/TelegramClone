@@ -2,11 +2,14 @@ import React, { useEffect } from 'react';
 import msgs from '../../styles/messages_panel/messages.module.css';
 import home from '../../styles/home/home.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
+import IChat from '../../@types/IChat';
 
 function ExpandedChat() {
 
     const params = useParams();
     const navigate = useNavigate();
+
+    // here might be request for chat by chatId from url params 
 
     const closeChat = (e:KeyboardEvent) => {
         if (e.key === 'Escape')
@@ -16,7 +19,6 @@ function ExpandedChat() {
     useEffect(() => {
         document.getElementById(msgs.msgs_wrapper)!
         .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
-
 
         window.addEventListener('keydown', closeChat);
         return () => window.removeEventListener('keydown', closeChat);

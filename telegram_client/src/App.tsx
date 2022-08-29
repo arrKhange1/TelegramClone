@@ -3,8 +3,8 @@ import Authentication from './components/auth/Authentication';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import RequireAuth from './components/auth/RequireAuth';
-import ExpandedChat from './components/Home/ExpandedChat';
-import Home from './components/Home/Home';
+import ExpandedChat from './components/ExpandedChat/ExpandedChat';
+import Home from './components/Home';
 import TestPrivate from './components/TestPrivate';
 
 
