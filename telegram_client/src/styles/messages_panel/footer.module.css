@@ -1,0 +1,45 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5em;
+    width: 50%;
+    background-color: none;
+    align-self: center;
+    padding: 1em;
+}
+.message {
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.message_container {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+}
+
+.message_input {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.message_input input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+}
+
+
+.send {
+    background-color: white;
+    width: 3rem;
+}

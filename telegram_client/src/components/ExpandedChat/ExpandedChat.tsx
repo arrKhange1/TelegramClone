@@ -4,6 +4,7 @@ import home from '../../styles/home/home.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import IChat from '../../@types/IChat';
 import Header from './Header';
+import Footer from './Footer';
 
 function ExpandedChat() {
 
@@ -38,7 +39,7 @@ function ExpandedChat() {
                     )}
                 </div>
             </div>
-            <div className={msgs.msgs_footer}>FOOTER OF CHAT</div>
+            <Footer/>
         </div>
     );
 }
