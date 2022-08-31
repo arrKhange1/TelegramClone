@@ -18,7 +18,10 @@ function Footer() {
                 </div>
                 
             </div>
-            <div className={footer.send}>send</div>
+            <div className={footer.send}>
+                <img src="imgs/voice_record.png" alt="" />
+            </div>
+            
         </div>
     );
 }
