@@ -38,8 +38,8 @@
     font-size: 1rem;
 }
 
-
 .send {
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,6 +48,13 @@
     padding: 1em;
 }
 
-.send img {
-    
+.send svg {
+    width: 24px;
+    height: 24px;
+}
+
+.send:hover {
+    background-color: #3390EC;
+    fill: white;
+    transition: all 200ms ease-in-out;
 }
