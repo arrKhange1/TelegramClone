@@ -19,6 +19,7 @@ namespace TelegramClone.Models
         public User()
         {
             RefreshTokens = new List<RefreshToken>();
+            ChatUsers = new List<ChatUser>();
         }
         
         public List<ChatUser> ChatUsers { get; set; }

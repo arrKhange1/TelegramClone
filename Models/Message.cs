@@ -10,6 +10,7 @@ namespace TelegramClone.Models
         public Guid MessageId { get; set; }
         public string MessageText { get; set; }
 
+        public Guid ChatUserId { get; set; }
         public ChatUser ChatUser { get; set; }
     }
 }
