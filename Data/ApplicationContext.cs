@@ -41,6 +41,7 @@ namespace TelegramClone.Data
                 UserId = Guid.NewGuid(),
                 UserName = "admin",
                 Password = "123456",
+                ConnectionStatus = "online",
                 RoleId = adminRole.RoleId
             });
             //
@@ -65,6 +66,7 @@ namespace TelegramClone.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
+        public DbSet<ChatCategory> ChatCategories { get; set; }
     }
 
     

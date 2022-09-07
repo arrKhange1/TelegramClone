@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelegramClone.Data;
 
 namespace TelegramClone.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20220907110516_add_chat_caterogiries")]
+    partial class add_chat_caterogiries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,12 +139,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = new Guid("f9cd7e3e-be2e-4821-912a-9e483753a397"),
+                            RoleId = new Guid("b8eba6b7-02b6-459b-9b41-d946430aaf98"),
                             RoleName = "admin"
                         },
                         new
                         {
-                            RoleId = new Guid("b6894f6d-d6f0-4716-96e4-895cdc340d24"),
+                            RoleId = new Guid("8fd9649e-799a-4c25-89ba-fbb771ded3fd"),
                             RoleName = "user"
                         });
                 });
@@ -152,9 +154,6 @@ namespace TelegramClone.Migrations
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConnectionStatus")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
@@ -174,10 +173,9 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("f7cab27a-57ce-4c7b-9a45-33e55893f60d"),
-                            ConnectionStatus = "online",
+                            UserId = new Guid("cd14d406-60e7-4914-aa2a-aecfd5013373"),
                             Password = "123456",
-                            RoleId = new Guid("f9cd7e3e-be2e-4821-912a-9e483753a397"),
+                            RoleId = new Guid("b8eba6b7-02b6-459b-9b41-d946430aaf98"),
                             UserName = "admin"
                         });
                 });
