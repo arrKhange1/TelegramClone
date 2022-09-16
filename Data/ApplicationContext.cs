@@ -56,6 +56,17 @@ namespace TelegramClone.Data
                 .WithMany(cu => cu.ChatUsers)
                 .HasForeignKey(cu => cu.UserId);
 
+            modelBuilder.Entity<UserContact>()
+                .HasOne(user => user.User)
+                .WithMany(uc => uc.UserContactsUsers)
+                .HasForeignKey(uc => uc.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<UserContact>()
+                .HasOne(contact => contact.Contact)
+                .WithMany(uc => uc.UserContactsContacts)
+                .HasForeignKey(uc => uc.ContactId)
+                .OnDelete(DeleteBehavior.NoAction);
 
 
         }
@@ -67,6 +78,7 @@ namespace TelegramClone.Data
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<ChatCategory> ChatCategories { get; set; }
+        public DbSet<UserContact> UserContacts { get; set; }
     }
 
     

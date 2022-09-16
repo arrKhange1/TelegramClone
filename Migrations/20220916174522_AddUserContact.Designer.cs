@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelegramClone.Data;
 
 namespace TelegramClone.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20220916174522_AddUserContact")]
+    partial class AddUserContact
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,12 +138,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = new Guid("744c027c-422c-4e67-9479-8ff705a06b60"),
+                            RoleId = new Guid("af064f86-6e93-40d9-a70b-e81e92a21805"),
                             RoleName = "admin"
                         },
                         new
                         {
-                            RoleId = new Guid("e141395b-ad79-494e-997b-035377980c9f"),
+                            RoleId = new Guid("43761fbe-1c5a-4d6f-a7c4-fc7511b715f6"),
                             RoleName = "user"
                         });
                 });
@@ -173,10 +175,10 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("ebfabcc4-6685-48ab-8ce9-1337137f4f91"),
+                            UserId = new Guid("ab5fabad-ed41-4854-8e34-69fddbc9e605"),
                             ConnectionStatus = "online",
                             Password = "123456",
-                            RoleId = new Guid("744c027c-422c-4e67-9479-8ff705a06b60"),
+                            RoleId = new Guid("af064f86-6e93-40d9-a70b-e81e92a21805"),
                             UserName = "admin"
                         });
                 });
@@ -196,8 +198,6 @@ namespace TelegramClone.Migrations
                     b.HasKey("UserContactId");
 
                     b.HasIndex("ContactId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserContacts");
                 });
@@ -265,19 +265,11 @@ namespace TelegramClone.Migrations
 
             modelBuilder.Entity("TelegramClone.Models.UserContact", b =>
                 {
-                    b.HasOne("TelegramClone.Models.User", "Contact")
-                        .WithMany("UserContactsContacts")
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("TelegramClone.Models.User", "User")
-                        .WithMany("UserContactsUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany("UserContacts")
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Contact");
 
                     b.Navigation("User");
                 });
@@ -303,9 +295,7 @@ namespace TelegramClone.Migrations
 
                     b.Navigation("RefreshTokens");
 
-                    b.Navigation("UserContactsContacts");
-
-                    b.Navigation("UserContactsUsers");
+                    b.Navigation("UserContacts");
                 });
 #pragma warning restore 612, 618
         }

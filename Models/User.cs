@@ -24,6 +24,9 @@ namespace TelegramClone.Models
         
         public List<ChatUser> ChatUsers { get; set; }
 
+        public List<UserContact> UserContactsUsers { get; set; }
+        public List<UserContact> UserContactsContacts { get; set; }
+
 
     }
 }
