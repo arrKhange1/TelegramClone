@@ -7,8 +7,17 @@ namespace TelegramClone.Models
 {
     public class User
     {
+        public User(Guid userId, string userName, string userPhoto, string connStatus)
+        {
+            UserId = userId;
+            UserName = userName;
+            UserPhoto = userPhoto;
+            ConnectionStatus = connStatus;
+        }
+
         public Guid UserId { get; set; }
         public string UserName { get; set; }
+        public string UserPhoto { get; set; }
         public string Password { get; set; }
         public string ConnectionStatus { get; set; }
 

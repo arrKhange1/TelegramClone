@@ -33,5 +33,12 @@ namespace TelegramClone.Controllers
             else
                 return BadRequest();
         }
+
+        [HttpGet(template: "get")]
+        public IActionResult GetContacts(string userId)
+        {
+            return Ok(_contactsService.GetContacts(Guid.Parse(userId)));
+        }
+
     }
 }

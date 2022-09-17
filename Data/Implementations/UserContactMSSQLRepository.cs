@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
+using TelegramClone.Models.DTO;
 
 namespace TelegramClone.Data.Implementations
 {
@@ -24,6 +25,21 @@ namespace TelegramClone.Data.Implementations
                 ContactId = contactId
             });
             _context.SaveChanges();
+        }
+
+        public List<ContactElement> GetContacts(Guid userId)
+        {
+            var contacts = from uc in _context.UserContacts
+                       join u in _context.Users on uc.ContactId equals u.UserId
+                       where uc.UserId == userId
+                       select new ContactElement
+                       {
+                           ContactId = u.UserId,
+                           ContactName = u.UserName,
+                           ContactPhoto = u.UserPhoto,
+                           ConnectionStatus = u.ConnectionStatus
+                       };
+            return contacts.ToList();
         }
     }
 }
