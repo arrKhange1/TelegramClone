@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
+using TelegramClone.Models;
 
 namespace TelegramClone.Data.Implementations
 {
@@ -15,7 +16,14 @@ namespace TelegramClone.Data.Implementations
         }
         public void AddContact(Guid userId, Guid contactId)
         {
-            
+            _context.UserContacts.Add(
+            new UserContact
+            {
+                UserContactId = Guid.NewGuid(),
+                UserId = userId,
+                ContactId = contactId
+            });
+            _context.SaveChanges();
         }
     }
 }

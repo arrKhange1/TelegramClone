@@ -21,10 +21,17 @@ namespace TelegramClone.Controllers
             _userService = userService;
         }
 
-        [HttpPost]
+        [HttpPost(template: "add")]
         public IActionResult AddContact(string userId, string contactName)
         {
-            
+            var contact = _userService.GetUserByUserName(contactName);
+            if (contact != null)
+            {
+                _contactsService.AddContact(Guid.Parse(userId), contact.UserId);
+                return Ok();
+            }
+            else
+                return BadRequest();
         }
     }
 }

@@ -14,6 +14,11 @@ namespace TelegramClone.Services
             _userContactRepository = userContactRepository;
         }
 
+        public void AddContact(Guid userId, Guid contactId)
+        {
+            _userContactRepository.AddContact(userId, contactId);
+        }
+
 
     }
 }
