@@ -4,25 +4,23 @@ import home from '../../styles/home/home.module.css';
 import side from '../../styles/side_panel/side.module.css';
 import ContactListElement from './ContactListElement';
 import IContact from '../../@types/IContact';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { IUser } from '../../@types/IUser';
+import { $api } from '../../http/axios';
+import { useAuth } from '../../hooks/useAuth';
+import ContactsService from '../../services/ContactsService';
 
 function ContactList() {
-
-    const contacts: IContact[] = [
-        {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Vitya', 
-          last_seen: 'yesterday'},
-          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Sasha', 
-          last_seen: '2:40 PM'},
-          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name4', 
-          last_seen: '11:10 AM'},
-          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Dasha', 
-          last_seen: 'today'},
-          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Petya', 
-          last_seen: '1:40 PM'},
-          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Vasya', 
-          last_seen: 'today'},
-          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Vasya', 
-          last_seen: 'today'},
-    ]
+    const user: IUser = useAuth();
+    
+    const [contacts, setContacts] = useState<IContact[]>([]);
+    useEffect(() => {
+        const fetchContacts = async () => {
+            const response = await ContactsService.getContacts(user.userId);
+            setContacts([...response.data]);
+        }
+        fetchContacts();
+    }, []);
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
 
@@ -34,15 +32,15 @@ function ContactList() {
 
     return (
         <div className={side.chats + custom_scroll}>
-            {contacts.map(contact => 
-                <Link to={contact.name} className={side.chat_open_link}
+            {contacts.length ? contacts.map(contact => 
+                <Link key={contact.contactId} to={contact.contactId} className={side.chat_open_link}
                 onClick={() => 
-                    setActiveChat(contact.name)
+                    setActiveChat(contact.contactId)
                 }>
                     <ContactListElement activeChat={activeChat} contact={contact}/>
                 </Link>
                 
-            )}
+            ) : <div>no contacts</div> }
         </div>
     );
 }

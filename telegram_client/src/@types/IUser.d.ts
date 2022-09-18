@@ -1,4 +1,5 @@
 export interface ILoginResponse {
+    userId:string,
     userName:string,
     role:string,
 }

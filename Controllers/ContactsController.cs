@@ -21,7 +21,7 @@ namespace TelegramClone.Controllers
             _userService = userService;
         }
 
-        [HttpPost(template: "add")]
+        [HttpPost]
         public IActionResult AddContact(string userId, string contactName)
         {
             var contact = _userService.GetUserByUserName(contactName);
@@ -34,7 +34,7 @@ namespace TelegramClone.Controllers
                 return BadRequest();
         }
 
-        [HttpGet(template: "get")]
+        [HttpGet]
         public IActionResult GetContacts(string userId)
         {
             return Ok(_contactsService.GetContacts(Guid.Parse(userId)));

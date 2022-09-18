@@ -81,6 +81,7 @@ namespace TelegramClone.Controllers
                 _refreshTokenService.AddRefreshTokenInCookie(HttpContext, newRefreshToken);
 
                 return Ok(new {
+                    userId = user.UserId,
                     userName = user.UserName, 
                     role = _roleService.GetRoleById(user).RoleName });
             }
@@ -105,6 +106,7 @@ namespace TelegramClone.Controllers
 
                 return Ok(new
                 {
+                    userId = createdUser.UserId,
                     userName = createdUser.UserName,
                     role = "user"
                 });

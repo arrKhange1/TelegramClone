@@ -5597,23 +5597,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {},
+    "C:\\Users\\Артур\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\source\\repos\\TelegramClone\\TelegramClone.csproj",
+      "projectUniqueName": "C:\\Users\\Артур\\source\\repos\\TelegramClone\\TelegramClone\\TelegramClone.csproj",
       "projectName": "TelegramClone",
-      "projectPath": "C:\\Users\\User\\source\\repos\\TelegramClone\\TelegramClone.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\source\\repos\\TelegramClone\\obj\\",
+      "projectPath": "C:\\Users\\Артур\\source\\repos\\TelegramClone\\TelegramClone\\TelegramClone.csproj",
+      "packagesPath": "C:\\Users\\Артур\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Артур\\source\\repos\\TelegramClone\\TelegramClone\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Артур\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

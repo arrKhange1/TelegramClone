@@ -8,12 +8,12 @@ function ContactListElement({activeChat, contact} : {activeChat: string,
     contact: IContact}) {
     
     return (
-        <div className={activeChat === contact.name ? `${side.chat} ${side.active}` :
+        <div className={activeChat === contact.contactId ? `${side.chat} ${side.active}` :
             `${side.chat}`} >
-            <img src={contact.img} className={side.chat_img} alt='asap'/>
+            <img src={contact.contactPhoto} className={side.chat_img} alt='asap'/>
             <div className={`${side.chat_content} ${side.chat_center}`}>
-                <div>{contact.name}</div>
-                <div>{contact.last_seen}</div>
+                <div>{contact.contactName}</div>
+                <div>{contact.connectionStatus}</div>
             </div>
         </div>
     );
