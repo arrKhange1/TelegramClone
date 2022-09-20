@@ -9,6 +9,8 @@ import { IUser } from '../../@types/IUser';
 import { $api } from '../../http/axios';
 import { useAuth } from '../../hooks/useAuth';
 import ContactsService from '../../services/ContactsService';
+import AddButton from './AddButton';
+import AddContactIcon from '../../icons/AddContactIcon';
 
 function ContactList() {
     const user: IUser = useAuth();
@@ -41,6 +43,11 @@ function ContactList() {
                 </Link>
                 
             ) : <div>no contacts</div> }
+
+            <AddButton addCallback={() => console.log('contact')}>
+                <AddContactIcon/>
+            </AddButton>
+
         </div>
     );
 }

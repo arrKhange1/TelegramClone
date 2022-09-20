@@ -4,6 +4,8 @@ import home from '../../styles/home/home.module.css';
 import side from '../../styles/side_panel/side.module.css';
 import ChatListElement from './ChatListElement';
 import IChat from '../../@types/IChat';
+import AddButton from './AddButton';
+import AddContactIcon from '../../icons/AddContactIcon';
 
 function ChatList() {
 
@@ -50,8 +52,12 @@ function ChatList() {
                 } >
                     <ChatListElement activeChat={activeChat} chat={chat}/>
                 </Link>
-                
             )}
+            
+            <AddButton addCallback={() => console.log('chat')}>
+                <AddContactIcon/>
+            </AddButton>
+            {/* modal window with add chat form */}
         </div>
     );
 }
