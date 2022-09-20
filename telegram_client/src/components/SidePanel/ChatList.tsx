@@ -34,6 +34,18 @@ function ChatList() {
          last_msg_date:'last_msg_date5', unread_msgs:5},
          {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
          last_msg_date:'last_msg_date5', unread_msgs:5},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
+         last_msg_date:'last_msg_date5', unread_msgs:5},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
+         last_msg_date:'last_msg_date5', unread_msgs:5},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
+         last_msg_date:'last_msg_date5', unread_msgs:5},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
+         last_msg_date:'last_msg_date5', unread_msgs:5},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
+         last_msg_date:'last_msg_date5', unread_msgs:5},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
+         last_msg_date:'last_msg_date5', unread_msgs:5},
     ]
 
     const chatId: string = useParams().chatId!;
@@ -54,9 +66,6 @@ function ChatList() {
                 </Link>
             )}
             
-            <AddButton addCallback={() => console.log('chat')}>
-                <AddContactIcon/>
-            </AddButton>
             {/* modal window with add chat form */}
         </div>
     );

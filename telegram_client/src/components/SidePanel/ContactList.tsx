@@ -44,10 +44,7 @@ function ContactList() {
                 
             ) : <div>no contacts</div> }
 
-            <AddButton addCallback={() => console.log('contact')}>
-                <AddContactIcon/>
-            </AddButton>
-
+            {/* modal window with add contact form */}
         </div>
     );
 }
