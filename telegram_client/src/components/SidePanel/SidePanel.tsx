@@ -5,22 +5,27 @@ import ChatList from './ChatList';
 import SidePanelHeader from './SidePanelHeader';
 import AddButton from './AddButton';
 import AddContactIcon from '../../icons/AddContactIcon';
+import ModalWindow from './ModalWindow';
+import ContactsAddForm from './ContactsAddForm';
 
 function SidePanel() {
 
     const [selectedOption, setSelectedOption] = useState<string>('');
+    const [modal, setModal] = useState(false);
+
 
     return (
         <div className={side.side_panel}> 
 
             <SidePanelHeader selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
             
-            {selectedOption === 'Contacts' && <ContactList/>}
-            {selectedOption === '' && <ChatList/>}
+            {selectedOption === 'Contacts' && <ContactList modal={modal} setModal={setModal}/>}
+            {selectedOption === '' && <ChatList modal={modal} setModal={setModal}/>}
 
-            <AddButton addCallback={() => console.log('chat')}>
+            <AddButton addCallback={() => setModal(true)}>
                 <AddContactIcon/>
             </AddButton>
+
         </div>
     );
 }

@@ -11,8 +11,11 @@ import { useAuth } from '../../hooks/useAuth';
 import ContactsService from '../../services/ContactsService';
 import AddButton from './AddButton';
 import AddContactIcon from '../../icons/AddContactIcon';
+import ContactsAddForm from './ContactsAddForm';
+import ModalWindow from './ModalWindow';
 
-function ContactList() {
+function ContactList({modal, setModal} : { modal: boolean,
+     setModal: React.Dispatch<React.SetStateAction<boolean>> }) {
     const user: IUser = useAuth();
     
     const [contacts, setContacts] = useState<IContact[]>([]);
@@ -44,7 +47,9 @@ function ContactList() {
                 
             ) : <div>no contacts</div> }
 
-            {/* modal window with add contact form */}
+            <ModalWindow modal={modal} setModal={setModal}>
+                <ContactsAddForm/>
+            </ModalWindow>
         </div>
     );
 }

@@ -7,7 +7,8 @@ import IChat from '../../@types/IChat';
 import AddButton from './AddButton';
 import AddContactIcon from '../../icons/AddContactIcon';
 
-function ChatList() {
+function ChatList({modal, setModal} : { modal: boolean,
+    setModal: React.Dispatch<React.SetStateAction<boolean>> }) {
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
 

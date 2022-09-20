@@ -5,10 +5,10 @@ function ContactsAddForm() {
     
     
     return (
-        <div>
+        <form>
             <input type="text" placeholder='username'/>
             <button type='button'>Add</button>
-        </div>
+        </form>
     )
 }
 
