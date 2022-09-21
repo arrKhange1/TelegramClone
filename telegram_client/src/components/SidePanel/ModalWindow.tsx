@@ -6,10 +6,8 @@ function ModalWindow({modal, setModal, children} : {children : JSX.Element,
     
     return (
         <div className={modal ? `${side.modal} ${side.modal__active}` :
-            side.modal} onClick={() => setModal(false)}>
-            <div onClick={(e:React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
+            side.modal} onMouseDown={(e: any) => e.target.classList.contains(`${side.modal__active}`) && setModal(false)}>
                 {children}
-            </div>
         </div>
     )
 }

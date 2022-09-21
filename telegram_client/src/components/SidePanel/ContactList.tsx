@@ -17,6 +17,11 @@ import ModalWindow from './ModalWindow';
 function ContactList({modal, setModal} : { modal: boolean,
      setModal: React.Dispatch<React.SetStateAction<boolean>> }) {
     const user: IUser = useAuth();
+
+    const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
+
+    const chatId: string = useParams().chatId!;
+    const [activeChat, setActiveChat] = useState(chatId);
     
     const [contacts, setContacts] = useState<IContact[]>([]);
     const [contactToAdd, setContactToAdd] = useState('');
@@ -30,15 +35,14 @@ function ContactList({modal, setModal} : { modal: boolean,
         fetchContacts();
     }, []);
 
-    const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
-
-    const chatId: string = useParams().chatId!;
-    const [activeChat, setActiveChat] = useState(chatId);
     useEffect(() => {
         setActiveChat(chatId);
     }, [chatId])
 
-    console.log(contactToAdd);
+    useEffect(() => {
+        if (!modal)
+            setContactToAdd('');
+    }, [modal])
 
     const addContact = async () => {
         await ContactsService.addContact(user.userId, contactToAdd);
@@ -63,6 +67,7 @@ function ContactList({modal, setModal} : { modal: boolean,
                 setModal={setModal}
                 cb={addContact}
                 setContactName={setContactToAdd}
+                contactName={contactToAdd}
                 />
             </ModalWindow>
         </div>
