@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,16 +16,24 @@ namespace TelegramClone.Data.Implementations
         {
             _context = context;
         }
-        public void AddContact(Guid userId, Guid contactId)
+        public async Task<bool> AddContact(Guid userId, Guid contactId)
         {
-            _context.UserContacts.Add(
-            new UserContact
+            try
             {
-                UserContactId = Guid.NewGuid(),
-                UserId = userId,
-                ContactId = contactId
-            });
-            _context.SaveChanges();
+                await _context.UserContacts.AddAsync(
+                new UserContact
+                {
+                    UserContactId = Guid.NewGuid(),
+                    UserId = userId,
+                    ContactId = contactId
+                });
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException ex)
+            {
+                return false;
+            }
         }
 
         public List<ContactElement> GetContacts(Guid userId)

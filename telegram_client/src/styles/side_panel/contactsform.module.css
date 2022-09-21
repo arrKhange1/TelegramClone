@@ -1,0 +1,21 @@
+.form {
+    background-color: white;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    gap: 1em;
+}
+
+.form_header {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.form_content {
+    align-self: flex-end;
+}
+
+.form_footer {
+    align-self: flex-end;
+}

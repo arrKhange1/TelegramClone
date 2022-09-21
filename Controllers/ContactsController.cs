@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,16 +23,23 @@ namespace TelegramClone.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddContact(string userId, string contactName)
+        public async Task<IActionResult> AddContact(string userId, string contactName)
         {
             var contact = _userService.GetUserByUserName(contactName);
+            Guid userIdFromString = Guid.Parse(userId);
+
             if (contact != null)
             {
-                _contactsService.AddContact(Guid.Parse(userId), contact.UserId);
-                return Ok();
+                if (userIdFromString == contact.UserId)
+                    return BadRequest("Trying to add yourself");
+
+                var addStatus = await _contactsService.AddContact(userIdFromString, contact.UserId);
+                if (addStatus)
+                    return Ok();
+                return BadRequest("Contact already exists");
             }
             else
-                return BadRequest();
+                return BadRequest("No such user");
         }
 
         [HttpGet]

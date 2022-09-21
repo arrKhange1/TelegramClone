@@ -9,7 +9,7 @@ namespace TelegramClone.Data.Interfaces
 {
     public interface IUserContactRepository
     {
-        public void AddContact(Guid userId, Guid contactId);
+        public Task<bool> AddContact(Guid userId, Guid contactId);
         public List<ContactElement> GetContacts(Guid userId);
     }
 }

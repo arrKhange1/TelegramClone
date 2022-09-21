@@ -6,6 +6,8 @@ import ChatListElement from './ChatListElement';
 import IChat from '../../@types/IChat';
 import AddButton from './AddButton';
 import AddContactIcon from '../../icons/AddContactIcon';
+import ModalWindow from './ModalWindow';
+import ContactsAddForm from './ContactsAddForm';
 
 function ChatList({modal, setModal} : { modal: boolean,
     setModal: React.Dispatch<React.SetStateAction<boolean>> }) {
@@ -55,6 +57,9 @@ function ChatList({modal, setModal} : { modal: boolean,
         setActiveChat(chatId);
     }, [chatId])
 
+    const addGroupChat = () => {
+
+    }
 
     return (
         <div className={side.chats + custom_scroll}>
@@ -67,7 +72,12 @@ function ChatList({modal, setModal} : { modal: boolean,
                 </Link>
             )}
             
-            {/* modal window with add chat form */}
+            {/* <ModalWindow modal={modal} setModal={setModal}>
+                <ContactsAddForm
+                 setModal={setModal}
+                 cb={addGroupChat}
+                />
+            </ModalWindow> */}
         </div>
     );
 }

@@ -19,11 +19,14 @@ function ContactList({modal, setModal} : { modal: boolean,
     const user: IUser = useAuth();
     
     const [contacts, setContacts] = useState<IContact[]>([]);
+    const [contactToAdd, setContactToAdd] = useState('');
+
+    const fetchContacts = async () => {
+        const response = await ContactsService.getContacts(user.userId);
+        setContacts([...response.data]);
+    }
+
     useEffect(() => {
-        const fetchContacts = async () => {
-            const response = await ContactsService.getContacts(user.userId);
-            setContacts([...response.data]);
-        }
         fetchContacts();
     }, []);
 
@@ -34,6 +37,14 @@ function ContactList({modal, setModal} : { modal: boolean,
     useEffect(() => {
         setActiveChat(chatId);
     }, [chatId])
+
+    console.log(contactToAdd);
+
+    const addContact = async () => {
+        await ContactsService.addContact(user.userId, contactToAdd);
+        await fetchContacts();
+        await setModal(false);
+    }
 
     return (
         <div className={side.chats + custom_scroll}>
@@ -48,7 +59,11 @@ function ContactList({modal, setModal} : { modal: boolean,
             ) : <div>no contacts</div> }
 
             <ModalWindow modal={modal} setModal={setModal}>
-                <ContactsAddForm/>
+                <ContactsAddForm 
+                setModal={setModal}
+                cb={addContact}
+                setContactName={setContactToAdd}
+                />
             </ModalWindow>
         </div>
     );

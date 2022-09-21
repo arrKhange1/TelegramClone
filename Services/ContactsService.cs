@@ -16,9 +16,9 @@ namespace TelegramClone.Services
             _userContactRepository = userContactRepository;
         }
 
-        public void AddContact(Guid userId, Guid contactId)
+        public async Task<bool> AddContact(Guid userId, Guid contactId)
         {
-            _userContactRepository.AddContact(userId, contactId);
+            return await _userContactRepository.AddContact(userId, contactId);
         }
         public List<ContactElement> GetContacts(Guid userId)
         {

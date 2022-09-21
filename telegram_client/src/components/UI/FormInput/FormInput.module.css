@@ -1,0 +1,9 @@
+.forminput {
+    padding: 0.5em;
+    border: none;
+}
+
+.forminput:focus, .forminput:hover {
+    outline: 1px solid #3390EC;
+    border-radius: 5px;
+}
