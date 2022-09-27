@@ -5,6 +5,7 @@ import Register from './components/auth/Register';
 import RequireAuth from './components/auth/RequireAuth';
 import ExpandedChat from './components/ExpandedChat/ExpandedChat';
 import Home from './components/Home';
+import TestChat from './components/TestChat';
 import TestPrivate from './components/TestPrivate';
 
 
@@ -17,7 +18,7 @@ function App() {
        path='/'
        element={
         <RequireAuth>
-          <Home/> 
+          <TestChat/>{/* <Home/>  */}
         </RequireAuth>
        } >
           <Route path=':chatId' element={<ExpandedChat/>} />

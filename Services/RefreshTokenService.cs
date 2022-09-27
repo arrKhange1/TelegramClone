@@ -51,7 +51,7 @@ namespace TelegramClone.Services
             {
                 Token = newRefreshToken,
                 UserId = user.UserId,
-                ExpireDate = DateTime.Now.AddHours(10)
+                ExpireDate = DateTime.Now.AddMinutes(0.5)
             };
 
             await _refreshTokenRepository.DeleteUserRefreshTokens(user.UserId);
@@ -68,7 +68,7 @@ namespace TelegramClone.Services
             {
                 Token = refreshToken,
                 UserId = user.UserId,
-                ExpireDate = DateTime.Now.AddHours(10)
+                ExpireDate = DateTime.Now.AddMinutes(0.5)
             };
 
             await _refreshTokenRepository.AddUserRefreshTokens(userToken);

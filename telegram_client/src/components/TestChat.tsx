@@ -1,7 +1,10 @@
 import * as signalR from '@microsoft/signalr';
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { $api } from '../http/axios';
+import AuthService from '../services/AuthService';
 
 export interface IMessage {
     user: string,
@@ -10,6 +13,7 @@ export interface IMessage {
 
 function TestChat() {
   const user = useAuth();
+  const navigate = useNavigate();
 
   const [connection, setConnection ] = useState<signalR.HubConnection>();
   const [msgs, setMsgs] = useState<IMessage[]>([]);
@@ -18,7 +22,7 @@ function TestChat() {
 
   useEffect(() => {
     const hubConnection = new signalR.HubConnectionBuilder()
-                      .withUrl("/testchat")
+                      .withUrl("/chat")
                       .build();
     setConnection(hubConnection);
   }, []);
@@ -35,8 +39,24 @@ function TestChat() {
                     console.log(msgs);
                     setMsgs([...msgs]);
                 });
+
+                
             })
-            .catch(e => console.log('Connection failed: ', e));
+            .catch(async e => {
+                console.log('Connection failed: ', e.status);
+                try {
+                  await axios.post('auth/refresh');
+                  const hubConnection = new signalR.HubConnectionBuilder()
+                      .withUrl("/chat")
+                      .build();
+                  setConnection(hubConnection);
+                  console.log('access token expired, new pair generated');
+                } catch(e) {
+                  console.log('refresh error'); // force logout
+                  await AuthService.logout();
+              }
+
+            });
     }
 }, [connection]);
 
@@ -75,8 +95,8 @@ function TestChat() {
         type="button"
         id="sendBtn"
         value="Отправить"
-        onClick={() => {
-          connection?.send("Send", message.msg, message.user);
+        onClick={async () => {
+          await $api.post(`chats?msg=${message.msg}&username=${message.user}`);
           setMessage({...message, msg:''});
         }}
         />

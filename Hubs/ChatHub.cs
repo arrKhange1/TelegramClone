@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace TelegramClone.Hubs
     {
         public async Task Send(string msg, string username)
         {
-            await this.Clients.All.SendAsync("Send", msg, username);
+            await this.Clients.All.SendAsync("Send", msg , username);
         }
 
         public override async Task OnConnectedAsync()
@@ -21,10 +22,6 @@ namespace TelegramClone.Hubs
             await base.OnConnectedAsync();
         }
 
-        public override async Task OnDisconnectedAsync(Exception ex)
-        {
-            await Clients.All.SendAsync("Send", "вышел из чата", $"{Context.ConnectionId}");
-            await base.OnDisconnectedAsync(ex);
-        }
+        
     }
 }
