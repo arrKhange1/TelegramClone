@@ -67,31 +67,31 @@ namespace TelegramClone
                             Configuration["Jwt:Key"])),
                         ClockSkew = TimeSpan.Zero
                     };
-                    // для сигнал р токена
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            var accessToken = context.Request.Query["access"];
+                    //// для сигнал р токена
+                    //options.Events = new JwtBearerEvents
+                    //{
+                    //    OnMessageReceived = context =>
+                    //    {
+                    //        var accessToken = context.Request.Query["access"];
 
-                            // если запрос направлен хабу
-                            var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/chat")))
-                            {
-                                // получаем токен из строки запроса
-                                context.Token = accessToken;
-                            }
-                            return Task.CompletedTask;
-                        },
+                    //        // если запрос направлен хабу
+                    //        var path = context.HttpContext.Request.Path;
+                    //        if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/chat")))
+                    //        {
+                    //            // получаем токен из строки запроса
+                    //            context.Token = accessToken;
+                    //        }
+                    //        return Task.CompletedTask;
+                    //    },
 
-                        OnAuthenticationFailed = context => {
-                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                            {
-                                context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
-                            }
-                            return Task.CompletedTask;
-                        }
-                    };
+                    //    OnAuthenticationFailed = context => {
+                    //        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                    //        {
+                    //            context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
+                    //        }
+                    //        return Task.CompletedTask;
+                    //    }
+                    //};
                     
 
                 });

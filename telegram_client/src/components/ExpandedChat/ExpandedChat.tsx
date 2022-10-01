@@ -5,7 +5,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import IChat from '../../@types/IChat';
 import Header from './Header';
 import Footer from './Footer';
+import SignalRService from '../../services/SignalRService';
+import { $api } from '../../http/axios';
 
+let signalRService : SignalRService;
 function ExpandedChat() {
 
     const params = useParams();
@@ -19,11 +22,25 @@ function ExpandedChat() {
     }
 
     useEffect(() => {
+        
+        (async function connEstablish() {
+            if (signalRService)
+                await signalRService.stop();
+            signalRService = new SignalRService();
+            await signalRService.start();
+            await signalRService.connection.on('Message', () => {
+            console.log('broadcast to msgs');
+            });
+        })()
+
         document.getElementById(msgs.msgs_wrapper)!
         .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
 
         window.addEventListener('keydown', closeChat);
-        return () => window.removeEventListener('keydown', closeChat);
+        return () => { 
+            window.removeEventListener('keydown', closeChat);
+            signalRService.stop();
+         };
     }, []);
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
@@ -31,6 +48,8 @@ function ExpandedChat() {
     return (
 
         <div className={msgs.messages_panel}>
+            {/* dev purposes */}
+            <button type='button' onClick={() => $api.post('/chats/testmsg')}>msgs</button>
             <Header/>
             <div id={msgs.msgs_wrapper} className={custom_scroll}>
                 <div className={msgs.msgs}>

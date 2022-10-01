@@ -13,7 +13,6 @@ function SidePanel() {
     const [selectedOption, setSelectedOption] = useState<string>('');
     const [modal, setModal] = useState(false);
 
-
     return (
         <div className={side.side_panel}> 
 

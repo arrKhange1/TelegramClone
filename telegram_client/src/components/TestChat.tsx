@@ -2,9 +2,11 @@ import * as signalR from '@microsoft/signalr';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAppSelector } from '../hooks/useAppSelector';
 import { useAuth } from '../hooks/useAuth';
 import { $api } from '../http/axios';
 import AuthService from '../services/AuthService';
+import SignalRService from '../services/SignalRService';
 
 export interface IMessage {
     user: string,
@@ -15,51 +17,14 @@ function TestChat() {
   const user = useAuth();
   const navigate = useNavigate();
 
-  const [connection, setConnection ] = useState<signalR.HubConnection>();
   const [msgs, setMsgs] = useState<IMessage[]>([]);
   const [message, setMessage] = useState<IMessage>({user: '', msg: ''});
   const userNameInput = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const hubConnection = new signalR.HubConnectionBuilder()
-                      .withUrl("/chat")
-                      .build();
-    setConnection(hubConnection);
-  }, []);
+ 
+
   
-  useEffect(() => {
-    if (connection) {
-        connection.start()
-            .then(result => {
-                console.log('Connected!');
-
-                connection.on('Send', (msg:string, username:string) => {
-                    msgs.unshift({user:username, msg:msg});
-                    console.log('received!');
-                    console.log(msgs);
-                    setMsgs([...msgs]);
-                });
-
                 
-            })
-            .catch(async e => {
-                console.log('Connection failed: ', e.status);
-                try {
-                  await axios.post('auth/refresh');
-                  const hubConnection = new signalR.HubConnectionBuilder()
-                      .withUrl("/chat")
-                      .build();
-                  setConnection(hubConnection);
-                  console.log('access token expired, new pair generated');
-                } catch(e) {
-                  console.log('refresh error'); // force logout
-                  await AuthService.logout();
-              }
-
-            });
-    }
-}, [connection]);
-
   console.log(message);
 
   return (
@@ -96,7 +61,7 @@ function TestChat() {
         id="sendBtn"
         value="Отправить"
         onClick={async () => {
-          await $api.post(`chats?msg=${message.msg}&username=${message.user}`);
+          await $api.post(`chats?msg=${message.msg}&to=${message.user}`);
           setMessage({...message, msg:''});
         }}
         />

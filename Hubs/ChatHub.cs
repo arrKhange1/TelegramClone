@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TelegramClone.Hubs
 {
-    [Authorize]
+    
     public class ChatHub: Hub
     {
         public async Task Send(string msg, string username)

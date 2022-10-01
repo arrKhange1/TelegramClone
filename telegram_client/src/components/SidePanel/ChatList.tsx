@@ -8,7 +8,10 @@ import AddButton from './AddButton';
 import AddContactIcon from '../../icons/AddContactIcon';
 import ModalWindow from './ModalWindow';
 import ContactsAddForm from './ContactsAddForm';
+import SignalRService from '../../services/SignalRService';
+import { $api } from '../../http/axios';
 
+let signalRService: SignalRService;
 function ChatList({modal, setModal} : { modal: boolean,
     setModal: React.Dispatch<React.SetStateAction<boolean>> }) {
 
@@ -57,14 +60,28 @@ function ChatList({modal, setModal} : { modal: boolean,
         setActiveChat(chatId);
     }, [chatId])
 
+    useEffect(() => {
+        (async function connEstablish() {
+            if (signalRService)
+                await signalRService.stop();
+            signalRService = new SignalRService();
+            await signalRService.start();
+            await signalRService.connection.on('Chat', () => {
+            console.log('broadcast to chats');
+            });
+        })()
+        return () => { signalRService.stop() };
+    }, [])
+
     const addGroupChat = () => {
 
     }
 
     return (
         <div className={side.chats + custom_scroll}>
-            {chats.map(chat => 
-                <Link to={chat.name} className={side.chat_open_link}
+            <button type='button' onClick={() => $api.post('/chats/testchats')}>chats</button>
+            {chats.map((chat,index) => 
+                <Link to={chat.name} key={index} className={side.chat_open_link}
                 onClick={() => 
                     setActiveChat(chat.name)
                 } >

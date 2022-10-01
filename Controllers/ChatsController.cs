@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Hubs;
 using Microsoft.AspNetCore.Authorization;
+using TelegramClone.Services;
 
 namespace TelegramClone.Controllers
 {
@@ -16,9 +17,11 @@ namespace TelegramClone.Controllers
     public class ChatsController : ControllerBase
     {
         private readonly IHubContext<ChatHub> _hubContext;
-        public ChatsController(IHubContext<ChatHub> hubContext)
+        private readonly UserService _userService;
+        public ChatsController(IHubContext<ChatHub> hubContext, UserService userService)
         {
             _hubContext = hubContext;
+            _userService = userService;
         }
         [HttpGet]
         public IActionResult GetChat(string chatId, string initiatorId)
@@ -27,9 +30,27 @@ namespace TelegramClone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendMessage(string msg, string userName)
+        public async Task<IActionResult> SendMessage(string msg, string to)
         {
-            await _hubContext.Clients.All.SendAsync("Send", msg, userName);
+
+            var senderName = _userService.GetCurrentUser(HttpContext).UserName;
+            if (senderName != to)
+                await _hubContext.Clients.User(to).SendAsync("Send", msg, senderName);
+            await _hubContext.Clients.User(senderName).SendAsync("Send", msg,  senderName);
+            return Ok();
+        }
+
+        [HttpPost ("testmsg")]
+        public async Task<IActionResult> TestMessage()
+        {
+            await _hubContext.Clients.All.SendAsync("Message");
+            return Ok();
+        }
+
+        [HttpPost("testchats")]
+        public async Task<IActionResult> TestChats()
+        {
+            await _hubContext.Clients.All.SendAsync("Chat");
             return Ok();
         }
     }

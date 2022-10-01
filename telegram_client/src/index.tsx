@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './App';
 import { useAppDispatch } from './hooks/useAppDispatch';
+import SignalRService from './services/SignalRService';
 import { authenticate } from './store/reducers/authSlice';
 import { setupStore } from './store/store';
 
@@ -15,7 +16,6 @@ export const store = setupStore();
 const userInfo = localStorage.getItem('userInfo');
 if (userInfo)
   store.dispatch(authenticate(JSON.parse(userInfo)));
-
 
 root.render(
   <Provider store={store}>
