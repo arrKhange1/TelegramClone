@@ -4,8 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import ContactsService from '../../services/ContactsService';
 import modalForm from '../../styles/side_panel/modalform.module.css';
 import FormInput from '../UI/FormInput/FormInput';
-import FormRegularButton from '../UI/FormRegularButton/FormRegularButton';
-import FormSubmit from '../UI/FormSubmit/FormSubmit';
+import FormButton from '../UI/FormButton/FormButton';
 
 function ChatsAddForm({setModal} : {
     setModal:React.Dispatch<React.SetStateAction<boolean>>,
@@ -55,8 +54,8 @@ function ChatsAddForm({setModal} : {
                 )
             }
             <footer className={modalForm.form_footer}>
-                <FormRegularButton onClick={() => setModal(false)}>CANCEL</FormRegularButton>
-                <FormSubmit>DONE</FormSubmit>
+                <FormButton onClick={() => setModal(false)}>CANCEL</FormButton>
+                <FormButton onClick={() => setModal(false)}>DONE</FormButton>
             </footer>
         </form>
     );
