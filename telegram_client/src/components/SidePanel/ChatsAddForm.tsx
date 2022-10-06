@@ -36,23 +36,27 @@ function ChatsAddForm({setModal} : {
     return (
         <form className={modalForm.form} onSubmit={addGroupChat}>
             <header className={modalForm.form_header}>New Group Chat</header>
-            <label>
-                <FormInput 
-                    value={chatToAdd}
-                    name={'groupName'}
-                    placeholder='group name'
-                    onChange={(e:ChangeEvent<HTMLInputElement>) => setChatToAdd(e.target.value)}
-                />
-            </label>
-            <p>Choose members from your contacts:</p>
-            {
-            contacts?.map(contact => 
-                <label key={contact.contactId}>
-                    <input type="checkbox" name='ids' value={contact.contactId}/>
-                    {contact.contactName}
+            <main className={modalForm.form_content}>
+                <label>
+                    <FormInput 
+                        value={chatToAdd}
+                        name={'groupName'}
+                        placeholder='group name'
+                        onChange={(e:ChangeEvent<HTMLInputElement>) => setChatToAdd(e.target.value)}
+                    />
                 </label>
-                )
-            }
+                <p>Choose members from your contacts:</p>
+                <ul>
+                    {
+                    contacts?.map(contact => 
+                        <label key={contact.contactId}>
+                            <input type="checkbox" name='ids' value={contact.contactId}/>
+                            {contact.contactName}
+                        </label>
+                        )
+                    }
+                </ul>
+            </main>
             <footer className={modalForm.form_footer}>
                 <FormButton onClick={() => setModal(false)}>CANCEL</FormButton>
                 <FormButton onClick={() => setModal(false)}>DONE</FormButton>
