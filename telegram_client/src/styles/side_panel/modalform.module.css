@@ -19,3 +19,12 @@
 .form_footer {
     align-self: flex-end;
 }
+
+p {
+    padding: 0;
+    margin: 0;
+}
+
+label {
+    display: block;
+}

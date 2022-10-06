@@ -1,0 +1,14 @@
+.butt {
+    border: none;
+    color: #3390EC;
+    background-color: white;
+    padding: 0.5em;
+    border-radius: 5px;
+    transition: background-color 250ms ease-in-out;
+    cursor: pointer;
+}
+
+.butt:hover {
+    
+    background-color: lightgray;
+}

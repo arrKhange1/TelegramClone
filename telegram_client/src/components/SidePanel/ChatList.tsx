@@ -10,6 +10,7 @@ import ModalWindow from './ModalWindow';
 import ContactsAddForm from './ContactsAddForm';
 import SignalRService from '../../services/SignalRService';
 import { $api } from '../../http/axios';
+import ChatsAddForm from './ChatsAddForm';
 
 let signalRService: SignalRService;
 function ChatList({modal, setModal} : { modal: boolean,
@@ -18,40 +19,9 @@ function ChatList({modal, setModal} : { modal: boolean,
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
 
     const chats: IChat[] = [
-        {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Vitya', last_msg:'last_msg1sdsqwqwqwwwwwwwwwwwwwwwwwwwwww',
-         last_msg_date:'last_msg_date1', unread_msgs:100},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name2', last_msg:'last_msg2',
-         last_msg_date:'last_msg_date2', unread_msgs:2},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name3', last_msg:'last_msg3',
-         last_msg_date:'last_msg_date3', unread_msgs:3},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name4', last_msg:'last_msg4',
-         last_msg_date:'last_msg_date4', unread_msgs:4},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name6', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name7', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name8', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name9', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name10', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name11', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name15', last_msg:'last_msg5',
-         last_msg_date:'last_msg_date5', unread_msgs:5},
+        {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Vitya'},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name2'},
+         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name3'},
     ]
 
     const chatId: string = useParams().chatId!;
@@ -66,8 +36,8 @@ function ChatList({modal, setModal} : { modal: boolean,
                 await signalRService.stop();
             signalRService = new SignalRService();
             await signalRService.start();
-            await signalRService.connection.on('Chat', () => {
-            console.log('broadcast to chats');
+            await signalRService.connection.on('addGroupChat', (chatName: string) => {
+                console.log(chatName);
             });
         })()
         return () => { signalRService.stop() };
@@ -89,12 +59,11 @@ function ChatList({modal, setModal} : { modal: boolean,
                 </Link>
             )}
             
-            {/* <ModalWindow modal={modal} setModal={setModal}>
-                <ContactsAddForm
+            <ModalWindow modal={modal} setModal={setModal}>
+                <ChatsAddForm
                  setModal={setModal}
-                 cb={addGroupChat}
                 />
-            </ModalWindow> */}
+            </ModalWindow>
         </div>
     );
 }

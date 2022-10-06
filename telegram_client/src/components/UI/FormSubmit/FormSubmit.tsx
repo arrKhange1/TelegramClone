@@ -1,13 +1,11 @@
 import React from 'react';
 import classes from './FormSubmit.module.css';
 
-function FormSubmit({children, onClick} : {children: string,
-    onClick: () => void}
+function FormSubmit({children} : {children: string}
     ) {
     return (
-        <button type='button'
+        <button type='submit'
          className={classes.butt}
-         onClick={onClick}
          >{children}</button>
     );
 }
