@@ -17,8 +17,9 @@ $api.interceptors.response.use(config => {
         originRequest._isRetry = true;
         try {
             await axios.post('auth/refresh');
-            $api.request(originRequest);
+            const resp = await $api.request(originRequest);
             console.log('access token expired, new pair generated');
+            return resp;
         } catch(e) {
             console.log('refresh error'); // force logout
             await AuthService.logout();

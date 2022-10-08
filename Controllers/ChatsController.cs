@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TelegramClone.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using TelegramClone.Services;
+using TelegramClone.Models.DTO;
 
 namespace TelegramClone.Controllers
 {
@@ -29,6 +30,12 @@ namespace TelegramClone.Controllers
             return Ok(new { chatId = chatId, initiator = initiatorId });
         }
 
+        [HttpPost ("addgroupchat")]
+        public IActionResult AddGroupChat([FromBody] GroupChat groupChat)
+        {
+            return Ok(); 
+        }
+
         [HttpPost]
         public async Task<IActionResult> SendMessage(string msg, string to)
         {
@@ -39,6 +46,8 @@ namespace TelegramClone.Controllers
             await _hubContext.Clients.User(senderName).SendAsync("Send", msg,  senderName);
             return Ok();
         }
+
+
 
         [HttpPost ("testmsg")]
         public async Task<IActionResult> TestMessage()

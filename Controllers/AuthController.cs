@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -46,17 +47,26 @@ namespace TelegramClone.Controllers
         {
             var expiredAccessToken = _jwtService.GetAccessTokenFromCookie(HttpContext);
             if (string.IsNullOrEmpty(expiredAccessToken))
+            {
+                Debug.WriteLine("first");
                 return Unauthorized("Invalid attempt!");
+            }
 
             var user = _jwtService.GetUserFromToken(expiredAccessToken);
 
             var savedRefreshToken = _refreshTokenService.GetSavedRefreshToken(user, _refreshTokenService.GetRefreshTokenFromCookie(HttpContext));
 
             if (savedRefreshToken == null)
+            {
+                Debug.WriteLine("second");
                 return Unauthorized("Invalid attempt!");
+            }
 
             if (savedRefreshToken.IsExpired)
+            {
+                Debug.WriteLine("third");
                 return Unauthorized("Refresh token expired");
+            }
 
             string refreshToken = await _refreshTokenService.RefreshToken(user);
             string accessToken = _jwtService.GenerateAccessToken(user);

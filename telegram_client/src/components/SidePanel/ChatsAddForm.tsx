@@ -5,6 +5,8 @@ import ContactsService from '../../services/ContactsService';
 import modalForm from '../../styles/side_panel/modalform.module.css';
 import FormInput from '../UI/FormInput/FormInput';
 import FormButton from '../UI/FormButton/FormButton';
+import { $api } from '../../http/axios';
+import axios from 'axios';
 
 function ChatsAddForm({setModal} : {
     setModal:React.Dispatch<React.SetStateAction<boolean>>,
@@ -14,23 +16,32 @@ function ChatsAddForm({setModal} : {
     const [contacts, setContacts] = useState<IContact[]>();
     const [chatToAdd, setChatToAdd] = useState<string>('');
         
-    const fetchContacts = async () => { // maybe from redux
+    const fetchContacts = async () => {
         const response = await ContactsService.getContacts(user.userId);
+        console.log(response);
         setContacts([...response.data]);
     }
 
     useEffect(() => {
         fetchContacts();
     }, []);
-    
-    const addGroupChat = (e: React.FormEvent<HTMLFormElement>) => {
+
+    const addGroupChat = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData(e.target as HTMLFormElement);
-        const membersToAdd: FormDataEntryValue[] = formData.getAll('ids');
+        const membersIds: FormDataEntryValue[] = formData.getAll('ids');
+        const membersNames: FormDataEntryValue[] = formData.getAll('names');
         const groupName = formData.get('groupName');
 
-        console.log(membersToAdd, groupName);
+        let payload = {
+            groupName: groupName,
+            membersIds:membersIds,
+            membersNames:membersNames
+          };
+        await $api.post('https://localhost:44351/chats/addgroupchat', payload);
+
+        console.log(membersIds, membersNames, groupName);
     }
 
     return (
@@ -52,6 +63,7 @@ function ChatsAddForm({setModal} : {
                         <label key={contact.contactId}>
                             <input type="checkbox" name='ids' value={contact.contactId}/>
                             {contact.contactName}
+                            <input type="hidden" name='names' value={contact.contactName}/> 
                         </label>
                         )
                     }

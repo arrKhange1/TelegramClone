@@ -33,7 +33,10 @@ namespace TelegramClone.Services
 
 		public void AddAccessTokenInCookie(HttpContext httpContext, string token)
 		{
-			httpContext.Response.Cookies.Append("access", token);
+			httpContext.Response.Cookies.Append("access", token, new CookieOptions // permanent cookie
+			{
+				Expires = DateTimeOffset.Now.AddYears(1)
+			});
 			
 		}
 
