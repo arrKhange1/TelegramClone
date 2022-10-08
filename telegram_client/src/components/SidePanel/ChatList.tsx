@@ -18,11 +18,8 @@ function ChatList({modal, setModal} : { modal: boolean,
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
 
-    const chats: IChat[] = [
-        {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'Vitya'},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name2'},
-         {img: 'https://i0.wp.com/networthheightsalary.com/wp-content/uploads/2020/02/A-Guide-Through-the-List-of-ASAP-Rocky’s-Ex-Girlfriends-and-Associations-1200x900.jpg', name:'name3'},
-    ]
+    const [chats, setChats] = useState<IChat[]>([]);
+        // dodelat frontend
 
     const chatId: string = useParams().chatId!;
     const [activeChat, setActiveChat] = useState<string>(chatId);
@@ -39,13 +36,12 @@ function ChatList({modal, setModal} : { modal: boolean,
             await signalRService.connection.on('addGroupChat', (chatName: string) => {
                 console.log(chatName);
             });
-        })()
+        })();
+
+
+
         return () => { signalRService.stop() };
     }, [])
-
-    const addGroupChat = () => {
-
-    }
 
     return (
         <div className={side.chats + custom_scroll}>

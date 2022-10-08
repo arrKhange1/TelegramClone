@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TelegramClone.Services
+namespace TelegramClone.Models.DTO
 {
-    public class ChatService
+    public class ChatElementDTO
     {
-
+        public string ChatName { get; set; }
     }
 }

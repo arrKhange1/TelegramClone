@@ -44,11 +44,14 @@ namespace TelegramClone
             services.AddScoped<IUserRepository, UserMSSQLRepository>();
             services.AddScoped<IUserRefreshTokensRepository, UserRefreshTokensMSSQLRepository>();
             services.AddScoped<IUserContactRepository, UserContactMSSQLRepository>();
+            services.AddScoped<IChatRepository, ChatMSSQLRepository>();
+            services.AddScoped<IChatUserRepository, ChatUserMSSQLRepository>();
             services.AddScoped<JWTService>();
             services.AddScoped<RefreshTokenService>();
             services.AddScoped<UserService>();
             services.AddScoped<RoleService>();
             services.AddScoped<ContactsService>();
+            services.AddScoped<ChatsService>();
 
             services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

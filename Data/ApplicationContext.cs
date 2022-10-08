@@ -21,6 +21,23 @@ namespace TelegramClone.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // private chat category
+            var privateCategory = new ChatCategory
+            {
+                ChatCategoryId = Guid.NewGuid(),
+                ChatCategoryName = "private"
+            };
+
+            // group chat category
+            var groupCategory = new ChatCategory
+            {
+                ChatCategoryId = Guid.NewGuid(),
+                ChatCategoryName = "group"
+            };
+
+            var priv = modelBuilder.Entity<ChatCategory>().HasData(privateCategory);
+            var group = modelBuilder.Entity<ChatCategory>().HasData(groupCategory);
+
             // admin
             var adminRole = new Role
             {
