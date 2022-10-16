@@ -7,6 +7,7 @@ namespace TelegramClone.Models.DTO
 {
     public class ChatElementDTO
     {
+        public Guid ChatId { get; set; }
         public string ChatName { get; set; }
     }
 }

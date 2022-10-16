@@ -11,17 +11,5 @@ namespace TelegramClone.Hubs
     
     public class ChatHub: Hub
     {
-        public async Task Send(string msg, string username)
-        {
-            await this.Clients.All.SendAsync("Send", msg , username);
-        }
-
-        public override async Task OnConnectedAsync()
-        {
-            await Clients.All.SendAsync("Send", "вошел в чат",  $"{Context.ConnectionId}");
-            await base.OnConnectedAsync();
-        }
-
-        
     }
 }

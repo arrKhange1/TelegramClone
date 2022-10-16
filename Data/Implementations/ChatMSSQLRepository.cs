@@ -19,8 +19,10 @@ namespace TelegramClone.Data.Implementations
 
         public List<ChatElementDTO> GetChats(Guid userId)
         {
+
             return _context.ChatUsers.Where(cu => cu.UserId == userId).Select(cu => new ChatElementDTO
             {
+                ChatId = cu.ChatId,
                 ChatName = _context.Chats.FirstOrDefault(chat => chat.ChatId == cu.ChatId).ChatName
             }).ToList();
         }

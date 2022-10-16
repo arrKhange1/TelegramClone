@@ -9,6 +9,8 @@ using TelegramClone.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using TelegramClone.Services;
 using TelegramClone.Models.DTO;
+using System.Diagnostics;
+using System.Security.Claims;
 
 namespace TelegramClone.Controllers
 {
@@ -36,44 +38,22 @@ namespace TelegramClone.Controllers
         [HttpPost ("addgroupchat")]
         public async Task<IActionResult> AddGroupChat([FromBody] GroupChat groupChat)
         {
+
             Guid newChatGuid = await _chatService.AddGroupChat(groupChat.groupName, groupChat.membersIds.Count);
 
             if (newChatGuid != Guid.Empty)
             {
+                Debug.WriteLine($"isauth: {HttpContext.User.Identity.IsAuthenticated}, name: {User.Identity.Name}");
+
                 var chatUserMembers = _chatService.FormChatUserList(newChatGuid,groupChat.membersIds);
                 await _chatService.AddUsersToChat(chatUserMembers);
-                await _hubContext.Clients.Users(groupChat.membersNames).SendAsync("addGroupChat", groupChat.groupName);
+                await _hubContext.Clients.Users(groupChat.membersNames).SendAsync("GroupChat", groupChat.groupName);
+                
                 return Ok();
             }
 
-            return BadRequest("Sometring went wrong..."); 
+            return BadRequest("Something went wrong..."); 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SendMessage(string msg, string to)
-        {
-
-            var senderName = _userService.GetCurrentUser(HttpContext).UserName;
-            if (senderName != to)
-                await _hubContext.Clients.User(to).SendAsync("Send", msg, senderName);
-            await _hubContext.Clients.User(senderName).SendAsync("Send", msg,  senderName);
-            return Ok();
-        }
-
-
-
-        [HttpPost ("testmsg")]
-        public async Task<IActionResult> TestMessage()
-        {
-            await _hubContext.Clients.All.SendAsync("Message");
-            return Ok();
-        }
-
-        [HttpPost("testchats")]
-        public async Task<IActionResult> TestChats()
-        {
-            await _hubContext.Clients.All.SendAsync("Chat");
-            return Ok();
-        }
     }
 }

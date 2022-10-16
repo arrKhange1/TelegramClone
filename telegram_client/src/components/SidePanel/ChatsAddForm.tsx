@@ -8,9 +8,9 @@ import FormButton from '../UI/FormButton/FormButton';
 import { $api } from '../../http/axios';
 import axios from 'axios';
 
-function ChatsAddForm({setModal} : {
+function ChatsAddForm({setModal, modal} : {
     setModal:React.Dispatch<React.SetStateAction<boolean>>,
-        }) {
+        modal: boolean}) {
 
     const user = useAuth();
     const [contacts, setContacts] = useState<IContact[]>();
@@ -23,15 +23,18 @@ function ChatsAddForm({setModal} : {
     }
 
     useEffect(() => {
-        fetchContacts();
-    }, []);
+        if (modal)
+            fetchContacts();
+    }, [modal])
 
     const addGroupChat = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData(e.target as HTMLFormElement);
         const membersIds: FormDataEntryValue[] = formData.getAll('ids');
+        membersIds.push(user.userId); // adding our id
         const membersNames: FormDataEntryValue[] = formData.getAll('names');
+        membersNames.push(user.userName) // adding our name
         const groupName = formData.get('groupName');
 
         let payload = {
@@ -39,7 +42,8 @@ function ChatsAddForm({setModal} : {
             membersIds:membersIds,
             membersNames:membersNames
           };
-        await $api.post('https://localhost:44351/chats/addgroupchat', payload);
+        
+        await $api.post('chats/addgroupchat', payload);
 
         console.log(membersIds, membersNames, groupName);
     }
@@ -70,8 +74,8 @@ function ChatsAddForm({setModal} : {
                 </ul>
             </main>
             <footer className={modalForm.form_footer}>
-                <FormButton onClick={() => setModal(false)}>CANCEL</FormButton>
-                <FormButton onClick={() => setModal(false)}>DONE</FormButton>
+                <FormButton type='button' onClick={() => setModal(false)}>CANCEL</FormButton>
+                <FormButton type='submit' onClick={() => setModal(false)}>DONE</FormButton>
             </footer>
         </form>
     );

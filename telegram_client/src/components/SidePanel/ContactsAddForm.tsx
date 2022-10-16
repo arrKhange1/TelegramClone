@@ -25,8 +25,8 @@ function ContactsAddForm({setModal, cb, setContactName, contactName} : {setModal
                 />
             </main>
             <footer className={modalForm.form_footer}>
-                <FormButton onClick={() => setModal(false)}>CANCEL</FormButton>
-                <FormButton onClick={() => setModal(false)}>DONE</FormButton>
+                <FormButton type='button' onClick={() => setModal(false)}>CANCEL</FormButton>
+                <FormButton type='submit' onClick={() => setModal(false)}>DONE</FormButton>
             </footer>
         </form>
     )

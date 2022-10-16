@@ -11,53 +11,66 @@ import ContactsAddForm from './ContactsAddForm';
 import SignalRService from '../../services/SignalRService';
 import { $api } from '../../http/axios';
 import ChatsAddForm from './ChatsAddForm';
+import ChatsService from '../../services/ChatsService';
+import { useAuth } from '../../hooks/useAuth';
 
-let signalRService: SignalRService;
+// let signalRService: SignalRService;
+
 function ChatList({modal, setModal} : { modal: boolean,
     setModal: React.Dispatch<React.SetStateAction<boolean>> }) {
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
+    const user = useAuth();
 
     const [chats, setChats] = useState<IChat[]>([]);
-        // dodelat frontend
-
     const chatId: string = useParams().chatId!;
     const [activeChat, setActiveChat] = useState<string>(chatId);
+
     useEffect(() => {
         setActiveChat(chatId);
     }, [chatId])
 
+    const fetchChats = async () => {
+        const response = await ChatsService.getChats(user.userId);
+        console.log(response);
+        setChats([...response.data]);
+    }
+
+    const callback = (groupName: string) => {
+        console.log('chat added:', chats, groupName)
+        fetchChats();
+    }
+
     useEffect(() => {
-        (async function connEstablish() {
-            if (signalRService)
-                await signalRService.stop();
-            signalRService = new SignalRService();
-            await signalRService.start();
-            await signalRService.connection.on('addGroupChat', (chatName: string) => {
-                console.log(chatName);
-            });
-        })();
+
+        fetchChats();
+
+        const signalRService = new SignalRService();
+        signalRService.connection.on('GroupChat', callback);
+        signalRService.start();
 
 
-
-        return () => { signalRService.stop() };
+        console.log(signalRService.connection);
+        return () => signalRService.stop();
     }, [])
+
 
     return (
         <div className={side.chats + custom_scroll}>
             <button type='button' onClick={() => $api.post('/chats/testchats')}>chats</button>
-            {chats.map((chat,index) => 
-                <Link to={chat.name} key={index} className={side.chat_open_link}
+            {chats.length ? chats.map(chat => 
+                <Link to={chat.chatId} key={chat.chatId} className={side.chat_open_link}
                 onClick={() => 
-                    setActiveChat(chat.name)
+                    setActiveChat(chat.chatId)
                 } >
                     <ChatListElement activeChat={activeChat} chat={chat}/>
                 </Link>
-            )}
+            ) : <div>no chats</div>}
             
             <ModalWindow modal={modal} setModal={setModal}>
                 <ChatsAddForm
                  setModal={setModal}
+                 modal={modal}
                 />
             </ModalWindow>
         </div>

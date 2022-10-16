@@ -9,14 +9,19 @@ export default class SignalRService {
     constructor() {
       this.connection = new signalR.HubConnectionBuilder()
         .withUrl("/chat")
+        .withAutomaticReconnect()
+        .configureLogging(signalR.LogLevel.Information)
         .build();
     }
 
-    async start() {
-      await this.connection.start();
+    start() {
+      this.connection.start();
     }
 
-    async stop() {
-      await this.connection.stop();
+    stop() {
+      this.connection.stop().then((res) => {
+          console.log('stop: ', this.connection);
+      });
+      
     }
 }

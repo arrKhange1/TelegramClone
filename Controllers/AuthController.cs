@@ -68,7 +68,7 @@ namespace TelegramClone.Controllers
                 return Unauthorized("Refresh token expired");
             }
 
-            string refreshToken = await _refreshTokenService.RefreshToken(user);
+            string refreshToken = await _refreshTokenService.RefreshToken(user); 
             string accessToken = _jwtService.GenerateAccessToken(user);
 
             _refreshTokenService.AddRefreshTokenInCookie(HttpContext, refreshToken);

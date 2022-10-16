@@ -1,3 +1,4 @@
+import * as signalR from '@microsoft/signalr';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Authentication from './components/auth/Authentication';
@@ -9,7 +10,6 @@ import Home from './components/Home';
 import TestChat from './components/TestChat';
 import TestPrivate from './components/TestPrivate';
 import { useAppSelector } from './hooks/useAppSelector';
-import SignalRService from './services/SignalRService';
 
 
 function App() {

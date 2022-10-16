@@ -8,7 +8,7 @@ import Footer from './Footer';
 import SignalRService from '../../services/SignalRService';
 import { $api } from '../../http/axios';
 
-let signalRService : SignalRService;
+// let signalRService : SignalRService;
 function ExpandedChat() {
 
     const params = useParams();
@@ -23,24 +23,24 @@ function ExpandedChat() {
 
     useEffect(() => {
         
-        (async function connEstablish() {
-            if (signalRService)
-                await signalRService.stop();
-            signalRService = new SignalRService();
-            await signalRService.start();
-            await signalRService.connection.on('Message', () => {
-            console.log('broadcast to msgs');
-            });
-        })()
+        // (async function connEstablish() {
+        //     if (signalRService)
+        //         await signalRService.stop();
+        //     signalRService = new SignalRService();
+        //     await signalRService.start();
+        //     await signalRService.connection.on('Message', () => {
+        //     console.log('broadcast to msgs');
+        //     });
+        // })()
 
-        document.getElementById(msgs.msgs_wrapper)!
-        .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
+        // document.getElementById(msgs.msgs_wrapper)!
+        // .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
 
-        window.addEventListener('keydown', closeChat);
-        return () => { 
-            window.removeEventListener('keydown', closeChat);
-            signalRService.stop();
-         };
+        // window.addEventListener('keydown', closeChat);
+        // return () => { 
+        //     window.removeEventListener('keydown', closeChat);
+        //     signalRService.stop();
+        //  };
     }, []);
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;

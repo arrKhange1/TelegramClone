@@ -22,6 +22,7 @@ using TelegramClone.Data.Interfaces;
 using TelegramClone.Data.Implementations;
 using TelegramClone.Services;
 using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.SignalR;
 
 namespace TelegramClone
 {
@@ -40,6 +41,7 @@ namespace TelegramClone
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection), ServiceLifetime.Transient);
 
+            //services.AddScoped<IHubContext<ChatHub>>();
             services.AddScoped<IRoleRepository, RoleMSSQLRepository>();
             services.AddScoped<IUserRepository, UserMSSQLRepository>();
             services.AddScoped<IUserRefreshTokensRepository, UserRefreshTokensMSSQLRepository>();
@@ -68,9 +70,10 @@ namespace TelegramClone
                         ValidAudience = Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                             Configuration["Jwt:Key"])),
-                        ClockSkew = TimeSpan.Zero
+                        ClockSkew = TimeSpan.Zero,
+                        NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
                     };
-                    //// для сигнал р токена
+                    // для сигнал р токена
                     //options.Events = new JwtBearerEvents
                     //{
                     //    OnMessageReceived = context =>
@@ -87,7 +90,8 @@ namespace TelegramClone
                     //        return Task.CompletedTask;
                     //    },
 
-                    //    OnAuthenticationFailed = context => {
+                    //    OnAuthenticationFailed = context =>
+                    //    {
                     //        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                     //        {
                     //            context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
@@ -95,7 +99,7 @@ namespace TelegramClone
                     //        return Task.CompletedTask;
                     //    }
                     //};
-                    
+
 
                 });
 
