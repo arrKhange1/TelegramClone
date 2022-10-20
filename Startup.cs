@@ -23,6 +23,8 @@ using TelegramClone.Data.Implementations;
 using TelegramClone.Services;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.SignalR;
+using TelegramClone.Utils;
+using System.Diagnostics;
 
 namespace TelegramClone
 {
@@ -41,7 +43,6 @@ namespace TelegramClone
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection), ServiceLifetime.Transient);
 
-            //services.AddScoped<IHubContext<ChatHub>>();
             services.AddScoped<IRoleRepository, RoleMSSQLRepository>();
             services.AddScoped<IUserRepository, UserMSSQLRepository>();
             services.AddScoped<IUserRefreshTokensRepository, UserRefreshTokensMSSQLRepository>();
@@ -73,12 +74,13 @@ namespace TelegramClone
                         ClockSkew = TimeSpan.Zero,
                         NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
                     };
-                    // для сигнал р токена
+                    //для сигнал р токена
                     //options.Events = new JwtBearerEvents
                     //{
                     //    OnMessageReceived = context =>
                     //    {
-                    //        var accessToken = context.Request.Query["access"];
+                    //        var accessToken = context.HttpContext.Request.Cookies["access"];
+                    //        Debug.WriteLine($"access:{accessToken}");
 
                     //        // если запрос направлен хабу
                     //        var path = context.HttpContext.Request.Path;
@@ -94,6 +96,7 @@ namespace TelegramClone
                     //    {
                     //        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                     //        {
+                    //            Debug.WriteLine("sds");
                     //            context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
                     //        }
                     //        return Task.CompletedTask;
@@ -104,6 +107,7 @@ namespace TelegramClone
                 });
 
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
             services.AddMvc();
             services.AddControllers();
@@ -148,7 +152,7 @@ namespace TelegramClone
                 var token = context.Request.Cookies["access"];
                 if (!string.IsNullOrEmpty(token))
                     context.Request.Headers.Add("Authorization", "Bearer " + token);
-
+               
                 await next();
             });
             app.UseAuthentication();

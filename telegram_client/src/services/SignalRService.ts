@@ -1,21 +1,31 @@
+import { store } from './../index';
 import axios from "axios";
 import AuthService from "./AuthService";
 import * as signalR from '@microsoft/signalr';
 
 export default class SignalRService {
 
-    connection: signalR.HubConnection;
+    connection!: signalR.HubConnection;
 
-    constructor() {
+    getConnection(accessToken: string) {
       this.connection = new signalR.HubConnectionBuilder()
-        .withUrl("/chat")
-        .withAutomaticReconnect()
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
+      .withUrl("/chat", { accessTokenFactory: () => accessToken })
+      .withAutomaticReconnect()
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
     }
 
     start() {
-      this.connection.start();
+        this.getConnection(store.getState().authReducer.accessToken);
+        this.connection.start().catch(e => {
+            console.log('wtf')
+            axios.post<string>('auth/refresh').then((res) => {
+              console.log('new access token:', res.data);
+              this.getConnection(res.data);
+              this.connection.start();
+              // refresh token in redux and local storage
+          });
+        }); 
     }
 
     stop() {

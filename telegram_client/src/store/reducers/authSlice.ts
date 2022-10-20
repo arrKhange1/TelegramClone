@@ -6,7 +6,8 @@ const initialState: IUser = {
     userId: '',
     userName: '',
     role: '',
-    isAuthenticated: false
+    isAuthenticated: false,
+    accessToken: ''
 }
 
 export const authSlice = createSlice({
@@ -19,6 +20,7 @@ export const authSlice = createSlice({
             state.role = action.payload.role;
             state.userName = action.payload.userName;
             state.isAuthenticated = action.payload.isAuthenticated;
+            state.accessToken = action.payload.accessToken;
         },
 
         signOut(state) {
@@ -26,7 +28,7 @@ export const authSlice = createSlice({
             state.role = '';
             state.userName = '';
             state.isAuthenticated = false;
-
+            state.accessToken = ''
         }
     }
 });

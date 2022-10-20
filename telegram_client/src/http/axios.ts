@@ -21,8 +21,10 @@ $api.interceptors.response.use(config => {
             console.log('access token expired, new pair generated');
             return resp;
         } catch(e) {
-            console.log('refresh error'); // force logout
-            await AuthService.logout();
+            if ((e as AxiosError).response?.status === 401) {
+                console.log('refresh error'); // force logout
+                await AuthService.logout();
+            }
         }
         
     }

@@ -57,6 +57,7 @@ namespace TelegramClone.Services
 					Subject = new ClaimsIdentity(new Claim[]
 				  {
 						new Claim(ClaimTypes.NameIdentifier, user.UserName),
+						new Claim(ClaimTypes.Name, user.UserName),
 						new Claim(ClaimTypes.Role, userRole.RoleName)
 
 				  }),

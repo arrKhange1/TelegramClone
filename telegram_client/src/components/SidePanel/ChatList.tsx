@@ -46,8 +46,8 @@ function ChatList({modal, setModal} : { modal: boolean,
         fetchChats();
 
         const signalRService = new SignalRService();
-        signalRService.connection.on('GroupChat', callback);
         signalRService.start();
+        signalRService.connection.on('GroupChat', callback);
 
 
         console.log(signalRService.connection);

@@ -74,7 +74,7 @@ namespace TelegramClone.Controllers
             _refreshTokenService.AddRefreshTokenInCookie(HttpContext, refreshToken);
             _jwtService.AddAccessTokenInCookie(HttpContext, accessToken);
 
-            return Ok();
+            return Ok(accessToken);
         }
 
         [AllowAnonymous]
@@ -93,7 +93,9 @@ namespace TelegramClone.Controllers
                 return Ok(new {
                     userId = user.UserId,
                     userName = user.UserName, 
-                    role = _roleService.GetRoleById(user).RoleName });
+                    role = _roleService.GetRoleById(user).RoleName,
+                    accessToken = accessToken
+                });
             }
 
             return NotFound("User not found");
@@ -118,7 +120,8 @@ namespace TelegramClone.Controllers
                 {
                     userId = createdUser.UserId,
                     userName = createdUser.UserName,
-                    role = "user"
+                    role = "user",
+                    accessToken = accessToken
                 });
             }
 
