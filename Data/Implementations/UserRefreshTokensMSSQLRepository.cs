@@ -21,14 +21,12 @@ namespace TelegramClone.Data.Implementations
 		public async Task<RefreshToken> AddUserRefreshTokens(RefreshToken user)
 		{
 			var token = _context.RefreshTokens.FirstOrDefault(tok => tok.UserId == user.UserId);
-			if (token == null) // prevent concurrent operation
+			if (token == null) // prevent concurrent operation ( the record is already added only when its a concurrent op )
             {
 				var added = await _context.RefreshTokens.AddAsync(user);
-				Debug.WriteLine($"f: {added.Entity.Token}");
 				await _context.SaveChangesAsync();
 				return added.Entity;
 			}
-			Debug.WriteLine($"s: {token.Token}");
 			return token;
 		}
 

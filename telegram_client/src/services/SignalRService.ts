@@ -13,11 +13,19 @@ export default class SignalRService {
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Information)
       .build();
+      
+      this.connection.on('GroupChat', (groupName: string) => {
+        console.log('chat added:',  groupName)
+      });
+    }
+
+    constructor() {
+      this.getConnection(store.getState().authReducer.accessToken);
+      
     }
 
     start() {
-        this.getConnection(store.getState().authReducer.accessToken);
-        this.connection.start().catch(e => {
+        return this.connection.start().catch(e => {
             console.log('wtf')
             axios.post<string>('auth/refresh').then((res) => {
               console.log('new access token:', res.data);
