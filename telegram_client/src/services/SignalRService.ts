@@ -1,7 +1,9 @@
 import { store } from './../index';
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import AuthService from "./AuthService";
 import * as signalR from '@microsoft/signalr';
+import refreshPromise from '../http/refreshTokenPromise';
+import { setAccessToken } from '../store/reducers/authSlice';
 
 export default class SignalRService {
 
@@ -26,13 +28,26 @@ export default class SignalRService {
 
     start() {
         return this.connection.start().catch(e => {
-            console.log('wtf')
-            axios.post<string>('auth/refresh').then((res) => {
-              console.log('new access token:', res.data);
-              this.getConnection(res.data);
+
+            if (!refreshPromise.refresh) {
+              refreshPromise.refresh = axios.post<string>('auth/refresh').then(res => {
+                console.log('send refresh from signalr interceptor');
+                refreshPromise.refresh = null;
+                store.dispatch(setAccessToken(res.data));
+                return res.data;
+              })
+              
+            } 
+            refreshPromise.refresh.then((token:string) => {
+              this.getConnection(token);
               this.connection.start();
-              // refresh token in redux and local storage
-          });
+            })
+            .catch(async (e: AxiosError) => {
+              if ((e as AxiosError).response?.status === 401) {
+                        console.log('refresh error'); // force logout
+                        await AuthService.logout();
+                    }
+              });
         }); 
     }
 

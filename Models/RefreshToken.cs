@@ -10,11 +10,11 @@ namespace TelegramClone.Models
     public class RefreshToken
     {
         public Guid Id { get; set; }
-        [ConcurrencyCheck]
         public Guid UserId { get; set; }
         public User User { get; set; }
         public string Token { get; set; }
         public bool isActive { get; set; } = true;
+        [ConcurrencyCheck]
         public DateTime? ExpireDate { get; set; }
 
         [NotMapped]

@@ -58,7 +58,7 @@ namespace TelegramClone.Controllers
 
             if (savedRefreshToken == null)
             {
-                Debug.WriteLine("second");
+                Debug.WriteLine($"second: {_refreshTokenService.GetRefreshTokenFromCookie(HttpContext)}");
                 return Unauthorized("Invalid attempt!");
             }
 

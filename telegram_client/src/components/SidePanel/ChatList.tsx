@@ -13,11 +13,14 @@ import { $api } from '../../http/axios';
 import ChatsAddForm from './ChatsAddForm';
 import ChatsService from '../../services/ChatsService';
 import { useAuth } from '../../hooks/useAuth';
+import refreshPromise from '../../http/refreshTokenPromise'
 
 // let signalRService: SignalRService;
 
 function ChatList({modal, setModal} : { modal: boolean,
     setModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+
+    console.log('in chatlist:', refreshPromise);
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
     const user = useAuth();
@@ -45,12 +48,12 @@ function ChatList({modal, setModal} : { modal: boolean,
 
         fetchChats();
 
-        const signalRService = new SignalRService();
-        signalRService.start();
+        // const signalRService = new SignalRService();
+        // signalRService.start();
 
         
-        console.log('conn:', signalRService.connection);
-        return () => signalRService.stop();
+        // console.log('conn:', signalRService.connection);
+        // return () => signalRService.stop();
     }, [])
 
 
