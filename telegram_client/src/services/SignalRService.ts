@@ -44,7 +44,7 @@ export default class SignalRService {
             })
             .catch(async (e: AxiosError) => {
               if ((e as AxiosError).response?.status === 401) {
-                        console.log('refresh error'); // force logout
+                        console.log('refresh error on signalr interceptor'); // force logout
                         await AuthService.logout();
                     }
               });

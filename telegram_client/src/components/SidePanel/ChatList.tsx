@@ -48,12 +48,12 @@ function ChatList({modal, setModal} : { modal: boolean,
 
         fetchChats();
 
-        // const signalRService = new SignalRService();
-        // signalRService.start();
+        const signalRService = new SignalRService();
+        signalRService.start(); // TODO: share fetchcontacts() with signalr listener
 
         
-        // console.log('conn:', signalRService.connection);
-        // return () => signalRService.stop();
+        console.log('conn:', signalRService.connection);
+        return () => signalRService.stop();
     }, [])
 
 

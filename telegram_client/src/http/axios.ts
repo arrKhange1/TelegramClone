@@ -30,30 +30,13 @@ $api.interceptors.response.use(config => {
 
         return refreshPromise.refresh.then(() => {
             return $api.request(originRequest)
-            
         })
         .catch(async (e: AxiosError) => {
             if (e.response?.status === 401) {
-                      console.log('refresh error'); // force logout
-                      await AuthService.logout();
-                      return;
-                  }
+                console.log('refresh error on axios interceptor'); // force logout
+                await AuthService.logout();
+            }
         });
-        
-
-
-
-        // try {
-        //     await axios.post('auth/refresh');
-        //     const resp = await $api.request(originRequest);
-        //     console.log('access token expired, new pair generated');
-        //     return resp;
-        // } catch(e) {
-        //     if ((e as AxiosError).response?.status === 401) {
-        //         console.log('refresh error'); // force logout
-        //         await AuthService.logout();
-        //     }
-        // }
         
     }
     throw error; // if not 401 status code
