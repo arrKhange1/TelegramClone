@@ -8,6 +8,7 @@ import { setAccessToken } from '../store/reducers/authSlice';
 export default class SignalRService {
 
     connection!: signalR.HubConnection;
+    
 
     getConnection(accessToken: string) {
       this.connection = new signalR.HubConnectionBuilder()
@@ -15,14 +16,6 @@ export default class SignalRService {
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Information)
       .build();
-      
-      this.connection.on('GroupChat', (groupName: string) => {
-        console.log('chat added:',  groupName)
-      });
-    }
-
-    constructor() {
-      this.getConnection(store.getState().authReducer.accessToken);
       
     }
 

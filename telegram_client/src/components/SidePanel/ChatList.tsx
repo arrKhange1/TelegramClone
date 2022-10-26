@@ -14,6 +14,7 @@ import ChatsAddForm from './ChatsAddForm';
 import ChatsService from '../../services/ChatsService';
 import { useAuth } from '../../hooks/useAuth';
 import refreshPromise from '../../http/refreshTokenPromise'
+import ChatListSignalRService from '../../services/ChatListSignalRService';
 
 // let signalRService: SignalRService;
 
@@ -39,7 +40,7 @@ function ChatList({modal, setModal} : { modal: boolean,
         setChats([...response.data]);
     }
 
-    const callback = (groupName: string) => {
+    const onAddGroupChat = (groupName: string) => {
         console.log('chat added:', chats, groupName)
         fetchChats();
     }
@@ -48,7 +49,7 @@ function ChatList({modal, setModal} : { modal: boolean,
 
         fetchChats();
 
-        const signalRService = new SignalRService();
+        const signalRService = new ChatListSignalRService(onAddGroupChat);
         signalRService.start(); // TODO: share fetchcontacts() with signalr listener
 
         

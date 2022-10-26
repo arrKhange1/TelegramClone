@@ -25,7 +25,7 @@ namespace TelegramClone.Services
 
         public void AddRefreshTokenInCookie(HttpContext httpContext, string token)
         {
-            httpContext.Response.Cookies.Append("refresh", token);
+            httpContext.Response.Cookies.Append("refresh", token); // add permanent cookie
             
         }
 
