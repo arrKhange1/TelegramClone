@@ -34,6 +34,7 @@ $api.interceptors.response.use(config => {
         .catch(async (e: AxiosError) => {
             if (e.response?.status === 401) {
                 console.log('refresh error on axios interceptor'); // force logout
+                refreshPromise.refresh = null;
                 await AuthService.logout();
             }
         });
