@@ -17,6 +17,10 @@ namespace TelegramClone.Data.Implementations
             _context = context;
         }
 
+        public Chat GetChat(Guid chatId)
+        {
+            return _context.Chats.FirstOrDefault(chat => chat.ChatId == chatId);
+        }
         public List<ChatElementDTO> GetChats(Guid userId)
         {
 

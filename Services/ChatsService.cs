@@ -19,6 +19,11 @@ namespace TelegramClone.Services
             _chatUserRepository = chatUserRepository;
         }
 
+        public Chat GetChat(Guid chatId)
+        {
+            return _chatRepository.GetChat(chatId);
+        }
+
         public List<ChatUser> FormChatUserList(Guid newChatId, List<string> ids)
         {
             var guidsList = ids.Select(id => Guid.Parse(id));

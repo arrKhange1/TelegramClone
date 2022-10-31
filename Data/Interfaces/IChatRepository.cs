@@ -9,6 +9,7 @@ namespace TelegramClone.Data.Interfaces
 {
     public interface IChatRepository
     {
+        public Chat GetChat(Guid chatId);
         public Task<Guid> AddGroupChat(string chatName, int groupMembers);
         public List<ChatElementDTO> GetChats(Guid userId);
     }

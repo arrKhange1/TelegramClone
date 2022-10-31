@@ -30,6 +30,16 @@ namespace TelegramClone.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetChat(string chatId)
+        {
+            var chat = _chatService.GetChat(Guid.Parse(chatId));
+            if (chat == null)
+            {
+
+            }
+        }
+
+        [HttpGet]
         public IActionResult GetChats(string userId)
         {
             return Ok(_chatService.GetChats(Guid.Parse(userId)));
