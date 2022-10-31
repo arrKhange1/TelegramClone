@@ -12,11 +12,26 @@ namespace TelegramClone.Services
     {
         private readonly IChatRepository _chatRepository;
         private readonly IChatUserRepository _chatUserRepository;
+        private readonly IMessageRepository _messageRepository;
+        private readonly IChatCategory _chatCategoryRepository;
 
-        public ChatsService(IChatRepository chatRepository, IChatUserRepository chatUserRepository)
+        public ChatsService(IChatRepository chatRepository, IChatUserRepository chatUserRepository, 
+            IMessageRepository messageRepository, IChatCategory chatCategoryRepository)
         {
             _chatRepository = chatRepository;
             _chatUserRepository = chatUserRepository;
+            _messageRepository = messageRepository;
+            _chatCategoryRepository = chatCategoryRepository;
+        }
+
+        public ChatCategory GetChatCategoryById(Guid chatCategoryId)
+        {
+            return _chatCategoryRepository.GetChatCategoryById(chatCategoryId);
+        }
+
+        public List<MessageDTO> GetMsgs(Guid chatId)
+        {
+            return _messageRepository.GetMsgs(chatId);
         }
 
         public Chat GetChat(Guid chatId)

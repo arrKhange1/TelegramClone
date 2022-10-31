@@ -32,10 +32,40 @@ namespace TelegramClone.Controllers
         [HttpGet]
         public IActionResult GetChat(string chatId)
         {
-            var chat = _chatService.GetChat(Guid.Parse(chatId));
-            if (chat == null)
+            Guid chatIdGuid = Guid.Parse(chatId);
+            var chat = _chatService.GetChat(chatIdGuid);
+            if (chat == null) // если чата с контактом еще нет
             {
+                var user = _userService.GetUserById(chatIdGuid);
+                return Ok(new ExpandedChatDTO
+                {
+                    ChatName = user.UserName,
+                    ChatStatus = user.ConnectionStatus,
+                    Messages = null
+                });
+            }
+            else // если такой чат существует
+            {
+                var msgs = _chatService.GetMsgs(chatIdGuid); // получаем сообщения
+                var chatCategory = _chatService.GetChatCategoryById(chat.ChatCategoryId);
+                if (chatCategory.ChatCategoryName == "private")
+                {
+                    var user = _userService.GetUserById(chatIdGuid);
+                    return Ok(new ExpandedChatDTO
+                    {
+                        ChatName = user.UserName,
+                        ChatStatus = user.ConnectionStatus,
+                        Messages = msgs
+                    });
+                }
 
+                return Ok(new ExpandedChatDTO
+                {
+                    ChatName = chat.ChatName,
+                    ChatStatus = chat.GroupMembers.ToString(),
+                    Messages = msgs
+                });
+                
             }
         }
 
