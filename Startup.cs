@@ -49,6 +49,8 @@ namespace TelegramClone
             services.AddScoped<IUserContactRepository, UserContactMSSQLRepository>();
             services.AddScoped<IChatRepository, ChatMSSQLRepository>();
             services.AddScoped<IChatUserRepository, ChatUserMSSQLRepository>();
+            services.AddScoped<IMessageRepository, MessageMSSQLRepository>();
+            services.AddScoped<IChatCategoryRepository, ChatCategoryMSSQLRepository>();
             services.AddScoped<JWTService>();
             services.AddScoped<RefreshTokenService>();
             services.AddScoped<UserService>();

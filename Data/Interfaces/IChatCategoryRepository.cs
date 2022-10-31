@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TelegramClone.Models;
 
 namespace TelegramClone.Data.Interfaces
 {
-    interface IChatCategory
+    public interface IChatCategoryRepository
     {
+        public ChatCategory GetChatCategoryById(Guid chatCategoryId);
     }
 }

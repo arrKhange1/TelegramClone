@@ -25,6 +25,11 @@ namespace TelegramClone.Data.Implementations
             return _context.Users.FirstOrDefault(user => user.UserName == userName);
         }
 
+        public User GetUserById(Guid userId)
+        {
+            return _context.Users.FirstOrDefault(user => user.UserId == userId);
+        }
+
         public async Task<User> AddUser(User createdUser)
         {
             await _context.Users.AddAsync(createdUser);

@@ -29,7 +29,7 @@ namespace TelegramClone.Controllers
             _chatService = chatService;
         }
 
-        [HttpGet]
+        [HttpGet ("getchat")]
         public IActionResult GetChat(string chatId)
         {
             Guid chatIdGuid = Guid.Parse(chatId);

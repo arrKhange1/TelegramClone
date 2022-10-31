@@ -11,6 +11,7 @@ namespace TelegramClone.Data.Interfaces
     {
         public User GetUserByUsernameAndPassword(UserLogin newUser);
         public User GetUserByUsername(string userName);
+        public User GetUserById(Guid userId);
         public Task<User> AddUser(User user);
 
 
