@@ -20,6 +20,7 @@ namespace TelegramClone.Data.Implementations
             var msgs = from m in _context.Messages join
             cu in _context.ChatUsers on m.ChatUserId equals cu.ChatUserId join
             u in _context.Users on cu.UserId equals u.UserId
+            where chatId == cu.ChatId
             select new MessageDTO
             {
                 UserName = u.UserName,

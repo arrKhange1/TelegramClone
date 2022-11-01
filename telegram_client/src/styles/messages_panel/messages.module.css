@@ -21,6 +21,32 @@
     background: none;
     width: 50%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    justify-content: flex-end;
+}
+
+.msg {
+    background-color: white;
+    border-radius: 10px;
+    padding: 0.7em;
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+}
+
+.username {
+    color: #4578EE;
+}
+
+.owner_msg {
+    align-self: flex-end;
+}
+
+.others_msg {
+    align-self: flex-start;
 }
 
 

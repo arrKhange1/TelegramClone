@@ -1,63 +1,56 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import msgs from '../../styles/messages_panel/messages.module.css';
-import home from '../../styles/home/home.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import IChat from '../../@types/IChat';
 import Header from './Header';
 import Footer from './Footer';
 import SignalRService from '../../services/SignalRService';
 import { $api } from '../../http/axios';
+import { useAuth } from '../../hooks/useAuth';
+import IExpandedChat from '../../@types/IExpandedChat';
+import MessagesList from './MessagesList';
 
 // let signalRService : SignalRService;
 function ExpandedChat() {
 
     const params = useParams();
+    const user = useAuth();
     const navigate = useNavigate();
 
+    const [chat, setChat] = useState<IExpandedChat>({
+        chatName: '',
+        chatStatus: '',
+        messages: []
+    })
+
     // here might be request for chat by chatId from url params 
+    useEffect(() => {
+        getChat();
+    }, [params.chatId])
+
 
     const closeChat = (e:KeyboardEvent) => {
         if (e.key === 'Escape')
             navigate('/');
     }
 
+    const getChat = async () => {
+        const response = await $api.get<IExpandedChat>(`chats/getchat?chatid=${params.chatId}`);
+        console.log(response.data)
+        setChat(response.data)
+    }
+
     useEffect(() => {
-        
-        // (async function connEstablish() {
-        //     if (signalRService)
-        //         await signalRService.stop();
-        //     signalRService = new SignalRService();
-        //     await signalRService.start();
-        //     await signalRService.connection.on('Message', () => {
-        //     console.log('broadcast to msgs');
-        //     });
-        // })()
-
-        // document.getElementById(msgs.msgs_wrapper)!
-        // .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
-
-        // window.addEventListener('keydown', closeChat);
-        // return () => { 
-        //     window.removeEventListener('keydown', closeChat);
-        //     signalRService.stop();
-        //  };
+        document.getElementById(msgs.msgs_wrapper)!
+        .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
     }, []);
-
-    const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
 
     return (
 
         <div className={msgs.messages_panel}>
             {/* dev purposes */}
-            <button type='button' onClick={() => $api.post('/chats/testmsg')}>msgs</button>
-            <Header/>
-            <div id={msgs.msgs_wrapper} className={custom_scroll}>
-                <div className={msgs.msgs}>
-                    {[...Array<string>(100)].map((chat,i) => 
-                        <div key={i}>#WELCOMETOMESSAGES FROM CHAT ID: {params.chatId}</div>
-                    )}
-                </div>
-            </div>
+            <Header chatName={chat.chatName} chatStatus={chat.chatStatus}/>
+            <MessagesList messages={chat.messages}/>
             <Footer/>
         </div>
     );
