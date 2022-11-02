@@ -1,8 +1,12 @@
+import contactListReducer from './reducers/contactListSlice';
+import chatsReducer from './reducers/chatListSlice';
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from './reducers/authSlice';
 
 const rootReducer = combineReducers({
     authReducer,
+    chatsReducer,
+    contactListReducer
 });
 
 export const setupStore = () => {

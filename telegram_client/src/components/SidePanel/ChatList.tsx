@@ -15,6 +15,9 @@ import ChatsService from '../../services/ChatsService';
 import { useAuth } from '../../hooks/useAuth';
 import refreshPromise from '../../http/refreshTokenPromise'
 import ChatListSignalRService from '../../services/ChatListSignalRService';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { setChats } from '../../store/reducers/chatListSlice';
 
 // let signalRService: SignalRService;
 
@@ -25,8 +28,9 @@ function ChatList({modal, setModal} : { modal: boolean,
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
     const user = useAuth();
+    const dispatch = useAppDispatch();
 
-    const [chats, setChats] = useState<IChat[]>([]);
+    const chats = useAppSelector(state => state.chatsReducer);
     const chatId: string = useParams().chatId!;
     const [activeChat, setActiveChat] = useState<string>(chatId);
 
@@ -37,7 +41,7 @@ function ChatList({modal, setModal} : { modal: boolean,
     const fetchChats = async () => {
         const response = await ChatsService.getChats(user.userId);
         console.log(response);
-        setChats([...response.data]);
+        dispatch(setChats([...response.data]));
     }
 
     const onAddGroupChat = (groupName: string) => {
