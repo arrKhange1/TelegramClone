@@ -29,44 +29,46 @@ namespace TelegramClone.Controllers
             _chatService = chatService;
         }
 
-        [HttpGet ("getchat")]
-        public IActionResult GetChat(string chatId)
+        [HttpGet("getprivatechat")]
+        public IActionResult GetPrivateChat(string chatId)
         {
             Guid chatIdGuid = Guid.Parse(chatId);
             var chat = _chatService.GetChat(chatIdGuid);
+            var user = _userService.GetUserById(chatIdGuid);
             if (chat == null) // если чата с контактом еще нет
             {
-                var user = _userService.GetUserById(chatIdGuid);
-                return Ok(new ExpandedChatDTO
+                return Ok(new PrivateChatDTO
                 {
-                    ChatName = user.UserName,
-                    ChatStatus = user.ConnectionStatus,
-                    Messages = null
+                    UserName = user.UserName,
+                    ConnectionStatus = user.ConnectionStatus,
+                    Messages = new List<MessageDTO>()
                 });
             }
             else // если такой чат существует
             {
                 var msgs = _chatService.GetMsgs(chatIdGuid); // получаем сообщения
-                var chatCategory = _chatService.GetChatCategoryById(chat.ChatCategoryId);
-                if (chatCategory.ChatCategoryName == "private")
+                return Ok(new PrivateChatDTO
                 {
-                    var user = _userService.GetUserById(chatIdGuid);
-                    return Ok(new ExpandedChatDTO
-                    {
-                        ChatName = user.UserName,
-                        ChatStatus = user.ConnectionStatus,
-                        Messages = msgs
-                    });
-                }
-
-                return Ok(new ExpandedChatDTO
-                {
-                    ChatName = chat.ChatName,
-                    ChatStatus = chat.GroupMembers.ToString(),
+                    UserName = user.UserName,
+                    ConnectionStatus = user.ConnectionStatus,
                     Messages = msgs
                 });
-                
             }
+        }
+
+        [HttpGet ("getgroupchat")]
+        public IActionResult GetGroupChat(string chatId)
+        {
+            Guid chatIdGuid = Guid.Parse(chatId);
+            var chat = _chatService.GetChat(chatIdGuid);
+            
+            var msgs = _chatService.GetMsgs(chatIdGuid); // получаем сообщения
+            return Ok(new GroupChatDTO
+            {
+                ChatName = chat.ChatName,
+                GroupMembers = chat.GroupMembers.ToString(),
+                Messages = msgs
+            });
         }
 
         [HttpGet]

@@ -26,7 +26,7 @@ function GroupChat() {
     }, []);
 
     const getChat = async () => {
-        const response = await $api.get<IGroupChat>(`chats/getchat?chatid=${params.chatId}`);
+        const response = await $api.get<IGroupChat>(`chats/getgroupchat?chatid=${params.chatId}`);
         console.log(response.data)
         setChat(response.data)
     }
