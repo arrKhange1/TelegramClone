@@ -13,23 +13,27 @@ import AddButton from './AddButton';
 import AddContactIcon from '../../icons/AddContactIcon';
 import ContactsAddForm from './ContactsAddForm';
 import ModalWindow from './ModalWindow';
+import { setContacts } from '../../store/reducers/contactListSlice';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 
 function ContactList({modal, setModal} : { modal: boolean,
      setModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+        
     const user: IUser = useAuth();
+    const dispatch = useAppDispatch();
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
 
     const chatId: string = useParams().chatId!;
     const [activeChat, setActiveChat] = useState(chatId);
     
-    const [contacts, setContacts] = useState<IContact[]>([]);
+    const contacts = useAppSelector(state => state.contactListReducer);
     const [contactToAdd, setContactToAdd] = useState('');
 
     const fetchContacts = async () => {
         const response = await ContactsService.getContacts(user.userId);
         console.log(response);
-        setContacts([...response.data]);
+        dispatch(setContacts([...response.data]));
     }
 
     useEffect(() => {
