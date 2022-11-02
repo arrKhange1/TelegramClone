@@ -1,7 +1,7 @@
 import React from 'react';
-import { IMessage } from '../../@types/IExpandedChat';
-import { useAuth } from '../../hooks/useAuth';
-import msgs from '../../styles/messages_panel/messages.module.css';
+import { IMessage } from '../../../@types/IExpandedChat';
+import { useAuth } from '../../../hooks/useAuth';
+import msgs from '../../../styles/messages_panel/messages.module.css';
 
 function Message({msg} : {msg: IMessage}) {
     const user = useAuth();

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { IMessage } from '../../@types/IExpandedChat';
 import home from '../../styles/home/home.module.css';
 import msgs from '../../styles/messages_panel/messages.module.css';
-import Message from './Message';
+import Message from './GroupChat/Message';
 
 function MessagesList({messages} : {messages: IMessage[]}) {
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;

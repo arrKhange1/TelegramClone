@@ -1,15 +1,16 @@
 import React from 'react';
-import msgsHeader from '../../styles/messages_panel/header.module.css';
+import msgsHeader from '../../../styles/messages_panel/header.module.css';
 
-function Header({chatName, chatStatus} : {chatName: string,
-    chatStatus: string}) {
+function Header({chatName, groupMembers} : {chatName: string,
+    groupMembers: number}) {
+
     return (
         <div className={msgsHeader.header}>
             <div className={msgsHeader.info}>
                 <img src="imgs/contacts_icon.png" alt="" className={msgsHeader.info_img} />
                 <div className={msgsHeader.info_text}>
                     <div>{chatName}</div>
-                    <div>{chatStatus}</div>
+                    <div>{groupMembers} members</div>
                 </div>
             </div>
             <div className={msgsHeader.controls}>
