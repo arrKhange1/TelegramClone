@@ -85,11 +85,11 @@ namespace TelegramClone.Controllers
 
             if (newChatGuid != Guid.Empty)
             {
-                Debug.WriteLine($"isauth: {HttpContext.User.Identity.IsAuthenticated}, name: {User.Identity.Name}");
+                Debug.WriteLine($"isauth: {HttpContext.User.Identity.IsAuthenticated}, name: {User.Identity.Name}"); // в user identity name - userId
 
                 var chatUserMembers = _chatService.FormChatUserList(newChatGuid,groupChat.membersIds);
                 await _chatService.AddUsersToChat(chatUserMembers);
-                await _hubContext.Clients.Users(groupChat.membersNames).SendAsync("GroupChat", groupChat.groupName);
+                await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName);
                 
                 return Ok();
             }

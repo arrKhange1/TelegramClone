@@ -56,7 +56,7 @@ namespace TelegramClone.Services
 				{
 					Subject = new ClaimsIdentity(new Claim[]
 				  {
-						new Claim(ClaimTypes.NameIdentifier, user.UserName),
+						new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
 						new Claim(ClaimTypes.Name, user.UserName),
 						new Claim(ClaimTypes.Role, userRole.RoleName)
 
@@ -102,7 +102,7 @@ namespace TelegramClone.Services
 		public User GetUserFromToken(string token)
         {
 			var principal = GetPrincipalFromExpiredToken(token);
-			var userName = principal.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+			var userName = principal.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name).Value;
 			var user = _userRepository.GetUserByUsername(userName);
 			return user;
 		}
