@@ -8,6 +8,7 @@ import MessagesList from '../MessagesList';
 import msgs from '../../../styles/messages_panel/messages.module.css';
 import GroupChatSignalRService from '../../../services/GroupChatSignalRService';
 
+// let signalRService: GroupChatSignalRService;
 function GroupChat() {
     const params = useParams();
 
@@ -15,10 +16,11 @@ function GroupChat() {
         chatName: '',
         groupMembers: 0,
         messages: []
-    })
+    });
+    const [isGetChat, setIsGetChat] = useState(false);
 
-    const onAddMsgInGroupChat = (senderName: string, messageText: string) => {
-        console.log('chat', chat)
+    function onAddMsgInGroupChat(senderName: string, messageText: string) {
+        setChat(prev => ({...prev, messages: [...prev.messages, {userName: senderName, messageText: messageText}]}));
     }
 
     useEffect(() => {
@@ -26,8 +28,8 @@ function GroupChat() {
 
         const signalRService = new GroupChatSignalRService(onAddMsgInGroupChat);
         signalRService.start();
-        
         console.log('conn to groupchat:', signalRService.connection);
+
         return () => signalRService.stop();
     }, [params.chatId])
 
