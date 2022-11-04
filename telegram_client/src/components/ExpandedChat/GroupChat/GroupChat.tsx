@@ -6,6 +6,7 @@ import Footer from '../Footer';
 import Header from './Header';
 import MessagesList from '../MessagesList';
 import msgs from '../../../styles/messages_panel/messages.module.css';
+import GroupChatSignalRService from '../../../services/GroupChatSignalRService';
 
 function GroupChat() {
     const params = useParams();
@@ -16,11 +17,22 @@ function GroupChat() {
         messages: []
     })
 
+    const onAddMsgInGroupChat = (senderName: string, messageText: string) => {
+        console.log('chat', chat)
+    }
+
     useEffect(() => {
         getChat();
+
+        const signalRService = new GroupChatSignalRService(onAddMsgInGroupChat);
+        signalRService.start();
+        
+        console.log('conn to groupchat:', signalRService.connection);
+        return () => signalRService.stop();
     }, [params.chatId])
 
     useEffect(() => {
+        
         document.getElementById(msgs.msgs_wrapper)!
         .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
     }, []);

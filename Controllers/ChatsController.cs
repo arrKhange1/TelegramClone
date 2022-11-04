@@ -29,6 +29,8 @@ namespace TelegramClone.Controllers
             _chatService = chatService;
         }
 
+
+
         [HttpGet("getprivatechat")]
         public IActionResult GetPrivateChat(string chatId)
         {
@@ -95,6 +97,22 @@ namespace TelegramClone.Controllers
             }
 
             return BadRequest("Something went wrong..."); 
+        }
+
+        [HttpPost("sendgroupchat")]
+        public async Task<ActionResult> SendMessageInGroupChat(string chatId, string senderId, string messageText)
+        {
+            var chatIdGuid = Guid.Parse(chatId);
+            var senderIdGuid = Guid.Parse(senderId);
+
+            var chatUser = _chatService.GetChatUser(chatIdGuid, senderIdGuid);
+            await _chatService.AddMsg(chatUser.ChatUserId, messageText);
+            var memberIds = _chatService.GetChatMemberIds(chatIdGuid);
+
+            var senderName = _userService.GetCurrentUser(HttpContext).UserName;
+            await _hubContext.Clients.Users(memberIds).SendAsync("AddMessageGroupChat", senderName, messageText);
+
+            return Ok();
         }
 
     }

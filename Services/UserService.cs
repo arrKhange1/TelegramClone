@@ -33,7 +33,7 @@ namespace TelegramClone.Services
 
                 return new User
                 {
-                    UserName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value,
+                    UserName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name).Value,
                     RoleId = _roleRepository.GetRoleByName(roleName).RoleId
 
                 };

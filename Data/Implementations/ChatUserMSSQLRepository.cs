@@ -16,6 +16,16 @@ namespace TelegramClone.Data.Implementations
         {
             _context = context;
         }
+
+        public List<string> GetChatMemberIds(Guid chatId)
+        {
+            return _context.ChatUsers.Where(cu => cu.ChatId == chatId).Select(cu => cu.UserId.ToString().ToLower()).ToList();
+        }
+
+        public ChatUser GetChatUserByChatIdAndUserId(Guid chatId, Guid userId)
+        {
+            return _context.ChatUsers.FirstOrDefault(cu => cu.ChatId == chatId && cu.UserId == userId);
+        }
         public async Task<bool> AddUsersToChat(List<ChatUser> members)
         {
             try

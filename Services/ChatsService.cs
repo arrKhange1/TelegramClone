@@ -24,6 +24,16 @@ namespace TelegramClone.Services
             _chatCategoryRepository = chatCategoryRepository;
         }
 
+        public List<string> GetChatMemberIds(Guid chatId)
+        {
+            return _chatUserRepository.GetChatMemberIds(chatId);
+        }
+
+        public ChatUser GetChatUser(Guid chatId, Guid userId)
+        {
+            return _chatUserRepository.GetChatUserByChatIdAndUserId(chatId, userId);
+        }
+
         public ChatCategory GetChatCategoryById(Guid chatCategoryId)
         {
             return _chatCategoryRepository.GetChatCategoryById(chatCategoryId);
@@ -32,6 +42,11 @@ namespace TelegramClone.Services
         public List<MessageDTO> GetMsgs(Guid chatId)
         {
             return _messageRepository.GetMsgs(chatId);
+        }
+
+        public async Task<Message> AddMsg(Guid chatUserId, string messageText)
+        {
+            return await _messageRepository.AddMsg(chatUserId, messageText);
         }
 
         public Chat GetChat(Guid chatId)

@@ -55,7 +55,6 @@ function ChatList({modal, setModal} : { modal: boolean,
 
         const signalRService = new ChatListSignalRService(onAddGroupChat);
         signalRService.start(); // TODO: share fetchcontacts() with signalr listener
-
         
         console.log('conn:', signalRService.connection);
         return () => signalRService.stop();

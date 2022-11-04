@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
+using TelegramClone.Models;
 using TelegramClone.Models.DTO;
 
 namespace TelegramClone.Data.Implementations
@@ -28,6 +29,18 @@ namespace TelegramClone.Data.Implementations
             };
 
             return msgs.ToList();
+        }
+
+        public async Task<Message> AddMsg(Guid chatUserId, string messageText)
+        {
+            var added = await _context.Messages.AddAsync(new Message
+            {
+                MessageId = Guid.NewGuid(),
+                MessageText = messageText,
+                ChatUserId = chatUserId
+            });
+            await _context.SaveChangesAsync();
+            return added.Entity;
         }
     }
 }

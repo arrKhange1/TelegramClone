@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { $api } from '../../http/axios';
 import footer from '../../styles/messages_panel/footer.module.css';
 
 
 
 function Footer() {
 
+    const chatId = useParams().chatId;
+    const user = useAuth();
     const  [textMsg, setTextMsg] = useState('');
 
-    const send = (e: React.MouseEvent<HTMLDivElement>) => {
-
+    const send = async (e: React.MouseEvent<HTMLDivElement>) => {
+        const response = await $api.post(`chats/sendgroupchat?chatId=${chatId}&senderId=${user.userId}&messageText=${textMsg}`);
+        console.log(response.data)
     };
 
     const record = (e: React.MouseEvent<HTMLDivElement>) => {
