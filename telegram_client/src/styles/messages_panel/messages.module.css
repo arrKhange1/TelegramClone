@@ -22,9 +22,12 @@
     width: 50%;
     text-align: center;
     display: flex;
-    flex-direction: column;
+    flex-flow: column nowrap;
     gap: 0.3em;
-    justify-content: flex-end;
+}
+
+.msgs > :first-child {
+    margin-top: auto !important;
 }
 
 .msg {

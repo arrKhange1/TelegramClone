@@ -33,8 +33,9 @@ function GroupChat() {
 
     useEffect(() => {
         
-        document.getElementById(msgs.msgs_wrapper)!
-        .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
+        // const shit = document.getElementById(msgs.msgs_wrapper)!;
+        // console.log(shit)
+        // shit.scrollTop = shit.scrollHeight; // auto scrollin user down //
     }, []);
 
     const getChat = async () => {

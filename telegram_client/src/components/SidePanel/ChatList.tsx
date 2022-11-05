@@ -63,7 +63,6 @@ function ChatList({modal, setModal} : { modal: boolean,
 
     return (
         <div className={side.chats + custom_scroll}>
-            <button type='button' onClick={() => $api.post('/chats/testchats')}>chats</button>
             {chats.length ? chats.map(chat => 
                 <Link to={chat.chatId} key={chat.chatId} className={side.chat_open_link}
                 onClick={() => 
