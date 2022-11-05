@@ -11,6 +11,7 @@ namespace TelegramClone.Models
         public string ChatName { get; set; }
         public int GroupMembers { get; set; }
         public Guid ChatCategoryId { get; set; }
+        public DateTime CreateTime { get; set; }
         public ChatCategory ChatCategory { get; set; }
         public List<ChatUser> ChatUsers { get; set; }
     }

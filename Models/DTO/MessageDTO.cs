@@ -9,5 +9,6 @@ namespace TelegramClone.Models.DTO
     {
         public string UserName { get; set; }
         public string MessageText { get; set; }
+        public DateTime MessageTime { get; set; }
     }
 }

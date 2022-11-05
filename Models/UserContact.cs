@@ -13,7 +13,8 @@ namespace TelegramClone.Models
         public Guid UserContactId { get; set; }
         public Guid UserId { get; set; }
         public Guid ContactId { get; set; }
-
+        
+        public DateTime CreateTime { get; set; }
         public User Contact { get; set; }
         public User User { get; set; }
 

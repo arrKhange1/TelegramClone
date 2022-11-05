@@ -112,7 +112,7 @@ namespace TelegramClone.Controllers
             var senderName = _userService.GetCurrentUser(HttpContext).UserName;
             await _hubContext.Clients.Users(memberIds).SendAsync("AddMessageGroupChat", senderName, messageText);
 
-            return Ok();
+            return Ok(memberIds);
         }
 
     }

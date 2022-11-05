@@ -22,10 +22,12 @@ namespace TelegramClone.Data.Implementations
             cu in _context.ChatUsers on m.ChatUserId equals cu.ChatUserId join
             u in _context.Users on cu.UserId equals u.UserId
             where chatId == cu.ChatId
+            orderby m.MessageTime
             select new MessageDTO
             {
                 UserName = u.UserName,
-                MessageText = m.MessageText
+                MessageText = m.MessageText,
+                MessageTime = m.MessageTime
             };
 
             return msgs.ToList();
@@ -37,7 +39,8 @@ namespace TelegramClone.Data.Implementations
             {
                 MessageId = Guid.NewGuid(),
                 MessageText = messageText,
-                ChatUserId = chatUserId
+                ChatUserId = chatUserId,
+                MessageTime = DateTime.UtcNow
             });
             await _context.SaveChangesAsync();
             return added.Entity;
