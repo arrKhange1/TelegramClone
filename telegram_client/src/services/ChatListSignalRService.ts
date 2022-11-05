@@ -4,7 +4,7 @@ import SignalRService from "./SignalRService";
 
 export default class ChatListSignalRService extends SignalRService {
 
-    onAddGroupChat : (groupName: string) => void;
+    onAddGroupChat : (groupName: string, chatId: string) => void;
 
     getConnection(accessToken: string) {
         this.connection = new signalR.HubConnectionBuilder()
@@ -16,7 +16,7 @@ export default class ChatListSignalRService extends SignalRService {
         this.connection.on('GroupChat', this.onAddGroupChat);
     }
 
-    constructor(onAddGroupChat: (groupName: string) => void) {
+    constructor(onAddGroupChat: (groupName: string, chatId: string) => void) {
         super();
         this.onAddGroupChat = onAddGroupChat;
         this.getConnection(store.getState().authReducer.accessToken);

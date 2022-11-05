@@ -10,10 +10,10 @@ function ContactListElement({activeChat, contact} : {activeChat: string,
     return (
         <div className={activeChat === contact.contactId ? `${side.chat} ${side.active}` :
             `${side.chat}`} >
-            <img src={contact.contactPhoto} className={side.chat_img} alt='asap'/>
+            <img src='' className={side.chat_img} alt='asap'/>
             <div className={`${side.chat_content} ${side.chat_center}`}>
                 <div>{contact.contactName}</div>
-                <div>{contact.connectionStatus}</div>
+                <div></div>
             </div>
         </div>
     );

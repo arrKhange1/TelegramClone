@@ -91,7 +91,7 @@ namespace TelegramClone.Controllers
 
                 var chatUserMembers = _chatService.FormChatUserList(newChatGuid,groupChat.membersIds);
                 await _chatService.AddUsersToChat(chatUserMembers);
-                await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName);
+                await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName, newChatGuid.ToString().ToLower());
                 
                 return Ok();
             }

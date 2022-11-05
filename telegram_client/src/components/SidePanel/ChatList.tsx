@@ -17,7 +17,7 @@ import refreshPromise from '../../http/refreshTokenPromise'
 import ChatListSignalRService from '../../services/ChatListSignalRService';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { setChats } from '../../store/reducers/chatListSlice';
+import { setChats, addToChats } from '../../store/reducers/chatListSlice';
 
 // let signalRService: SignalRService;
 
@@ -44,9 +44,9 @@ function ChatList({modal, setModal} : { modal: boolean,
         dispatch(setChats([...response.data]));
     }
 
-    const onAddGroupChat = (groupName: string) => {
+    const onAddGroupChat = (groupName: string, chatId: string) => {
         console.log('chat added:', chats, groupName)
-        fetchChats();
+        dispatch(addToChats({chatId: chatId, chatName: groupName}));
     }
 
     useEffect(() => {

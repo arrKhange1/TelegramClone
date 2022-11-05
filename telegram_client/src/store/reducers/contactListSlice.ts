@@ -12,10 +12,14 @@ export const contactListSlice = createSlice({
 
         setContacts(state, action:PayloadAction<IContact[]>) {
             return action.payload;
+        },
+
+        addContacts(state, action:PayloadAction<IContact>) {
+            return [action.payload, ...state];
         }
     }
 });
 
-export const {setContacts} = contactListSlice.actions;
+export const {setContacts, addContacts} = contactListSlice.actions;
 
 export default contactListSlice.reducer;

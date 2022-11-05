@@ -23,12 +23,17 @@ namespace TelegramClone.Data.Implementations
         }
         public List<ChatElementDTO> GetChats(Guid userId)
         {
-
-            return _context.ChatUsers.Where(cu => cu.UserId == userId).Select(cu => new ChatElementDTO
+            var result = from cu in _context.ChatUsers join
+            c in _context.Chats on cu.ChatId equals c.ChatId
+            where cu.UserId == userId
+            orderby c.CreateTime descending
+            select new ChatElementDTO
             {
                 ChatId = cu.ChatId,
-                ChatName = _context.Chats.FirstOrDefault(chat => chat.ChatId == cu.ChatId).ChatName
-            }).ToList();
+                ChatName = c.ChatName,
+                CreateTime = c.CreateTime
+            };
+            return result.ToList();
         }
 
         public async Task<Guid> AddGroupChat(string chatName, int groupMembers)
@@ -39,7 +44,8 @@ namespace TelegramClone.Data.Implementations
                 ChatId = newChatGuid,
                 ChatName = chatName,
                 ChatCategoryId = _context.ChatCategories.FirstOrDefault(cat => cat.ChatCategoryName == "group").ChatCategoryId,
-                GroupMembers = groupMembers
+                GroupMembers = groupMembers,
+                CreateTime = DateTime.UtcNow
             };
             var addedChat = await _context.Chats.AddAsync(newChat);
             if (addedChat != null)

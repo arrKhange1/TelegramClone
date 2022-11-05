@@ -12,10 +12,14 @@ export const chatListSlice = createSlice({
 
         setChats(state, action:PayloadAction<IChat[]>) {
             return action.payload;
+        },
+
+        addToChats(state, action: PayloadAction<IChat>) {
+            return [action.payload, ...state];
         }
     }
 });
 
-export const {setChats} = chatListSlice.actions;
+export const {setChats, addToChats} = chatListSlice.actions;
 
 export default chatListSlice.reducer;

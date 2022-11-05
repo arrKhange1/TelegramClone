@@ -13,7 +13,7 @@ import AddButton from './AddButton';
 import AddContactIcon from '../../icons/AddContactIcon';
 import ContactsAddForm from './ContactsAddForm';
 import ModalWindow from './ModalWindow';
-import { setContacts } from '../../store/reducers/contactListSlice';
+import { setContacts, addContacts } from '../../store/reducers/contactListSlice';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 
 function ContactList({modal, setModal} : { modal: boolean,
@@ -50,9 +50,9 @@ function ContactList({modal, setModal} : { modal: boolean,
     }, [modal])
 
     const addContact = async () => {
-        await ContactsService.addContact(user.userId, contactToAdd);
-        await fetchContacts();
-        await setModal(false);
+        const response = await ContactsService.addContact(user.userId, contactToAdd);
+        dispatch(addContacts(response.data));
+        setModal(false);
     }
 
     return (

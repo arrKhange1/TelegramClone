@@ -8,7 +8,7 @@ export default class ContactsService {
     }
 
     static async addContact(userId: string, contactName: string) {
-        const response = await $api.post(`contacts?userid=${userId}&contactname=${contactName}`);
+        const response = await $api.post<IContact>(`contacts?userid=${userId}&contactname=${contactName}`);
         return response;
     }
 }
