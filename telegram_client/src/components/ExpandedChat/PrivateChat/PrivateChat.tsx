@@ -7,15 +7,18 @@ import Header from './Header';
 import MessagesList from '../MessagesList';
 import msgs from '../../../styles/messages_panel/messages.module.css';
 import PrivateChatSignalRService from '../../../services/PrivateChatSignalRService';
+import { useAuth } from '../../../hooks/useAuth';
 
 function PrivateChat() {
     const params = useParams();
+    const user = useAuth();
 
     const [chat, setChat] = useState<IPrivateChat>({
         userName: '',
         connectionStatus: '',
         messages: []
-    })
+    });
+    const  [textMsg, setTextMsg] = useState('');
 
     function onAddMsgInPrivateChat(senderName: string, messageText: string, chatId: string) {
         if (chatId === params.chatId)
@@ -45,11 +48,16 @@ function PrivateChat() {
         setChat(response.data)
     }
 
+    const sendMsg = async (e: React.MouseEvent<HTMLDivElement>) => {
+        const response = await $api.post(`chats/sendprivatechat?chatId=${params.chatId}&senderId=${user.userId}&messageText=${textMsg}`);
+        console.log(response.data)
+    };
+
     return (
         <div className={msgs.messages_panel}>
             <Header userName={chat.userName} conStatus={chat.connectionStatus}/>
             <MessagesList messages={chat.messages}/>
-            <Footer/>
+            <Footer textMsg={textMsg} sendMsg={sendMsg} setTextMsg={setTextMsg}/>
         </div>
     );
 }

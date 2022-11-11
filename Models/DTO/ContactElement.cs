@@ -11,5 +11,6 @@ namespace TelegramClone.Models.DTO
         public string ContactName { get; set; }
         public string ContactPhoto { get; set; }
         public string ConnectionStatus { get; set; }
+        public string ChatCategory { get; set; }
     }
 }

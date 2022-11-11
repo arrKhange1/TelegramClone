@@ -48,7 +48,8 @@ namespace TelegramClone.Data.Implementations
                            ContactId = u.UserId,
                            ContactName = u.UserName,
                            ContactPhoto = u.UserPhoto,
-                           ConnectionStatus = u.ConnectionStatus
+                           ConnectionStatus = u.ConnectionStatus,
+                           ChatCategory = "private"
                        };
             return contacts.ToList();
         }

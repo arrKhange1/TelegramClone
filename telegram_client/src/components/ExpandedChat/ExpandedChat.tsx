@@ -24,10 +24,15 @@ function ExpandedChat() {
             navigate('/');
     }
 
-    if (contactList.some(contact => contact.contactId === chatId))
+    if (contactList.some(contact => contact.contactId === chatId) ||
+         chatList.find(chat => chat.chatId === chatId)?.chatCategory === 'private') {
+        console.log('priv')
         return <PrivateChat/>;
-    else if (chatList.some(chat => chat.chatId === chatId))
+    }
+    else if (chatList.some(chat => chat.chatId === chatId)) {
+        console.log('group')
         return <GroupChat/>;
+    }
     return <div>Page unavailable</div>;
 }
 

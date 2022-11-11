@@ -31,6 +31,7 @@ namespace TelegramClone.Data.Implementations
             {
                 ChatId = cu.ChatId,
                 ChatName = c.ChatName,
+                ChatCategory = "private",
                 CreateTime = c.CreateTime
             };
             return result.ToList();
