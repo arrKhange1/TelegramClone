@@ -32,13 +32,6 @@ function GroupChat() {
         return () => signalRService.stop();
     }, [params.chatId])
 
-    useEffect(() => {
-        
-        // const shit = document.getElementById(msgs.msgs_wrapper)!;
-        // console.log(shit)
-        // shit.scrollTop = shit.scrollHeight; // auto scrollin user down //
-    }, []);
-
     const getChat = async () => {
         const response = await $api.get<IGroupChat>(`chats/getgroupchat?chatid=${params.chatId}`);
         console.log(response.data)

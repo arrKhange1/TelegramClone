@@ -115,5 +115,32 @@ namespace TelegramClone.Controllers
             return Ok(memberIds);
         }
 
+        [HttpPost("sendprivatechat")]
+        public async Task<ActionResult> SendMessageInPrivateChat(string chatId, string senderId, string messageText)
+        {
+            var chatIdGuid = Guid.Parse(chatId);
+            var senderIdGuid = Guid.Parse(senderId);
+            var memberIds = new List<string>
+            {
+                chatId,
+                senderId
+            };
+
+            var chatUser = _chatService.GetChatUser(chatIdGuid, senderIdGuid);
+
+            if (chatUser == null) // add private chat
+            {
+                var chatUsers = await _chatService.AddPrivateChat(chatIdGuid, memberIds);
+                chatUser = chatUsers.FirstOrDefault(cu => cu.UserId == Guid.Parse(senderId));
+            }
+            await _chatService.AddMsg(chatUser.ChatUserId, messageText);
+
+            var senderName = _userService.GetCurrentUser(HttpContext).UserName;
+            await _hubContext.Clients.Users(memberIds).SendAsync("AddMessagePrivateChat", senderName, messageText, chatId);
+            // TODO: add v chatlist
+
+            return Ok(memberIds);
+        }
+
     }
 }

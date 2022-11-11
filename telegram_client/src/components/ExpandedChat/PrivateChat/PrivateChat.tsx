@@ -6,6 +6,7 @@ import Footer from '../Footer';
 import Header from './Header';
 import MessagesList from '../MessagesList';
 import msgs from '../../../styles/messages_panel/messages.module.css';
+import PrivateChatSignalRService from '../../../services/PrivateChatSignalRService';
 
 function PrivateChat() {
     const params = useParams();
@@ -16,14 +17,27 @@ function PrivateChat() {
         messages: []
     })
 
-    useEffect(() => {
-        getChat();
-    }, [params.chatId])
+    function onAddMsgInPrivateChat(senderName: string, messageText: string, chatId: string) {
+        if (chatId === params.chatId)
+            setChat(prev => ({...prev, messages: [...prev.messages, {userName: senderName, messageText: messageText}]}));
+    }
 
     useEffect(() => {
-        document.getElementById(msgs.msgs_wrapper)!
-        .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
-    }, []);
+        getChat();
+
+        const signalRService = new PrivateChatSignalRService(onAddMsgInPrivateChat);
+        signalRService.start();
+        console.log('conn to privatechat:', signalRService.connection);
+
+        return () => signalRService.stop();
+    }, [params.chatId])
+
+
+
+    // useEffect(() => {
+    //     document.getElementById(msgs.msgs_wrapper)!
+    //     .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
+    // }, []);
 
     const getChat = async () => {
         const response = await $api.get<IPrivateChat>(`chats/getprivatechat?chatid=${params.chatId}`);

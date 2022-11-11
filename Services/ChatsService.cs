@@ -70,6 +70,14 @@ namespace TelegramClone.Services
             return await _chatUserRepository.AddUsersToChat(members);
         }
 
+        public async Task<List<ChatUser>> AddPrivateChat(Guid chatId, List<string> members)
+        {
+            await _chatRepository.AddPrivateChat(chatId);
+            var chatUserMembers = FormChatUserList(chatId, members);
+            await AddUsersToChat(chatUserMembers);
+            return chatUserMembers;
+        }
+
         public async Task<Guid> AddGroupChat(string chatName, int groupMembers)
         {
             return await _chatRepository.AddGroupChat(chatName, groupMembers);

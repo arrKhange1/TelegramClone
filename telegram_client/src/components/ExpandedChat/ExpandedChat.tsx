@@ -13,7 +13,6 @@ import { useAppSelector } from '../../hooks/useAppSelector';
 import PrivateChat from './PrivateChat/PrivateChat';
 import GroupChat from './GroupChat/GroupChat';
 
-// let signalRService : SignalRService;
 function ExpandedChat() {
     const navigate = useNavigate();
     const chatId = useParams().chatId;

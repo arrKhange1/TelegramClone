@@ -36,6 +36,24 @@ namespace TelegramClone.Data.Implementations
             return result.ToList();
         }
 
+        public async Task<Guid> AddPrivateChat(Guid chatId)
+        {
+            var newChat = new Chat
+            {
+                ChatId = chatId,
+                ChatCategoryId = _context.ChatCategories.FirstOrDefault(cat => cat.ChatCategoryName == "private").ChatCategoryId,
+                GroupMembers = 2,
+                CreateTime = DateTime.UtcNow
+            };
+            var addedChat = await _context.Chats.AddAsync(newChat);
+            if (addedChat != null)
+            {
+                _context.SaveChanges();
+                return chatId;
+            }
+            return Guid.Empty;
+        }
+
         public async Task<Guid> AddGroupChat(string chatName, int groupMembers)
         {
             var newChatGuid = Guid.NewGuid();
