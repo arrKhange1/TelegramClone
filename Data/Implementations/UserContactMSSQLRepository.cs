@@ -25,7 +25,8 @@ namespace TelegramClone.Data.Implementations
                 {
                     UserContactId = Guid.NewGuid(),
                     UserId = userId,
-                    ContactId = contactId
+                    ContactId = contactId,
+                    CreateTime = DateTime.UtcNow
                 });
                 await _context.SaveChangesAsync();
                 return true;
@@ -41,6 +42,7 @@ namespace TelegramClone.Data.Implementations
             var contacts = from uc in _context.UserContacts
                        join u in _context.Users on uc.ContactId equals u.UserId
                        where uc.UserId == userId
+                       orderby uc.CreateTime descending
                        select new ContactElement
                        {
                            ContactId = u.UserId,
