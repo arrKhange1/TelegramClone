@@ -36,6 +36,10 @@ namespace TelegramClone.Models
         public List<UserContact> UserContactsUsers { get; set; }
         public List<UserContact> UserContactsContacts { get; set; }
 
+        public List<Dialog> DialogsFirstParticipants { get; set; }
+        public List<Dialog> DialogsSecondParticipants { get; set; }
+        public List<DialogMessage> DialogMessages { get; set; }
+
 
     }
 }

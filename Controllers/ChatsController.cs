@@ -41,6 +41,7 @@ namespace TelegramClone.Controllers
             {
                 return Ok(new PrivateChatDTO
                 {
+                    UserId = user.UserId.ToString().ToLower(),
                     UserName = user.UserName,
                     ConnectionStatus = user.ConnectionStatus,
                     Messages = new List<MessageDTO>()
@@ -51,6 +52,7 @@ namespace TelegramClone.Controllers
                 var msgs = _chatService.GetMsgs(chatIdGuid); // получаем сообщения
                 return Ok(new PrivateChatDTO
                 {
+                    UserId = user.UserId.ToString().ToLower(),
                     UserName = user.UserName,
                     ConnectionStatus = user.ConnectionStatus,
                     Messages = msgs
@@ -76,7 +78,7 @@ namespace TelegramClone.Controllers
         [HttpGet]
         public IActionResult GetChats(string userId)
         {
-            return Ok(_chatService.GetChats(Guid.Parse(userId)));
+            return Ok(_chatService.GetChats(Guid.Parse(userId), HttpContext));
         }
 
         [HttpPost ("addgroupchat")]

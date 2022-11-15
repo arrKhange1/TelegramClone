@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -83,9 +84,9 @@ namespace TelegramClone.Services
             return await _chatRepository.AddGroupChat(chatName, groupMembers);
         }
 
-        public List<ChatElementDTO> GetChats(Guid userId)
+        public List<ChatElementDTO> GetChats(Guid userId, HttpContext httpContext)
         {
-            return _chatRepository.GetChats(userId);
+            return _chatRepository.GetChats(userId, httpContext);
         }
     }
 }

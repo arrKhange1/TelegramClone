@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,6 @@ namespace TelegramClone.Data.Interfaces
         public Chat GetChat(Guid chatId);
         public Task<Guid> AddPrivateChat(Guid chatId);
         public Task<Guid> AddGroupChat(string chatName, int groupMembers);
-        public List<ChatElementDTO> GetChats(Guid userId);
+        public List<ChatElementDTO> GetChats(Guid userId, HttpContext httpContext);
     }
 }
