@@ -61,7 +61,7 @@ namespace TelegramClone.Services
 						new Claim(ClaimTypes.Role, userRole.RoleName)
 
 				  }),
-					Expires = DateTime.Now.AddSeconds(10),
+					Expires = DateTime.Now.AddSeconds(3600),
 					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
 				};
 				var token = tokenHandler.CreateToken(tokenDescriptor);

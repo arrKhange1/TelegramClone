@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
@@ -23,52 +24,85 @@ namespace TelegramClone.Data.Implementations
             return _context.Chats.FirstOrDefault(chat => chat.ChatId == chatId);
         }
 
-        public static string GetChatName(Chat chat, ChatUser chatUser, Guid userId)
+        public List<ChatElementDTO> GetGroupChats(Guid userId)
         {
-            if (chat.ChatName == null)
-            {
-                if (userId != chatUser.UserId)
-                    return userId.ToString().ToLower();
-                return chatUser.ChatId.ToString().ToLower();
-            }
-            return chat.ChatName;
-            
-        }
-
-        public List<ChatElementDTO> GetChats(Guid userId, HttpContext httpContext)
-        {
-            var currentUser = httpContext.User.Identity.Name;
-            
             var result = from cu in _context.ChatUsers join
             c in _context.Chats on cu.ChatId equals c.ChatId
-            where (cu.UserId == userId || cu.ChatId == userId) && cu.ChatId != cu.UserId
-            orderby c.CreateTime descending
+            where cu.UserId == userId
             select new ChatElementDTO
             {
                 ChatId = c.ChatId,
-                ChatName = GetChatName(c, cu, userId),
-                ChatCategory = c.ChatName == null ? "private" : "group",
+                ChatName = c.ChatName,
+                ChatCategory = "group",
                 CreateTime = c.CreateTime
             };
-            return result.ToList();
+            var groupChats = result.ToList();
+            if (groupChats == null)
+                return new List<ChatElementDTO>();
+            return groupChats;
         }
 
-        public async Task<Guid> AddPrivateChat(Guid chatId)
+        public Dialog GetPrivateChat(Guid firstParticipantId, Guid secondParticipantId)
         {
-            var newChat = new Chat
+            var dialog = _context.Dialogs.FirstOrDefault(dial => dial.FirstParticipantId == firstParticipantId && dial.SecondParticipantId == secondParticipantId ||
+                dial.FirstParticipantId == secondParticipantId && dial.SecondParticipantId == firstParticipantId);
+            return dialog;
+        }
+ 
+        public List<ChatElementDTO> GetPrivateChats(Guid userId)
+        {
+            var firstParticipants = from pc in _context.Dialogs join
+            u in _context.Users on pc.FirstParticipantId equals u.UserId
+            where pc.SecondParticipantId == userId
+            select new ChatElementDTO
             {
-                ChatId = chatId,
-                ChatCategoryId = _context.ChatCategories.FirstOrDefault(cat => cat.ChatCategoryName == "private").ChatCategoryId,
-                GroupMembers = 2,
-                CreateTime = DateTime.UtcNow
+                ChatId = u.UserId,
+                ChatName = u.UserName,
+                ChatCategory = "private"
             };
-            var addedChat = await _context.Chats.AddAsync(newChat);
+
+            var secondParticipants = from pc in _context.Dialogs join
+            u in _context.Users on pc.SecondParticipantId equals u.UserId
+            where pc.FirstParticipantId == userId
+            select new ChatElementDTO
+            {
+                ChatId = u.UserId,
+                ChatName = u.UserName,
+                ChatCategory = "private"
+            };
+            //var firstParticipantsList = firstParticipants.ToList();
+            //var secondParticipantsList = secondParticipants.ToList();
+
+            if (firstParticipants == null && secondParticipants == null)
+                return new List<ChatElementDTO>();
+            else if (firstParticipants == null)
+            {
+                return secondParticipants.ToList();
+            }
+            else if (secondParticipants == null)
+            {
+                return firstParticipants.ToList();
+            }
+            return firstParticipants.Concat(secondParticipants).ToList();
+        }
+
+        
+
+        public async Task<Dialog> AddPrivateChat(Guid fromId, Guid toId)
+        {
+            var newDialog= new Dialog
+            {
+                DialogId = Guid.NewGuid(),
+                FirstParticipantId = fromId,
+                SecondParticipantId = toId,
+            };
+            var addedChat = await _context.Dialogs.AddAsync(newDialog);
             if (addedChat != null)
             {
                 _context.SaveChanges();
-                return chatId;
+                return addedChat.Entity;
             }
-            return Guid.Empty;
+            return null;
         }
 
         public async Task<Guid> AddGroupChat(string chatName, int groupMembers)

@@ -49,7 +49,6 @@ namespace TelegramClone.Data.Implementations
                            ContactName = u.UserName,
                            ContactPhoto = u.UserPhoto,
                            ConnectionStatus = u.ConnectionStatus,
-                           ChatCategory = "private"
                        };
             return contacts.ToList();
         }

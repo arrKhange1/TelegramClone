@@ -20,8 +20,9 @@ function PrivateChat() {
     });
     const  [textMsg, setTextMsg] = useState('');
 
-    function onAddMsgInPrivateChat(senderName: string, messageText: string, chatId: string) {
-        if (chatId === params.chatId)
+    function onAddMsgInPrivateChat(senderName: string, messageText: string, fromId: string, toId: string) {
+        if ((user.userId === fromId && params.chatId === toId) ||
+                (user.userId === toId && params.chatId === fromId))
             setChat(prev => ({...prev, messages: [...prev.messages, {userName: senderName, messageText: messageText}]}));
     }
 
@@ -35,21 +36,14 @@ function PrivateChat() {
         return () => signalRService.stop();
     }, [params.chatId])
 
-
-
-    // useEffect(() => {
-    //     document.getElementById(msgs.msgs_wrapper)!
-    //     .scrollTo(0, document.getElementById(msgs.msgs_wrapper)!.scrollHeight); // auto scrollin user down
-    // }, []);
-
     const getChat = async () => {
-        const response = await $api.get<IPrivateChat>(`chats/getprivatechat?chatid=${params.chatId}`);
+        const response = await $api.get<IPrivateChat>(`chats/getprivatechat?fromId=${user.userId}&toId=${params.chatId}`);
         console.log(response.data)
         setChat(response.data)
     }
 
     const sendMsg = async (e: React.MouseEvent<HTMLDivElement>) => {
-        const response = await $api.post(`chats/sendprivatechat?chatId=${params.chatId}&senderId=${user.userId}&messageText=${textMsg}`);
+        const response = await $api.post(`chats/sendprivatechat?fromId=${user.userId}&toId=${params.chatId}&messageText=${textMsg}`);
         console.log(response.data)
     };
 

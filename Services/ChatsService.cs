@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
@@ -15,14 +16,17 @@ namespace TelegramClone.Services
         private readonly IChatUserRepository _chatUserRepository;
         private readonly IMessageRepository _messageRepository;
         private readonly IChatCategoryRepository _chatCategoryRepository;
+        private readonly IUserRepository _userRepository;
 
         public ChatsService(IChatRepository chatRepository, IChatUserRepository chatUserRepository, 
-            IMessageRepository messageRepository, IChatCategoryRepository chatCategoryRepository)
+            IMessageRepository messageRepository, IChatCategoryRepository chatCategoryRepository,
+            IUserRepository userRepository)
         {
             _chatRepository = chatRepository;
             _chatUserRepository = chatUserRepository;
             _messageRepository = messageRepository;
             _chatCategoryRepository = chatCategoryRepository;
+            _userRepository = userRepository;
         }
 
         public List<string> GetChatMemberIds(Guid chatId)
@@ -71,22 +75,48 @@ namespace TelegramClone.Services
             return await _chatUserRepository.AddUsersToChat(members);
         }
 
-        public async Task<List<ChatUser>> AddPrivateChat(Guid chatId, List<string> members)
-        {
-            await _chatRepository.AddPrivateChat(chatId);
-            var chatUserMembers = FormChatUserList(chatId, members);
-            await AddUsersToChat(chatUserMembers);
-            return chatUserMembers;
-        }
 
         public async Task<Guid> AddGroupChat(string chatName, int groupMembers)
         {
             return await _chatRepository.AddGroupChat(chatName, groupMembers);
         }
 
-        public List<ChatElementDTO> GetChats(Guid userId, HttpContext httpContext)
+        public List<ChatElementDTO> GetChats(Guid userId)
         {
-            return _chatRepository.GetChats(userId, httpContext);
+            var privateChats = _chatRepository.GetPrivateChats(userId);
+            var groupChats = _chatRepository.GetGroupChats(userId);
+
+            return privateChats.Concat(groupChats).ToList();
+        }
+
+        public PrivateChatDTO GetPrivateChat(Guid fromId, Guid toId)
+        {
+            var dialog = _chatRepository.GetPrivateChat(fromId, toId);
+            var user = _userRepository.GetUserById(toId);
+            if (dialog == null)
+                return new PrivateChatDTO
+                {
+                    UserId = toId.ToString().ToLower(),
+                    UserName = user.UserName,
+                    ConnectionStatus = user.ConnectionStatus,
+                    Messages = new List<MessageDTO>()
+                };
+            var msgs = _messageRepository.GetDialogMessages(dialog.DialogId);
+            return new PrivateChatDTO
+            {
+                UserId = toId.ToString().ToLower(),
+                UserName = user.UserName,
+                ConnectionStatus = user.ConnectionStatus,
+                Messages = msgs
+            };
+        }
+
+        public async Task AddMessageInPrivateChat(Guid fromId, Guid toId, string messageText)
+        {
+            var dialog = _chatRepository.GetPrivateChat(fromId, toId);
+            if (dialog == null)
+                dialog = await _chatRepository.AddPrivateChat(fromId, toId);
+            await _messageRepository.AddDialogMessage(dialog.DialogId, fromId, messageText);
         }
     }
 }

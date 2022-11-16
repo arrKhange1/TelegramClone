@@ -33,6 +33,20 @@ namespace TelegramClone.Data.Implementations
             return msgs.ToList();
         }
 
+        public List<MessageDTO> GetDialogMessages(Guid dialogId)
+        { // add message time and message time sort
+            var msgs = from m in _context.DialogMessages join
+            d in _context.Dialogs on m.DialogId equals d.DialogId join
+            u in _context.Users on m.SenderId equals u.UserId
+            where m.DialogId == dialogId
+            select new MessageDTO
+            {
+                UserName = u.UserName,
+                MessageText = m.MessageText
+            };
+            return msgs.ToList();
+        }
+
         public async Task<Message> AddMsg(Guid chatUserId, string messageText)
         {
             var added = await _context.Messages.AddAsync(new Message
@@ -41,6 +55,19 @@ namespace TelegramClone.Data.Implementations
                 MessageText = messageText,
                 ChatUserId = chatUserId,
                 MessageTime = DateTime.UtcNow
+            });
+            await _context.SaveChangesAsync();
+            return added.Entity;
+        }
+
+        public async Task<DialogMessage> AddDialogMessage(Guid dialogId, Guid fromId, string messageText)
+        {
+            var added = await _context.DialogMessages.AddAsync(new DialogMessage
+            {
+                MessageId = Guid.NewGuid(),
+                SenderId = fromId,
+                MessageText = messageText,
+                DialogId = dialogId
             });
             await _context.SaveChangesAsync();
             return added.Entity;

@@ -26,7 +26,7 @@ function ExpandedChat() {
 
     if (contactList.some(contact => contact.contactId === chatId) ||
          chatList.find(chat => chat.chatId === chatId)?.chatCategory === 'private') {
-        console.log('priv')
+        console.log('priv', chatList.find(chat => chat.chatId === chatId))
         return <PrivateChat/>;
     }
     else if (chatList.some(chat => chat.chatId === chatId)) {

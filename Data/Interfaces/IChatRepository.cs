@@ -11,8 +11,10 @@ namespace TelegramClone.Data.Interfaces
     public interface IChatRepository
     {
         public Chat GetChat(Guid chatId);
-        public Task<Guid> AddPrivateChat(Guid chatId);
+        public Task<Dialog> AddPrivateChat(Guid fromId, Guid toId);
         public Task<Guid> AddGroupChat(string chatName, int groupMembers);
-        public List<ChatElementDTO> GetChats(Guid userId, HttpContext httpContext);
+        public List<ChatElementDTO> GetPrivateChats(Guid userId);
+        public Dialog GetPrivateChat(Guid firstParticipantId, Guid secondParticipantId);
+        public List<ChatElementDTO> GetGroupChats(Guid userId);
     }
 }

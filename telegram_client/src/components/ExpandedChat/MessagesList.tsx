@@ -20,7 +20,7 @@ function MessagesList({messages} : {messages: IMessage[]}) {
     return (
         <div ref={msgs_wrapper} id={msgs.msgs_wrapper} className={custom_scroll}>
             <div className={msgs.msgs}>
-                {messages.length ? messages.map(msg => 
+                {messages && messages.length ? messages.map(msg => 
                     <Message msg={msg}/>
                 ) : <div>no messages</div>}
             </div>

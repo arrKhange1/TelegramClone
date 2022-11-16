@@ -108,6 +108,8 @@ namespace TelegramClone.Data
         public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<ChatCategory> ChatCategories { get; set; }
         public DbSet<UserContact> UserContacts { get; set; }
+        public DbSet<Dialog> Dialogs { get; set; }
+        public DbSet<DialogMessage> DialogMessages { get; set; }
     }
 
     

@@ -4,7 +4,7 @@ import SignalRService from "./SignalRService";
 
 export default class PrivateChatSignalRService extends SignalRService {
 
-    onAddMsgInPrivateChat : (senderName: string, messageText: string, chatId: string) => void;
+    onAddMsgInPrivateChat : (senderName: string, messageText: string, fromId: string, toId: string) => void;
 
     getConnection(accessToken: string) {
         this.connection = new signalR.HubConnectionBuilder()
@@ -16,7 +16,7 @@ export default class PrivateChatSignalRService extends SignalRService {
         this.connection.on('AddMessagePrivateChat', this.onAddMsgInPrivateChat);
     }
 
-    constructor(onAddMsgInPrivateChat: (senderName: string, messageText: string, chatId: string) => void) {
+    constructor(onAddMsgInPrivateChat: (senderName: string, messageText: string, fromId: string ,toId: string) => void) {
         super();
         this.onAddMsgInPrivateChat = onAddMsgInPrivateChat;
         this.getConnection(store.getState().authReducer.accessToken);
