@@ -70,8 +70,6 @@ namespace TelegramClone.Data.Implementations
                 ChatName = u.UserName,
                 ChatCategory = "private"
             };
-            //var firstParticipantsList = firstParticipants.ToList();
-            //var secondParticipantsList = secondParticipants.ToList();
 
             if (firstParticipants == null && secondParticipants == null)
                 return new List<ChatElementDTO>();
