@@ -16,5 +16,7 @@ namespace TelegramClone.Data.Interfaces
         public List<ChatElementDTO> GetPrivateChats(Guid userId);
         public Dialog GetPrivateChat(Guid firstParticipantId, Guid secondParticipantId);
         public List<ChatElementDTO> GetGroupChats(Guid userId);
+        public void UpdatePrivateChatLastMessage(Dialog dialog, Guid lastMessageId);
+        public void UpdateGroupChatLastMessage(Chat chat, Guid lastMessageId);
     }
 }

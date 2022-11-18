@@ -88,8 +88,7 @@ namespace TelegramClone.Controllers
             var chatIdGuid = Guid.Parse(chatId);
             var senderIdGuid = Guid.Parse(senderId);
 
-            var chatUser = _chatService.GetChatUser(chatIdGuid, senderIdGuid);
-            await _chatService.AddMsg(chatUser.ChatUserId, messageText);
+            await _chatService.AddMessageInGroupChat(chatIdGuid, senderIdGuid, messageText);
             var memberIds = _chatService.GetChatMemberIds(chatIdGuid);
 
             var senderName = _userService.GetCurrentUser(HttpContext).UserName;

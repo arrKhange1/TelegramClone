@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelegramClone.Data;
 
 namespace TelegramClone.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221118155720_MakeLastMsgIdBeNullInDialogs")]
+    partial class MakeLastMsgIdBeNullInDialogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,16 +39,9 @@ namespace TelegramClone.Migrations
                     b.Property<int>("GroupMembers")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("LastMessageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ChatId");
 
                     b.HasIndex("ChatCategoryId");
-
-                    b.HasIndex("LastMessageId")
-                        .IsUnique()
-                        .HasFilter("[LastMessageId] IS NOT NULL");
 
                     b.ToTable("Chats");
                 });
@@ -67,12 +62,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            ChatCategoryId = new Guid("748562c3-f2ef-4a23-8822-f9c71659baea"),
+                            ChatCategoryId = new Guid("0e5534d7-db4f-4f65-87ec-70b17395fdd2"),
                             ChatCategoryName = "private"
                         },
                         new
                         {
-                            ChatCategoryId = new Guid("d79677ed-69da-4e81-a33f-b483e8c5ba29"),
+                            ChatCategoryId = new Guid("c966fb9b-88c2-46c9-aec5-b82e3c29eafd"),
                             ChatCategoryName = "group"
                         });
                 });
@@ -216,12 +211,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = new Guid("58828030-5f21-4792-a0ce-bb28a34eab28"),
+                            RoleId = new Guid("862b5a2f-fe57-4174-b040-d296efb53f5b"),
                             RoleName = "admin"
                         },
                         new
                         {
-                            RoleId = new Guid("8af8968e-b44b-4f13-a554-6bcd927f90c8"),
+                            RoleId = new Guid("03c80aae-7bab-4de8-a6b6-5326ec7e6499"),
                             RoleName = "user"
                         });
                 });
@@ -256,10 +251,10 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("3f4df199-dc20-4b13-bb47-d82b6997ff42"),
+                            UserId = new Guid("408113db-9f86-4690-ba36-c2f27e20de0f"),
                             ConnectionStatus = "online",
                             Password = "123456",
-                            RoleId = new Guid("58828030-5f21-4792-a0ce-bb28a34eab28"),
+                            RoleId = new Guid("862b5a2f-fe57-4174-b040-d296efb53f5b"),
                             UserName = "admin"
                         });
                 });
@@ -297,14 +292,7 @@ namespace TelegramClone.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TelegramClone.Models.Message", "LastMessage")
-                        .WithOne("Chat")
-                        .HasForeignKey("TelegramClone.Models.Chat", "LastMessageId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.Navigation("ChatCategory");
-
-                    b.Navigation("LastMessage");
                 });
 
             modelBuilder.Entity("TelegramClone.Models.ChatUser", b =>
@@ -437,11 +425,6 @@ namespace TelegramClone.Migrations
             modelBuilder.Entity("TelegramClone.Models.DialogMessage", b =>
                 {
                     b.Navigation("Dialog");
-                });
-
-            modelBuilder.Entity("TelegramClone.Models.Message", b =>
-                {
-                    b.Navigation("Chat");
                 });
 
             modelBuilder.Entity("TelegramClone.Models.Role", b =>

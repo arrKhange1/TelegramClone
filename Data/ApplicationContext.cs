@@ -97,6 +97,18 @@ namespace TelegramClone.Data
                 .HasForeignKey(uc => uc.SecondParticipantId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Dialog>()
+                .HasOne(dm => dm.LastMessage)
+                .WithOne(m => m.Dialog)
+                .HasForeignKey<Dialog>(d => d.LastMessageId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.LastMessage)
+                .WithOne(m => m.Chat)
+                .HasForeignKey<Chat>(c => c.LastMessageId)
+                .OnDelete(DeleteBehavior.NoAction);
+
 
         }
 

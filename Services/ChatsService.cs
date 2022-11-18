@@ -116,7 +116,16 @@ namespace TelegramClone.Services
             var dialog = _chatRepository.GetPrivateChat(fromId, toId);
             if (dialog == null)
                 dialog = await _chatRepository.AddPrivateChat(fromId, toId);
-            await _messageRepository.AddDialogMessage(dialog.DialogId, fromId, messageText);
+            var addedMessage = await _messageRepository.AddDialogMessage(dialog.DialogId, fromId, messageText);
+            _chatRepository.UpdatePrivateChatLastMessage(dialog, addedMessage.MessageId);
+        }
+
+        public async Task AddMessageInGroupChat(Guid chatId, Guid senderId, string messageText)
+        {
+            var chat = GetChat(chatId);
+            var chatUser = GetChatUser(chatId, senderId);
+            var addedMessage = await AddMsg(chatUser.ChatUserId, messageText);
+            _chatRepository.UpdateGroupChatLastMessage(chat, addedMessage.MessageId);
         }
     }
 }

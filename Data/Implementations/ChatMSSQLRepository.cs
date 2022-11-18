@@ -85,6 +85,17 @@ namespace TelegramClone.Data.Implementations
         }
 
         
+        public void UpdatePrivateChatLastMessage(Dialog dialog, Guid lastMessageId)
+        {
+            dialog.LastMessageId = lastMessageId;
+            _context.SaveChanges();
+        }
+
+        public void UpdateGroupChatLastMessage(Chat chat, Guid lastMessageId)
+        {
+            chat.LastMessageId = lastMessageId;
+            _context.SaveChanges();
+        }
 
         public async Task<Dialog> AddPrivateChat(Guid fromId, Guid toId)
         {

@@ -16,5 +16,7 @@ namespace TelegramClone.Models
         public Dialog Dialog { get; set; }
         public string MessageText { get; set; }
         public DateTime MessageTime { get; set; }
+
+
     }
 }
