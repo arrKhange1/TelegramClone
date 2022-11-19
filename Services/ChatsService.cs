@@ -76,7 +76,7 @@ namespace TelegramClone.Services
         }
 
 
-        public async Task<Guid> AddGroupChat(string chatName, int groupMembers)
+        public async Task<Chat> AddGroupChat(string chatName, int groupMembers)
         {
             return await _chatRepository.AddGroupChat(chatName, groupMembers);
         }
@@ -114,21 +114,29 @@ namespace TelegramClone.Services
             };
         }
 
-        public async Task AddMessageInPrivateChat(Guid fromId, Guid toId, string messageText)
+        public Dialog GetDialog(Guid fromId, Guid toId)
         {
             var dialog = _chatRepository.GetPrivateChat(fromId, toId);
+            return dialog;
+        }
+
+        public async Task<DialogMessage> AddMessageInPrivateChat(Dialog dialog, Guid fromId, Guid toId, string messageText)
+        {
             if (dialog == null)
                 dialog = await _chatRepository.AddPrivateChat(fromId, toId);
             var addedMessage = await _messageRepository.AddDialogMessage(dialog.DialogId, fromId, messageText);
             _chatRepository.UpdatePrivateChatLastMessage(dialog, addedMessage.MessageId);
+
+            return addedMessage;
         }
 
-        public async Task AddMessageInGroupChat(Guid chatId, Guid senderId, string messageText, string messageType)
+        public async Task<Message> AddMessageInGroupChat(Chat chat, Guid senderId, string messageText, string messageType)
         {
-            var chat = GetChat(chatId);
-            var chatUser = GetChatUser(chatId, senderId);
+            var chatUser = GetChatUser(chat.ChatId, senderId);
             var addedMessage = await AddMsg(chatUser.ChatUserId, messageText, messageType);
             _chatRepository.UpdateGroupChatLastMessage(chat, addedMessage.MessageId);
+
+            return addedMessage;
         }
     }
 }

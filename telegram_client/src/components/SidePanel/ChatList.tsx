@@ -18,6 +18,7 @@ import ChatListSignalRService from '../../services/ChatListSignalRService';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { setChats, addToChats } from '../../store/reducers/chatListSlice';
+import { store } from '../..';
 
 // let signalRService: SignalRService;
 
@@ -50,11 +51,17 @@ function ChatList({modal, setModal} : { modal: boolean,
             lastMessageText: "created a chat!", lastMessageTime: new Date(Date.now()).toDateString(), lastMessageType: "notification"}));
     }
 
+    const onNewMsgInChat = (chatElement: IChat) => {
+        let currentChats: IChat[] = store.getState().chatsReducer;
+        currentChats = currentChats.filter(chat => chat.chatId !== chatElement.chatId);
+        dispatch(setChats([chatElement, ...currentChats]));
+    }
+
     useEffect(() => {
 
         fetchChats();
 
-        const signalRService = new ChatListSignalRService(onAddGroupChat);
+        const signalRService = new ChatListSignalRService(onAddGroupChat, onNewMsgInChat);
         signalRService.start(); // TODO: share fetchcontacts() with signalr listener
         
         console.log('conn:', signalRService.connection);

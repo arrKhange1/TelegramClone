@@ -66,17 +66,17 @@ namespace TelegramClone.Controllers
         public async Task<IActionResult> AddGroupChat([FromBody] GroupChat groupChat)
         {
 
-            Guid newChatGuid = await _chatService.AddGroupChat(groupChat.groupName, groupChat.membersIds.Count);
+            var chat = await _chatService.AddGroupChat(groupChat.groupName, groupChat.membersIds.Count);
             var currentUserId = User.Identity.Name;
 
-            if (newChatGuid != Guid.Empty)
+            if (chat != null)
             {
                 Debug.WriteLine($"isauth: {HttpContext.User.Identity.IsAuthenticated}, name: {User.Identity.Name}"); // в user identity name - userId
 
-                var chatUserMembers = _chatService.FormChatUserList(newChatGuid,groupChat.membersIds);
+                var chatUserMembers = _chatService.FormChatUserList(chat.ChatId, groupChat.membersIds);
                 await _chatService.AddUsersToChat(chatUserMembers);
-                await _chatService.AddMessageInGroupChat(newChatGuid, Guid.Parse(currentUserId), "created a chat!", "notification");
-                await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName, newChatGuid.ToString().ToLower());
+                await _chatService.AddMessageInGroupChat(chat, Guid.Parse(currentUserId), "created a chat!", "notification");
+                await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName, chat.ChatId.ToString().ToLower());
                 
                 return Ok();
             }
@@ -90,31 +90,60 @@ namespace TelegramClone.Controllers
             var chatIdGuid = Guid.Parse(chatId);
             var senderIdGuid = Guid.Parse(senderId);
 
-            await _chatService.AddMessageInGroupChat(chatIdGuid, senderIdGuid, messageText, "message");
+            var chat = _chatService.GetChat(chatIdGuid);
+            var addedMessage = await _chatService.AddMessageInGroupChat(chat, senderIdGuid, messageText, "message");
             var memberIds = _chatService.GetChatMemberIds(chatIdGuid);
 
             var senderName = _userService.GetCurrentUser(HttpContext).UserName;
             await _hubContext.Clients.Users(memberIds).SendAsync("AddMessageGroupChat", senderName, messageText, chatId);
+            await _hubContext.Clients.Users(memberIds).SendAsync("NewMsgInChat", new ChatElementDTO
+            {
+                ChatId = chat.ChatId,
+                ChatName = chat.ChatName,
+                ChatCategory = "group",
+                LastMessageSender = senderName,
+                LastMessageText = addedMessage.MessageText,
+                LastMessageTime = addedMessage.MessageTime,
+                LastMessageType = "message"
+            });
 
             return Ok(memberIds);
         }
 
         [HttpPost("sendprivatechat")]
-        public async Task<ActionResult> SendMessageInPrivateChat(string fromId, string toId, string messageText)
+        public async Task<ActionResult> SendMessageInPrivateChat(string fromId, string toId, string toName, string messageText)
         {
             var fromIdGuid = Guid.Parse(fromId);
             var toIdGuid = Guid.Parse(toId);
 
-            await _chatService.AddMessageInPrivateChat(fromIdGuid, toIdGuid, messageText);
+            var dialog = _chatService.GetDialog(fromIdGuid, toIdGuid);
+            var addedMessage = await _chatService.AddMessageInPrivateChat(dialog, fromIdGuid, toIdGuid, messageText);
 
             // if add msg ok
-            var memberIds = new List<string>
-            {
-                fromId,
-                toId
-            };
+            var memberIds = new List<string> { fromId, toId };
             var senderName = _userService.GetCurrentUser(HttpContext).UserName;
             await _hubContext.Clients.Users(memberIds).SendAsync("AddMessagePrivateChat", senderName, messageText, fromId, toId);
+            
+            await _hubContext.Clients.User(fromId).SendAsync("NewMsgInChat", new ChatElementDTO
+            {
+                ChatId = toIdGuid,
+                ChatName = toName,
+                ChatCategory = "private",
+                LastMessageSender = senderName,
+                LastMessageText = addedMessage.MessageText,
+                LastMessageTime = addedMessage.MessageTime,
+                LastMessageType = "message"
+            });
+            await _hubContext.Clients.User(toId).SendAsync("NewMsgInChat", new ChatElementDTO
+            {
+                ChatId = fromIdGuid,
+                ChatName = senderName,
+                ChatCategory = "private",
+                LastMessageSender = senderName,
+                LastMessageText = addedMessage.MessageText,
+                LastMessageTime = addedMessage.MessageTime,
+                LastMessageType = "message"
+            });
 
             return Ok();
         }

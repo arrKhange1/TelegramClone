@@ -133,7 +133,7 @@ namespace TelegramClone.Data.Implementations
             return null;
         }
 
-        public async Task<Guid> AddGroupChat(string chatName, int groupMembers)
+        public async Task<Chat> AddGroupChat(string chatName, int groupMembers)
         {
             var newChatGuid = Guid.NewGuid();
             var newChat = new Chat
@@ -148,9 +148,9 @@ namespace TelegramClone.Data.Implementations
             if (addedChat != null)
             {
                 _context.SaveChanges();
-                return newChatGuid;
+                return addedChat.Entity;
             }
-            return Guid.Empty;
+            return null;
         }
     }
 }

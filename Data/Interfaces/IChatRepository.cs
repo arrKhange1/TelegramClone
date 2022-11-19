@@ -12,7 +12,7 @@ namespace TelegramClone.Data.Interfaces
     {
         public Chat GetChat(Guid chatId);
         public Task<Dialog> AddPrivateChat(Guid fromId, Guid toId);
-        public Task<Guid> AddGroupChat(string chatName, int groupMembers);
+        public Task<Chat> AddGroupChat(string chatName, int groupMembers);
         public List<ChatElementDTO> GetPrivateChats(Guid userId);
         public Dialog GetPrivateChat(Guid firstParticipantId, Guid secondParticipantId);
         public List<ChatElementDTO> GetGroupChats(Guid userId);

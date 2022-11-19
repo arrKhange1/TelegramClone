@@ -43,7 +43,8 @@ function PrivateChat() {
     }
 
     const sendMsg = async (e: React.MouseEvent<HTMLDivElement>) => {
-        const response = await $api.post(`chats/sendprivatechat?fromId=${user.userId}&toId=${params.chatId}&messageText=${textMsg}`);
+        const response = await $api.post(`chats/sendprivatechat?fromId=${user.userId}&toId=${params.chatId}&toName=${chat.userName}&messageText=${textMsg}`);
+        setTextMsg('');
         console.log(response.data)
     };
 
