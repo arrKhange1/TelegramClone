@@ -22,7 +22,7 @@ function GroupChat() {
 
     function onAddMsgInGroupChat(senderName: string, messageText: string, chatId: string) {
         if (chatId === params.chatId)
-            setChat(prev => ({...prev, messages: [...prev.messages, {userName: senderName, messageText: messageText}]}));
+            setChat(prev => ({...prev, messages: [...prev.messages, {userName: senderName, messageText: messageText, messageType: "message"}]}));
     }
 
     useEffect(() => {

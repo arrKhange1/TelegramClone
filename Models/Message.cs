@@ -11,6 +11,9 @@ namespace TelegramClone.Models
         public string MessageText { get; set; }
         public DateTime MessageTime { get; set; }
 
+        public Guid MessageTypeId { get; set; }
+        public MessageType MessageType { get; set; }
+
         public Guid ChatUserId { get; set; }
         public ChatUser ChatUser { get; set; }
 

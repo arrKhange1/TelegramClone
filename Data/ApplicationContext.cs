@@ -61,7 +61,18 @@ namespace TelegramClone.Data
                 ConnectionStatus = "online",
                 RoleId = adminRole.RoleId
             });
-            //
+
+            modelBuilder.Entity<MessageType>().HasData(new MessageType
+            {
+               Id = Guid.NewGuid(),
+               Type = "message"
+            });
+
+            modelBuilder.Entity<MessageType>().HasData(new MessageType
+            {
+                Id = Guid.NewGuid(),
+                Type = "notification"
+            });
 
             modelBuilder.Entity<ChatUser>()
                 .HasOne(chat => chat.Chat)
@@ -116,6 +127,7 @@ namespace TelegramClone.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<MessageType> MessageTypes { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<ChatCategory> ChatCategories { get; set; }

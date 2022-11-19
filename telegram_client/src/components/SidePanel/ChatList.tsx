@@ -46,7 +46,8 @@ function ChatList({modal, setModal} : { modal: boolean,
 
     const onAddGroupChat = (groupName: string, chatId: string) => {
         console.log('chat added:', chats, groupName)
-        dispatch(addToChats({chatId: chatId, chatName: groupName, chatCategory: 'group'}));
+        dispatch(addToChats({chatId: chatId, chatName: groupName, chatCategory: 'group', lastMessageSender: user.userName,
+            lastMessageText: "created a chat!", lastMessageTime: new Date(Date.now()).toDateString(), lastMessageType: "notification"}));
     }
 
     useEffect(() => {

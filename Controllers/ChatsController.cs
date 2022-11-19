@@ -67,6 +67,7 @@ namespace TelegramClone.Controllers
         {
 
             Guid newChatGuid = await _chatService.AddGroupChat(groupChat.groupName, groupChat.membersIds.Count);
+            var currentUserId = User.Identity.Name;
 
             if (newChatGuid != Guid.Empty)
             {
@@ -74,6 +75,7 @@ namespace TelegramClone.Controllers
 
                 var chatUserMembers = _chatService.FormChatUserList(newChatGuid,groupChat.membersIds);
                 await _chatService.AddUsersToChat(chatUserMembers);
+                await _chatService.AddMessageInGroupChat(newChatGuid, Guid.Parse(currentUserId), "created a chat!", "notification");
                 await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName, newChatGuid.ToString().ToLower());
                 
                 return Ok();
@@ -88,7 +90,7 @@ namespace TelegramClone.Controllers
             var chatIdGuid = Guid.Parse(chatId);
             var senderIdGuid = Guid.Parse(senderId);
 
-            await _chatService.AddMessageInGroupChat(chatIdGuid, senderIdGuid, messageText);
+            await _chatService.AddMessageInGroupChat(chatIdGuid, senderIdGuid, messageText, "message");
             var memberIds = _chatService.GetChatMemberIds(chatIdGuid);
 
             var senderName = _userService.GetCurrentUser(HttpContext).UserName;

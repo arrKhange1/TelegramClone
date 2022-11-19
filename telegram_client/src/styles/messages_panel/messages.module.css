@@ -52,4 +52,11 @@
     align-self: flex-start;
 }
 
+.notification {
+    border-radius: 10px;
+    align-self: center;
+    padding: 0.4em;
+    background-color: rgba(193, 199, 199, 0.5);
+}
+
 

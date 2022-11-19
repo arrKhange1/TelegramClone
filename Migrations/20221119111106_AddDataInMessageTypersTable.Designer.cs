@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelegramClone.Data;
 
 namespace TelegramClone.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221119111106_AddDataInMessageTypersTable")]
+    partial class AddDataInMessageTypersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,12 +69,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            ChatCategoryId = new Guid("057388a3-583e-4b3b-8034-2ad20a9ee515"),
+                            ChatCategoryId = new Guid("4e28dfe7-4020-4d93-9ea8-d3cae0cffc75"),
                             ChatCategoryName = "private"
                         },
                         new
                         {
-                            ChatCategoryId = new Guid("7496bf81-3af8-44da-9fae-0dd0a5fa3621"),
+                            ChatCategoryId = new Guid("1c74c3cb-2120-40a2-81da-2f322085db90"),
                             ChatCategoryName = "group"
                         });
                 });
@@ -175,7 +177,8 @@ namespace TelegramClone.Migrations
 
                     b.HasIndex("ChatUserId");
 
-                    b.HasIndex("MessageTypeId");
+                    b.HasIndex("MessageTypeId")
+                        .IsUnique();
 
                     b.ToTable("Messages");
                 });
@@ -196,12 +199,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("07508962-aa9e-4403-b739-9650f5fffe84"),
+                            Id = new Guid("786e20ae-bc6b-472a-bd15-14beee7121ae"),
                             Type = "message"
                         },
                         new
                         {
-                            Id = new Guid("a3477a01-8bbb-4b84-9853-0569e18da5b9"),
+                            Id = new Guid("2c83753e-c3be-4a9b-8b6f-07db48bdc951"),
                             Type = "notification"
                         });
                 });
@@ -247,12 +250,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = new Guid("674ca53e-1b04-4c85-8730-0816fa7ba594"),
+                            RoleId = new Guid("d5943e1f-61f7-4ed5-b0c8-55bb1f374fd5"),
                             RoleName = "admin"
                         },
                         new
                         {
-                            RoleId = new Guid("6e0fa874-8ee2-4af3-992e-15035b8a9d38"),
+                            RoleId = new Guid("72f2fc42-c65c-43ac-86dd-8bdd3ff0e1df"),
                             RoleName = "user"
                         });
                 });
@@ -287,10 +290,10 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("442700ff-662b-4501-bd06-4db3a98691c4"),
+                            UserId = new Guid("d089d04a-ea2f-443f-94dc-544781e97a09"),
                             ConnectionStatus = "online",
                             Password = "123456",
-                            RoleId = new Guid("674ca53e-1b04-4c85-8730-0816fa7ba594"),
+                            RoleId = new Guid("d5943e1f-61f7-4ed5-b0c8-55bb1f374fd5"),
                             UserName = "admin"
                         });
                 });
@@ -409,8 +412,8 @@ namespace TelegramClone.Migrations
                         .IsRequired();
 
                     b.HasOne("TelegramClone.Models.MessageType", "MessageType")
-                        .WithMany("Message")
-                        .HasForeignKey("MessageTypeId")
+                        .WithOne("Message")
+                        .HasForeignKey("TelegramClone.Models.Message", "MessageTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

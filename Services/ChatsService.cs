@@ -49,9 +49,9 @@ namespace TelegramClone.Services
             return _messageRepository.GetMsgs(chatId);
         }
 
-        public async Task<Message> AddMsg(Guid chatUserId, string messageText)
+        public async Task<Message> AddMsg(Guid chatUserId, string messageText, string messageType)
         {
-            return await _messageRepository.AddMsg(chatUserId, messageText);
+            return await _messageRepository.AddMsg(chatUserId, messageText, messageType);
         }
 
         public Chat GetChat(Guid chatId)
@@ -86,7 +86,10 @@ namespace TelegramClone.Services
             var privateChats = _chatRepository.GetPrivateChats(userId);
             var groupChats = _chatRepository.GetGroupChats(userId);
 
-            return privateChats.Concat(groupChats).ToList();
+            var chats = privateChats.Concat(groupChats).ToList();
+            chats.Sort();
+
+            return chats;
         }
 
         public PrivateChatDTO GetPrivateChat(Guid fromId, Guid toId)
@@ -120,11 +123,11 @@ namespace TelegramClone.Services
             _chatRepository.UpdatePrivateChatLastMessage(dialog, addedMessage.MessageId);
         }
 
-        public async Task AddMessageInGroupChat(Guid chatId, Guid senderId, string messageText)
+        public async Task AddMessageInGroupChat(Guid chatId, Guid senderId, string messageText, string messageType)
         {
             var chat = GetChat(chatId);
             var chatUser = GetChatUser(chatId, senderId);
-            var addedMessage = await AddMsg(chatUser.ChatUserId, messageText);
+            var addedMessage = await AddMsg(chatUser.ChatUserId, messageText, messageType);
             _chatRepository.UpdateGroupChatLastMessage(chat, addedMessage.MessageId);
         }
     }

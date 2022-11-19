@@ -25,16 +25,23 @@ namespace TelegramClone.Data.Implementations
         }
 
         public List<ChatElementDTO> GetGroupChats(Guid userId)
-        {
+        { // exchange chatuserid on user id and chatId
             var result = from cu in _context.ChatUsers join
             c in _context.Chats on cu.ChatId equals c.ChatId
+            join msg in _context.Messages on c.LastMessageId equals msg.MessageId
+            join msgType in _context.MessageTypes on msg.MessageTypeId equals msgType.Id
+            join cuu in _context.ChatUsers on msg.ChatUserId equals cuu.ChatUserId
+            join u in _context.Users on cuu.UserId equals u.UserId
             where cu.UserId == userId
             select new ChatElementDTO
             {
                 ChatId = c.ChatId,
                 ChatName = c.ChatName,
                 ChatCategory = "group",
-                CreateTime = c.CreateTime
+                LastMessageSender = u.UserName,
+                LastMessageText = msg.MessageText,
+                LastMessageTime = msg.MessageTime,
+                LastMessageType = msgType.Type
             };
             var groupChats = result.ToList();
             if (groupChats == null)
@@ -52,23 +59,35 @@ namespace TelegramClone.Data.Implementations
         public List<ChatElementDTO> GetPrivateChats(Guid userId)
         {
             var firstParticipants = from pc in _context.Dialogs join
-            u in _context.Users on pc.FirstParticipantId equals u.UserId
+            dialogUser in _context.Users on pc.FirstParticipantId equals dialogUser.UserId
+            join msg in _context.DialogMessages on pc.LastMessageId equals msg.MessageId
+            join lastMsgUser in _context.Users on msg.SenderId equals lastMsgUser.UserId
             where pc.SecondParticipantId == userId
             select new ChatElementDTO
             {
-                ChatId = u.UserId,
-                ChatName = u.UserName,
-                ChatCategory = "private"
+                ChatId = dialogUser.UserId,
+                ChatName = dialogUser.UserName,
+                ChatCategory = "private",
+                LastMessageSender = lastMsgUser.UserName,
+                LastMessageText = msg.MessageText,
+                LastMessageTime = msg.MessageTime,
+                LastMessageType = "message"
             };
 
             var secondParticipants = from pc in _context.Dialogs join
             u in _context.Users on pc.SecondParticipantId equals u.UserId
+            join msg in _context.DialogMessages on pc.LastMessageId equals msg.MessageId
+            join lastMsgUser in _context.Users on msg.SenderId equals lastMsgUser.UserId
             where pc.FirstParticipantId == userId
             select new ChatElementDTO
             {
                 ChatId = u.UserId,
                 ChatName = u.UserName,
-                ChatCategory = "private"
+                ChatCategory = "private",
+                LastMessageSender = lastMsgUser.UserName,
+                LastMessageText = msg.MessageText,
+                LastMessageTime = msg.MessageTime,
+                LastMessageType = "message"
             };
 
             if (firstParticipants == null && secondParticipants == null)

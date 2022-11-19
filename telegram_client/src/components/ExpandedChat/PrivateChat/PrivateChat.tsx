@@ -23,7 +23,7 @@ function PrivateChat() {
     function onAddMsgInPrivateChat(senderName: string, messageText: string, fromId: string, toId: string) {
         if ((user.userId === fromId && params.chatId === toId) ||
                 (user.userId === toId && params.chatId === fromId))
-            setChat(prev => ({...prev, messages: [...prev.messages, {userName: senderName, messageText: messageText}]}));
+            setChat(prev => ({...prev, messages: [...prev.messages, {userName: senderName, messageText: messageText, messageType: "message"}]}));
     }
 
     useEffect(() => {

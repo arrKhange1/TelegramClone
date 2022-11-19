@@ -3,7 +3,8 @@ export default interface IChat {
     chatId:string,
     chatName: string,
     chatCategory: string
-    // last_msg: string,
-    // last_msg_date: string,
-    // unread_msgs: number
+    lastMessageText: string,
+    lastMessageSender: string,
+    lastMessageTime: string,
+    lastMessageType: string
 }

@@ -14,5 +14,6 @@ export interface IGroupChat extends IExpandedChat {
 
 export interface IMessage {
     userName: string,
-    messageText: string
+    messageText: string,
+    messageType?: string
 }
