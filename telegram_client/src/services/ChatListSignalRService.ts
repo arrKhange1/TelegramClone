@@ -5,7 +5,7 @@ import SignalRService from "./SignalRService";
 
 export default class ChatListSignalRService extends SignalRService {
 
-    onAddGroupChat : (groupName: string, chatId: string) => void;
+    onAddGroupChat : (groupName: string, chatId: string, senderName: string) => void;
     onNewMsgInChat: (chatElement: IChat) => void
 
     getConnection(accessToken: string) {
@@ -19,7 +19,7 @@ export default class ChatListSignalRService extends SignalRService {
         this.connection.on('NewMsgInChat', this.onNewMsgInChat);
     }
 
-    constructor(onAddGroupChat: (groupName: string, chatId: string) => void, 
+    constructor(onAddGroupChat : (groupName: string, chatId: string, senderName: string) => void, 
         onNewMsgInChat: (chatElement: IChat) => void) {
         super();
         this.onAddGroupChat = onAddGroupChat;

@@ -12,6 +12,8 @@ namespace TelegramClone.Models
         public User FirstParticipant { get; set; }
         public Guid SecondParticipantId { get; set; }
         public User SecondParticipant { get; set; }
+        public int UnreadMsgsByFirst { get; set; }
+        public int UnreadMsgsBySecond { get; set; }
         public List<DialogMessage> DialogMessages { get; set; }
 
         public Guid? LastMessageId { get; set; }

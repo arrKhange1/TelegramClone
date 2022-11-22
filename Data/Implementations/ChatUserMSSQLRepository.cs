@@ -17,9 +17,16 @@ namespace TelegramClone.Data.Implementations
             _context = context;
         }
 
-        public List<string> GetChatMemberIds(Guid chatId)
+        public List<ChatUser> GetChatMembers(Guid chatId)
         {
-            return _context.ChatUsers.Where(cu => cu.ChatId == chatId).Select(cu => cu.UserId.ToString().ToLower()).ToList();
+            return _context.ChatUsers.Where(cu => cu.ChatId == chatId).ToList();
+        }
+
+        public void UpdateUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
+        {
+            foreach(var chatMember in chatMembers)
+                chatMember.UnreadMessages += 1;
+            _context.SaveChanges();
         }
 
         public ChatUser GetChatUserByChatIdAndUserId(Guid chatId, Guid userId)

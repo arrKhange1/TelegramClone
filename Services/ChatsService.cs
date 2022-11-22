@@ -29,9 +29,14 @@ namespace TelegramClone.Services
             _userRepository = userRepository;
         }
 
-        public List<string> GetChatMemberIds(Guid chatId)
+        public List<ChatUser> GetChatMembers(Guid chatId)
         {
-            return _chatUserRepository.GetChatMemberIds(chatId);
+            return _chatUserRepository.GetChatMembers(chatId);
+        }
+
+        public void UpdateUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
+        {
+            _chatUserRepository.UpdateUnreadMsgsOfChatMembers(chatMembers);
         }
 
         public ChatUser GetChatUser(Guid chatId, Guid userId)
