@@ -13,6 +13,7 @@ function ChatListElement({activeChat, chat} : {activeChat: string,
                 <div>{chat.lastMessageType === "message" ? `${chat.lastMessageSender}: ${chat.lastMessageText}` :
                     `${chat.lastMessageSender} ${chat.lastMessageText}`}</div>
             </div>
+            {chat.unreadMsgs ? <div className={`${side.chat_content} ${side.chat_end}`}>{chat.unreadMsgs}</div> : <></>}
         </div>
     );
 }

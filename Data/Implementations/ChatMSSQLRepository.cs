@@ -41,7 +41,8 @@ namespace TelegramClone.Data.Implementations
                 LastMessageSender = u.UserName,
                 LastMessageText = msg.MessageText,
                 LastMessageTime = msg.MessageTime,
-                LastMessageType = msgType.Type
+                LastMessageType = msgType.Type,
+                UnreadMsgs = cu.UnreadMessages
             };
             var groupChats = result.ToList();
             if (groupChats == null)
@@ -71,7 +72,8 @@ namespace TelegramClone.Data.Implementations
                 LastMessageSender = lastMsgUser.UserName,
                 LastMessageText = msg.MessageText,
                 LastMessageTime = msg.MessageTime,
-                LastMessageType = "message"
+                LastMessageType = "message",
+                UnreadMsgs = pc.UnreadMsgsBySecond
             };
 
             var secondParticipants = from pc in _context.Dialogs join
@@ -87,7 +89,8 @@ namespace TelegramClone.Data.Implementations
                 LastMessageSender = lastMsgUser.UserName,
                 LastMessageText = msg.MessageText,
                 LastMessageTime = msg.MessageTime,
-                LastMessageType = "message"
+                LastMessageType = "message",
+                UnreadMsgs = pc.UnreadMsgsByFirst
             };
 
             if (firstParticipants == null && secondParticipants == null)
@@ -113,6 +116,15 @@ namespace TelegramClone.Data.Implementations
         public void UpdateGroupChatLastMessage(Chat chat, Guid lastMessageId)
         {
             chat.LastMessageId = lastMessageId;
+            _context.SaveChanges();
+        }
+
+        public void UpdateUnreadMsgsOfDialog(Dialog dialog, Guid toId)
+        {
+            if (toId == dialog.FirstParticipantId)
+                dialog.UnreadMsgsByFirst += 1;
+            else if (toId == dialog.SecondParticipantId)
+                dialog.UnreadMsgsBySecond += 1;
             _context.SaveChanges();
         }
 

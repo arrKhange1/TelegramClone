@@ -6,5 +6,6 @@ export default interface IChat {
     lastMessageText: string,
     lastMessageSender: string,
     lastMessageTime: string,
-    lastMessageType: string
+    lastMessageType: string,
+    unreadMsgs: number
 }

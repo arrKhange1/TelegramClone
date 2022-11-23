@@ -14,6 +14,7 @@ namespace TelegramClone.Models.DTO
         public string LastMessageText { get; set; }
         public DateTime LastMessageTime { get; set; }
         public string LastMessageType { get; set; }
+        public int UnreadMsgs { get; set; }
 
         public int CompareTo(ChatElementDTO chatElement)
         {

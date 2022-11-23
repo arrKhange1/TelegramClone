@@ -122,16 +122,23 @@
 }
 
 .chat_end { 
-    align-items: flex-end;
     font-size: 0.75rem;
-    flex-grow: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1rem;
+    border-radius: 50%;
+    background-color: #78E378;
+    color: white;
+    padding: 0.35em; 
 }
 
-.chat_end :first-child {
+/* .chat_end :first-child { // time, unreadmsgs were second child
     color: #707991;
-}
+} */
 
-.chat_end :nth-child(2) {
+.chat_end :nth-child(2) { 
     display: flex;
     justify-content: center;
     align-items: center;

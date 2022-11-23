@@ -68,6 +68,7 @@ namespace TelegramClone.Controllers
 
             var chat = await _chatService.AddGroupChat(groupChat.groupName, groupChat.membersIds.Count);
             var currentUserId = User.Identity.Name;
+            var currentUserName = _userService.GetCurrentUser(HttpContext).UserName;
 
             if (chat != null)
             {
@@ -75,8 +76,8 @@ namespace TelegramClone.Controllers
 
                 var chatUserMembers = _chatService.FormChatUserList(chat.ChatId, groupChat.membersIds);
                 await _chatService.AddUsersToChat(chatUserMembers);
-                await _chatService.AddMessageInGroupChat(chat, Guid.Parse(currentUserId), "created a chat!", "notification");
-                await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName, chat.ChatId.ToString().ToLower());
+                await _chatService.AddMessageInGroupChat(chat, chatUserMembers, Guid.Parse(currentUserId), "created a chat!", "notification");
+                await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName, chat.ChatId.ToString().ToLower(), currentUserName);
                 
                 return Ok();
             }
@@ -91,9 +92,10 @@ namespace TelegramClone.Controllers
             var senderIdGuid = Guid.Parse(senderId);
 
             var chat = _chatService.GetChat(chatIdGuid);
-            var addedMessage = await _chatService.AddMessageInGroupChat(chat, senderIdGuid, messageText, "message");
             var chatMembers = _chatService.GetChatMembers(chatIdGuid);
-            _chatService.UpdateUnreadMsgsOfChatMembers(chatMembers);
+            var addedMessage = await _chatService.AddMessageInGroupChat(chat, chatMembers, senderIdGuid, messageText, "message");
+            
+            //_chatService.UpdateUnreadMsgsOfChatMembers(chatMembers);
 
             var senderName = _userService.GetCurrentUser(HttpContext).UserName;
             var chatMembersIds = chatMembers.Select(chatMember => chatMember.UserId.ToString().ToLower()).ToList();
@@ -119,7 +121,11 @@ namespace TelegramClone.Controllers
             var toIdGuid = Guid.Parse(toId);
 
             var dialog = _chatService.GetDialog(fromIdGuid, toIdGuid);
+            if (dialog == null)
+                dialog = await _chatService.AddPrivateChat(fromIdGuid, toIdGuid);
+
             var addedMessage = await _chatService.AddMessageInPrivateChat(dialog, fromIdGuid, toIdGuid, messageText);
+            //_chatService.UpdateUnreadMsgsOfDialog(dialog, toIdGuid);
 
             // if add msg ok
             var memberIds = new List<string> { fromId, toId };

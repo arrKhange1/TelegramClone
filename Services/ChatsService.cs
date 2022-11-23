@@ -18,7 +18,7 @@ namespace TelegramClone.Services
         private readonly IChatCategoryRepository _chatCategoryRepository;
         private readonly IUserRepository _userRepository;
 
-        public ChatsService(IChatRepository chatRepository, IChatUserRepository chatUserRepository, 
+        public ChatsService(IChatRepository chatRepository, IChatUserRepository chatUserRepository,
             IMessageRepository messageRepository, IChatCategoryRepository chatCategoryRepository,
             IUserRepository userRepository)
         {
@@ -37,6 +37,11 @@ namespace TelegramClone.Services
         public void UpdateUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
         {
             _chatUserRepository.UpdateUnreadMsgsOfChatMembers(chatMembers);
+        }
+
+        public void UpdateUnreadMsgsOfDialog(Dialog dialog, Guid toId)
+        {
+            _chatRepository.UpdateUnreadMsgsOfDialog(dialog, toId);
         }
 
         public ChatUser GetChatUser(Guid chatId, Guid userId)
@@ -58,6 +63,7 @@ namespace TelegramClone.Services
         {
             return await _messageRepository.AddMsg(chatUserId, messageText, messageType);
         }
+
 
         public Chat GetChat(Guid chatId)
         {
@@ -84,6 +90,11 @@ namespace TelegramClone.Services
         public async Task<Chat> AddGroupChat(string chatName, int groupMembers)
         {
             return await _chatRepository.AddGroupChat(chatName, groupMembers);
+        }
+
+        public async Task<Dialog> AddPrivateChat(Guid fromId, Guid toId)
+        {
+            return await _chatRepository.AddPrivateChat(fromId, toId);
         }
 
         public List<ChatElementDTO> GetChats(Guid userId)
@@ -127,19 +138,19 @@ namespace TelegramClone.Services
 
         public async Task<DialogMessage> AddMessageInPrivateChat(Dialog dialog, Guid fromId, Guid toId, string messageText)
         {
-            if (dialog == null)
-                dialog = await _chatRepository.AddPrivateChat(fromId, toId);
             var addedMessage = await _messageRepository.AddDialogMessage(dialog.DialogId, fromId, messageText);
             _chatRepository.UpdatePrivateChatLastMessage(dialog, addedMessage.MessageId);
+            _chatRepository.UpdateUnreadMsgsOfDialog(dialog, toId);
 
             return addedMessage;
         }
 
-        public async Task<Message> AddMessageInGroupChat(Chat chat, Guid senderId, string messageText, string messageType)
+        public async Task<Message> AddMessageInGroupChat(Chat chat, List<ChatUser> members, Guid senderId, string messageText, string messageType)
         {
             var chatUser = GetChatUser(chat.ChatId, senderId);
             var addedMessage = await AddMsg(chatUser.ChatUserId, messageText, messageType);
             _chatRepository.UpdateGroupChatLastMessage(chat, addedMessage.MessageId);
+            _chatUserRepository.UpdateUnreadMsgsOfChatMembers(members);
 
             return addedMessage;
         }
