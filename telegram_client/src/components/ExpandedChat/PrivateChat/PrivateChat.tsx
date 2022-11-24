@@ -8,10 +8,17 @@ import MessagesList from '../MessagesList';
 import msgs from '../../../styles/messages_panel/messages.module.css';
 import PrivateChatSignalRService from '../../../services/PrivateChatSignalRService';
 import { useAuth } from '../../../hooks/useAuth';
+import ChatsService from '../../../services/ChatsService';
+import { useAppSelector } from '../../../hooks/useAppSelector';
+import { setChats } from '../../../store/reducers/chatListSlice';
+import IChat from '../../../@types/IChat';
+import { useDispatch } from 'react-redux';
 
 function PrivateChat() {
     const params = useParams();
     const user = useAuth();
+    const chats = useAppSelector(state => state.chatsReducer);
+    const dispatch = useDispatch();
 
     const [chat, setChat] = useState<IPrivateChat>({
         userName: '',
@@ -35,6 +42,13 @@ function PrivateChat() {
 
         return () => signalRService.stop();
     }, [params.chatId])
+
+    useEffect(() => {
+        const response = ChatsService.readPrivateChat(user.userId, params.chatId!);
+        const updatedChats: IChat[] = chats.map(chat => chat.chatId === params.chatId ? {...chat, unreadMsgs: 0} : chat);
+        dispatch(setChats([...updatedChats]));
+
+    }, [chat, params.chatId])
 
     const getChat = async () => {
         const response = await $api.get<IPrivateChat>(`chats/getprivatechat?fromId=${user.userId}&toId=${params.chatId}`);

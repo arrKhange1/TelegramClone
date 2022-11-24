@@ -8,10 +8,18 @@ import MessagesList from '../MessagesList';
 import msgs from '../../../styles/messages_panel/messages.module.css';
 import GroupChatSignalRService from '../../../services/GroupChatSignalRService';
 import { useAuth } from '../../../hooks/useAuth';
+import ChatsService from '../../../services/ChatsService';
+import IChat from '../../../@types/IChat';
+import { useAppSelector } from '../../../hooks/useAppSelector';
+import { useDispatch } from 'react-redux';
+import { setChats } from '../../../store/reducers/chatListSlice';
 
 function GroupChat() {
     const params = useParams();
     const user = useAuth();
+    const chats = useAppSelector(state => state.chatsReducer);
+    const dispatch = useDispatch();
+
 
     const [chat, setChat] = useState<IGroupChat>({
         chatName: '',
@@ -34,6 +42,13 @@ function GroupChat() {
 
         return () => signalRService.stop();
     }, [params.chatId])
+
+    useEffect(() => {
+        const response = ChatsService.readGroupChat(user.userId, params.chatId!);
+        const updatedChats: IChat[] = chats.map(chat => chat.chatId === params.chatId ? {...chat, unreadMsgs: 0} : chat);
+        dispatch(setChats([...updatedChats]));
+
+    }, [chat, params.chatId])
 
     const getChat = async () => {
         const response = await $api.get<IGroupChat>(`chats/getgroupchat?chatid=${params.chatId}`);

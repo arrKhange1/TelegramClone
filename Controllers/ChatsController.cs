@@ -156,5 +156,27 @@ namespace TelegramClone.Controllers
             return Ok();
         }
 
+        [HttpPut("readprivatechat")]
+        public ActionResult ReadPrivateChat(string fromId, string toId)
+        {
+            var fromIdGuid = Guid.Parse(fromId);
+            var toIdGuid = Guid.Parse(toId);
+
+            var dialog = _chatService.GetDialog(fromIdGuid, toIdGuid);
+            _chatService.CleanUnreadMsgsOfDialog(dialog, fromIdGuid);
+            return Ok();
+        }
+
+        [HttpPut("readgroupchat")]
+        public ActionResult ReadGroupChat(string fromId, string chatId)
+        {
+            var fromIdGuid = Guid.Parse(fromId);
+            var chatIdGuid = Guid.Parse(chatId);
+
+            var chatUser = _chatService.GetChatUser(chatIdGuid, fromIdGuid);
+            _chatService.CleanUnreadMsgsOfChatMember(chatUser);
+            return Ok();
+        }
+
     }
 }

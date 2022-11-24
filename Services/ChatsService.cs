@@ -34,14 +34,23 @@ namespace TelegramClone.Services
             return _chatUserRepository.GetChatMembers(chatId);
         }
 
-        public void UpdateUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
+        public void IncreaseUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
         {
-            _chatUserRepository.UpdateUnreadMsgsOfChatMembers(chatMembers);
+            _chatUserRepository.IncreaseUnreadMsgsOfChatMembers(chatMembers);
         }
 
-        public void UpdateUnreadMsgsOfDialog(Dialog dialog, Guid toId)
+        public void IncreaseUnreadMsgsOfDialog(Dialog dialog, Guid toId)
         {
-            _chatRepository.UpdateUnreadMsgsOfDialog(dialog, toId);
+            _chatRepository.IncreaseUnreadMsgsOfDialog(dialog, toId);
+        }
+        public void CleanUnreadMsgsOfChatMember(ChatUser chatUser)
+        {
+            _chatUserRepository.CleanUnreadMsgsOfChatMember(chatUser);
+        }
+
+        public void CleanUnreadMsgsOfDialog(Dialog dialog, Guid fromId)
+        {
+            _chatRepository.CleanUnreadMsgsOfDialog(dialog, fromId);
         }
 
         public ChatUser GetChatUser(Guid chatId, Guid userId)
@@ -140,7 +149,7 @@ namespace TelegramClone.Services
         {
             var addedMessage = await _messageRepository.AddDialogMessage(dialog.DialogId, fromId, messageText);
             _chatRepository.UpdatePrivateChatLastMessage(dialog, addedMessage.MessageId);
-            _chatRepository.UpdateUnreadMsgsOfDialog(dialog, toId);
+            _chatRepository.IncreaseUnreadMsgsOfDialog(dialog, toId);
 
             return addedMessage;
         }
@@ -150,7 +159,7 @@ namespace TelegramClone.Services
             var chatUser = GetChatUser(chat.ChatId, senderId);
             var addedMessage = await AddMsg(chatUser.ChatUserId, messageText, messageType);
             _chatRepository.UpdateGroupChatLastMessage(chat, addedMessage.MessageId);
-            _chatUserRepository.UpdateUnreadMsgsOfChatMembers(members);
+            _chatUserRepository.IncreaseUnreadMsgsOfChatMembers(members);
 
             return addedMessage;
         }
