@@ -94,24 +94,26 @@ namespace TelegramClone.Controllers
             var chat = _chatService.GetChat(chatIdGuid);
             var chatMembers = _chatService.GetChatMembers(chatIdGuid);
             var addedMessage = await _chatService.AddMessageInGroupChat(chat, chatMembers, senderIdGuid, messageText, "message");
-            
-            //_chatService.UpdateUnreadMsgsOfChatMembers(chatMembers);
+            var updatedChatMembers = _chatService.IncreaseUnreadMsgsOfChatMembers(chatMembers);
 
             var senderName = _userService.GetCurrentUser(HttpContext).UserName;
             var chatMembersIds = chatMembers.Select(chatMember => chatMember.UserId.ToString().ToLower()).ToList();
             await _hubContext.Clients.Users(chatMembersIds).SendAsync("AddMessageGroupChat", senderName, messageText, chatId);
-            await _hubContext.Clients.Users(chatMembersIds).SendAsync("NewMsgInChat", new ChatElementDTO
-            {
-                ChatId = chat.ChatId,
-                ChatName = chat.ChatName,
-                ChatCategory = "group",
-                LastMessageSender = senderName,
-                LastMessageText = addedMessage.MessageText,
-                LastMessageTime = addedMessage.MessageTime,
-                LastMessageType = "message"
-            }); // add constructor!!!
+            
+            foreach(var chatMember in updatedChatMembers) 
+                await _hubContext.Clients.User(chatMember.UserId.ToString().ToLower()).SendAsync("NewMsgInChat", new ChatElementDTO
+                {
+                    ChatId = chat.ChatId,
+                    ChatName = chat.ChatName,
+                    ChatCategory = "group",
+                    LastMessageSender = senderName,
+                    LastMessageText = addedMessage.MessageText,
+                    LastMessageTime = addedMessage.MessageTime,
+                    LastMessageType = "message",
+                    UnreadMsgs = chatMember.UnreadMessages
+                }); // add constructor!!!
 
-            return Ok(chatMembersIds);
+            return Ok();
         }
 
         [HttpPost("sendprivatechat")]
@@ -125,7 +127,7 @@ namespace TelegramClone.Controllers
                 dialog = await _chatService.AddPrivateChat(fromIdGuid, toIdGuid);
 
             var addedMessage = await _chatService.AddMessageInPrivateChat(dialog, fromIdGuid, toIdGuid, messageText);
-            //_chatService.UpdateUnreadMsgsOfDialog(dialog, toIdGuid);
+            var toIdUnreadMsgs = _chatService.IncreaseUnreadMsgsOfDialog(dialog, toIdGuid);
 
             // if add msg ok
             var memberIds = new List<string> { fromId, toId };
@@ -140,7 +142,8 @@ namespace TelegramClone.Controllers
                 LastMessageSender = senderName,
                 LastMessageText = addedMessage.MessageText,
                 LastMessageTime = addedMessage.MessageTime,
-                LastMessageType = "message"
+                LastMessageType = "message",
+                UnreadMsgs = 0
             });
             await _hubContext.Clients.User(toId).SendAsync("NewMsgInChat", new ChatElementDTO
             {
@@ -150,7 +153,8 @@ namespace TelegramClone.Controllers
                 LastMessageSender = senderName,
                 LastMessageText = addedMessage.MessageText,
                 LastMessageTime = addedMessage.MessageTime,
-                LastMessageType = "message"
+                LastMessageType = "message",
+                UnreadMsgs = toIdUnreadMsgs
             });
 
             return Ok();

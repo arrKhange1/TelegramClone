@@ -34,14 +34,14 @@ namespace TelegramClone.Services
             return _chatUserRepository.GetChatMembers(chatId);
         }
 
-        public void IncreaseUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
+        public List<ChatUser> IncreaseUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
         {
-            _chatUserRepository.IncreaseUnreadMsgsOfChatMembers(chatMembers);
+            return _chatUserRepository.IncreaseUnreadMsgsOfChatMembers(chatMembers);
         }
 
-        public void IncreaseUnreadMsgsOfDialog(Dialog dialog, Guid toId)
+        public int IncreaseUnreadMsgsOfDialog(Dialog dialog, Guid toId)
         {
-            _chatRepository.IncreaseUnreadMsgsOfDialog(dialog, toId);
+            return _chatRepository.IncreaseUnreadMsgsOfDialog(dialog, toId);
         }
         public void CleanUnreadMsgsOfChatMember(ChatUser chatUser)
         {
@@ -149,7 +149,6 @@ namespace TelegramClone.Services
         {
             var addedMessage = await _messageRepository.AddDialogMessage(dialog.DialogId, fromId, messageText);
             _chatRepository.UpdatePrivateChatLastMessage(dialog, addedMessage.MessageId);
-            _chatRepository.IncreaseUnreadMsgsOfDialog(dialog, toId);
 
             return addedMessage;
         }
@@ -159,7 +158,6 @@ namespace TelegramClone.Services
             var chatUser = GetChatUser(chat.ChatId, senderId);
             var addedMessage = await AddMsg(chatUser.ChatUserId, messageText, messageType);
             _chatRepository.UpdateGroupChatLastMessage(chat, addedMessage.MessageId);
-            _chatUserRepository.IncreaseUnreadMsgsOfChatMembers(members);
 
             return addedMessage;
         }

@@ -12,7 +12,7 @@ import ChatsService from '../../../services/ChatsService';
 import IChat from '../../../@types/IChat';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { useDispatch } from 'react-redux';
-import { setChats } from '../../../store/reducers/chatListSlice';
+import { cleanChatUnreadMsgs, setChats } from '../../../store/reducers/chatListSlice';
 
 function GroupChat() {
     const params = useParams();
@@ -45,8 +45,7 @@ function GroupChat() {
 
     useEffect(() => {
         const response = ChatsService.readGroupChat(user.userId, params.chatId!);
-        const updatedChats: IChat[] = chats.map(chat => chat.chatId === params.chatId ? {...chat, unreadMsgs: 0} : chat);
-        dispatch(setChats([...updatedChats]));
+        dispatch(cleanChatUnreadMsgs(params.chatId!));
 
     }, [chat, params.chatId])
 

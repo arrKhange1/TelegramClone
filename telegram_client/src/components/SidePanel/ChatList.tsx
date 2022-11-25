@@ -17,8 +17,9 @@ import refreshPromise from '../../http/refreshTokenPromise'
 import ChatListSignalRService from '../../services/ChatListSignalRService';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { setChats, addToChats } from '../../store/reducers/chatListSlice';
+import { setChats, addToChats, replaceExistingChat } from '../../store/reducers/chatListSlice';
 import { store } from '../..';
+import queryString from 'query-string';
 
 // let signalRService: SignalRService;
 
@@ -29,6 +30,7 @@ function ChatList({modal, setModal} : { modal: boolean,
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
     const user = useAuth();
+    const params = useParams();
     const dispatch = useAppDispatch();
 
     const chats = useAppSelector(state => state.chatsReducer);
@@ -52,9 +54,9 @@ function ChatList({modal, setModal} : { modal: boolean,
     }
 
     const onNewMsgInChat = (chatElement: IChat) => {
-        let currentChats: IChat[] = store.getState().chatsReducer;
-        currentChats = currentChats.filter(chat => chat.chatId !== chatElement.chatId);
-        dispatch(setChats([chatElement, ...currentChats]));
+        if (chatElement.chatId === params.chatId) //dodelat
+            chatElement.unreadMsgs = 0;
+        dispatch(replaceExistingChat(chatElement));
     }
 
     useEffect(() => {

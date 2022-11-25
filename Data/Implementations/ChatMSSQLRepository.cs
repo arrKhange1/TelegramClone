@@ -119,13 +119,22 @@ namespace TelegramClone.Data.Implementations
             _context.SaveChanges();
         }
 
-        public void IncreaseUnreadMsgsOfDialog(Dialog dialog, Guid toId)
+        public int IncreaseUnreadMsgsOfDialog(Dialog dialog, Guid toId)
         {
+            int unreadMsgs = 0;
             if (toId == dialog.FirstParticipantId)
+            {
                 dialog.UnreadMsgsByFirst += 1;
+                unreadMsgs = dialog.UnreadMsgsByFirst;
+            }
             else if (toId == dialog.SecondParticipantId)
+            {
                 dialog.UnreadMsgsBySecond += 1;
+                unreadMsgs = dialog.UnreadMsgsBySecond;
+            }
+               
             _context.SaveChanges();
+            return unreadMsgs;
         }
         
         public void CleanUnreadMsgsOfDialog(Dialog dialog, Guid fromId)

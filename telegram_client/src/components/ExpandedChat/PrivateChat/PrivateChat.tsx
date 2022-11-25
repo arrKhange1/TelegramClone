@@ -10,7 +10,7 @@ import PrivateChatSignalRService from '../../../services/PrivateChatSignalRServi
 import { useAuth } from '../../../hooks/useAuth';
 import ChatsService from '../../../services/ChatsService';
 import { useAppSelector } from '../../../hooks/useAppSelector';
-import { setChats } from '../../../store/reducers/chatListSlice';
+import { cleanChatUnreadMsgs, setChats } from '../../../store/reducers/chatListSlice';
 import IChat from '../../../@types/IChat';
 import { useDispatch } from 'react-redux';
 
@@ -45,8 +45,7 @@ function PrivateChat() {
 
     useEffect(() => {
         const response = ChatsService.readPrivateChat(user.userId, params.chatId!);
-        const updatedChats: IChat[] = chats.map(chat => chat.chatId === params.chatId ? {...chat, unreadMsgs: 0} : chat);
-        dispatch(setChats([...updatedChats]));
+        dispatch(cleanChatUnreadMsgs(params.chatId!));
 
     }, [chat, params.chatId])
 

@@ -22,11 +22,17 @@ namespace TelegramClone.Data.Implementations
             return _context.ChatUsers.Where(cu => cu.ChatId == chatId).ToList();
         }
 
-        public void IncreaseUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
+        public List<ChatUser> IncreaseUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
         {
+            List<ChatUser> updatedChatUsers = new List<ChatUser>();
             foreach(var chatMember in chatMembers)
+            {
                 chatMember.UnreadMessages += 1;
+                updatedChatUsers.Add(chatMember);
+            }
+            
             _context.SaveChanges();
+            return updatedChatUsers;
         }
         public void CleanUnreadMsgsOfChatMember(ChatUser chatUser)
         {

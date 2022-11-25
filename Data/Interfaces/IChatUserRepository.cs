@@ -10,7 +10,7 @@ namespace TelegramClone.Data.Interfaces
     {
         public Task<bool> AddUsersToChat(List<ChatUser> members);
         public ChatUser GetChatUserByChatIdAndUserId(Guid chatId, Guid userId);
-        public void IncreaseUnreadMsgsOfChatMembers(List<ChatUser> chatMembers);
+        public List<ChatUser> IncreaseUnreadMsgsOfChatMembers(List<ChatUser> chatMembers);
         public void CleanUnreadMsgsOfChatMember(ChatUser chatUser);
         public List<ChatUser> GetChatMembers(Guid chatId);
     }
