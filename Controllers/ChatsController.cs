@@ -110,7 +110,7 @@ namespace TelegramClone.Controllers
                     LastMessageText = addedMessage.MessageText,
                     LastMessageTime = addedMessage.MessageTime,
                     LastMessageType = "message",
-                    UnreadMsgs = chatMember.UnreadMessages
+                    UnreadMsgs = chatMember.UserId == senderIdGuid ? 0 : chatMember.UnreadMessages
                 }); // add constructor!!!
 
             return Ok();

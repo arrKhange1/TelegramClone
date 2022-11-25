@@ -19,8 +19,8 @@ export const chatListSlice = createSlice({
         },
 
         replaceExistingChat(state, action: PayloadAction<IChat>) {
-            const currentChats = state.filter(chat => chat.chatId !== action.payload.chatId);
-            return [action.payload, ...currentChats];
+            
+            return [action.payload, ...state.filter(chat => chat.chatId !== action.payload.chatId)];
         },
 
         addToChats(state, action: PayloadAction<IChat>) {

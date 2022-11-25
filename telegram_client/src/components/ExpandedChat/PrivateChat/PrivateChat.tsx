@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import IExpandedChat, { IGroupChat, IPrivateChat } from '../../../@types/IExpandedChat';
 import { $api } from '../../../http/axios';
 import Footer from '../Footer';
@@ -19,6 +19,12 @@ function PrivateChat() {
     const user = useAuth();
     const chats = useAppSelector(state => state.chatsReducer);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const closeChat = (e:KeyboardEvent) => {
+        if (e.key === 'Escape')
+            navigate('/');
+    }
 
     const [chat, setChat] = useState<IPrivateChat>({
         userName: '',
@@ -40,7 +46,12 @@ function PrivateChat() {
         signalRService.start();
         console.log('conn to privatechat:', signalRService.connection);
 
-        return () => signalRService.stop();
+        window.addEventListener('keydown', closeChat);
+
+        return () => { 
+            signalRService.stop();
+            window.removeEventListener('keydown', closeChat);
+        }
     }, [params.chatId])
 
     useEffect(() => {

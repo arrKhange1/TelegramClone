@@ -54,8 +54,6 @@ function ChatList({modal, setModal} : { modal: boolean,
     }
 
     const onNewMsgInChat = (chatElement: IChat) => {
-        if (chatElement.chatId === params.chatId) //dodelat
-            chatElement.unreadMsgs = 0;
         dispatch(replaceExistingChat(chatElement));
     }
 

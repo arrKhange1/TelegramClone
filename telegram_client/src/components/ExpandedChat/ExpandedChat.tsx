@@ -19,11 +19,6 @@ function ExpandedChat() {
     const chatList = useAppSelector(state => state.chatsReducer);
     const contactList = useAppSelector(state => state.contactListReducer);
 
-    const closeChat = (e:KeyboardEvent) => {
-        if (e.key === 'Escape')
-            navigate('/');
-    }
-
     if (contactList.some(contact => contact.contactId === chatId) ||
          chatList.find(chat => chat.chatId === chatId)?.chatCategory === 'private') {
         console.log('priv', chatList.find(chat => chat.chatId === chatId))

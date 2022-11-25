@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import IExpandedChat, { IGroupChat } from '../../../@types/IExpandedChat';
 import { $api } from '../../../http/axios';
 import Footer from '../Footer';
@@ -19,7 +19,12 @@ function GroupChat() {
     const user = useAuth();
     const chats = useAppSelector(state => state.chatsReducer);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
+    const closeChat = (e:KeyboardEvent) => {
+        if (e.key === 'Escape')
+            navigate('/');
+    }
 
     const [chat, setChat] = useState<IGroupChat>({
         chatName: '',
@@ -40,7 +45,12 @@ function GroupChat() {
         signalRService.start();
         console.log('conn to groupchat:', signalRService.connection);
 
-        return () => signalRService.stop();
+        window.addEventListener('keydown', closeChat);
+
+        return () =>  {
+            signalRService.stop();
+            window.removeEventListener('keydown', closeChat);
+        }
     }, [params.chatId])
 
     useEffect(() => {
@@ -61,7 +71,7 @@ function GroupChat() {
     };
 
     return (
-        <div className={msgs.messages_panel}>
+        <div  className={msgs.messages_panel}>
             <Header chatName={chat.chatName} groupMembers={chat.groupMembers}/>
             <MessagesList messages={chat.messages}/>
             <Footer textMsg={textMsg} sendMsg={sendMsg} setTextMsg={setTextMsg}/>
