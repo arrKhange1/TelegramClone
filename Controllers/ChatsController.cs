@@ -74,9 +74,10 @@ namespace TelegramClone.Controllers
             {
                 Debug.WriteLine($"isauth: {HttpContext.User.Identity.IsAuthenticated}, name: {User.Identity.Name}"); // в user identity name - userId
 
-                var chatUserMembers = _chatService.FormChatUserList(chat.ChatId, groupChat.membersIds);
-                await _chatService.AddUsersToChat(chatUserMembers);
-                await _chatService.AddMessageInGroupChat(chat, chatUserMembers, Guid.Parse(currentUserId), "created a chat!", "notification");
+                var chatMembers = _chatService.FormChatUserList(chat.ChatId, groupChat.membersIds);
+                await _chatService.AddUsersToChat(chatMembers);
+                await _chatService.AddMessageInGroupChat(chat, chatMembers, Guid.Parse(currentUserId), "created a chat!", "notification");
+                _chatService.IncreaseUnreadMsgsOfChatMembers(chatMembers);
                 await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName, chat.ChatId.ToString().ToLower(), currentUserName);
                 
                 return Ok();
