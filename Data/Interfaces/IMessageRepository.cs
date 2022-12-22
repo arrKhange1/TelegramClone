@@ -11,7 +11,7 @@ namespace TelegramClone.Data.Interfaces
     {
         public List<MessageDTO> GetMsgs(Guid chatId);
         public List<MessageDTO> GetDialogMessages(Guid dialogId);
-        public Task<Message> AddMsg(Guid chatUserId, string messageText, string messageType);
+        public Task<Message> AddMsg(Guid chatId, Guid userId, string messageText, string messageType);
         public Task<DialogMessage> AddDialogMessage(Guid dialogId, Guid fromId, string messageText);
     }
 }

@@ -19,10 +19,9 @@ namespace TelegramClone.Data.Implementations
         public List<MessageDTO> GetMsgs(Guid chatId)
         {
             var msgs = from m in _context.Messages join
-            cu in _context.ChatUsers on m.ChatUserId equals cu.ChatUserId join
-            u in _context.Users on cu.UserId equals u.UserId
+            u in _context.Users on m.UserId equals u.UserId
             join msgType in _context.MessageTypes on m.MessageTypeId equals msgType.Id
-            where chatId == cu.ChatId
+            where chatId == m.ChatId
             orderby m.MessageTime
             select new MessageDTO
             {
@@ -52,14 +51,15 @@ namespace TelegramClone.Data.Implementations
             return msgs.ToList();
         }
 
-        public async Task<Message> AddMsg(Guid chatUserId, string messageText, string messageType)
+        public async Task<Message> AddMsg(Guid chatId, Guid userId, string messageText, string messageType)
         {
             var msgTypeId = _context.MessageTypes.FirstOrDefault(msgType => msgType.Type == messageType).Id;
             var added = await _context.Messages.AddAsync(new Message
             {
                 MessageId = Guid.NewGuid(),
                 MessageText = messageText,
-                ChatUserId = chatUserId,
+                ChatId = chatId,
+                UserId = userId,
                 MessageTime = DateTime.UtcNow,
                 MessageTypeId = msgTypeId
             });

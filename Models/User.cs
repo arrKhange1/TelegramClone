@@ -28,9 +28,8 @@ namespace TelegramClone.Models
         public User()
         {
             RefreshTokens = new List<RefreshToken>();
-            ChatUsers = new List<ChatUser>();
         }
-        
+
         public List<ChatUser> ChatUsers { get; set; }
 
         public List<UserContact> UserContactsUsers { get; set; }
@@ -39,7 +38,7 @@ namespace TelegramClone.Models
         public List<Dialog> DialogsFirstParticipants { get; set; }
         public List<Dialog> DialogsSecondParticipants { get; set; }
         public List<DialogMessage> DialogMessages { get; set; }
-
+        public List<Message> Messages { get; set; }
 
     }
 }

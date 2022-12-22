@@ -68,9 +68,9 @@ namespace TelegramClone.Services
             return _messageRepository.GetMsgs(chatId);
         }
 
-        public async Task<Message> AddMsg(Guid chatUserId, string messageText, string messageType)
+        public async Task<Message> AddMsg(Guid chatId, Guid userId, string messageText, string messageType)
         {
-            return await _messageRepository.AddMsg(chatUserId, messageText, messageType);
+            return await _messageRepository.AddMsg(chatId, userId, messageText, messageType);
         }
 
 
@@ -153,10 +153,9 @@ namespace TelegramClone.Services
             return addedMessage;
         }
 
-        public async Task<Message> AddMessageInGroupChat(Chat chat, List<ChatUser> members, Guid senderId, string messageText, string messageType)
+        public async Task<Message> AddMessageInGroupChat(Chat chat, Guid senderId, string messageText, string messageType)
         {
-            var chatUser = GetChatUser(chat.ChatId, senderId);
-            var addedMessage = await AddMsg(chatUser.ChatUserId, messageText, messageType);
+            var addedMessage = await AddMsg(chat.ChatId, senderId, messageText, messageType);
             _chatRepository.UpdateGroupChatLastMessage(chat, addedMessage.MessageId);
 
             return addedMessage;

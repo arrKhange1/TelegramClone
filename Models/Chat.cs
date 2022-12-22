@@ -14,6 +14,7 @@ namespace TelegramClone.Models
         public DateTime CreateTime { get; set; }
         public ChatCategory ChatCategory { get; set; }
         public List<ChatUser> ChatUsers { get; set; }
+        public List<Message> Messages { get; set; }
 
         public Guid? LastMessageId { get; set; }
         public Message LastMessage { get; set; }

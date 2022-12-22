@@ -18,10 +18,5 @@ namespace TelegramClone.Models
         
         public int UnreadMessages { get; set; }
 
-        public ChatUser()
-        {
-            Messages = new List<Message>();
-        }
-        public List<Message> Messages { get; set; }
     }
 }

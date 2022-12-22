@@ -26,12 +26,32 @@ namespace TelegramClone.Data.Implementations
 
         public List<ChatElementDTO> GetGroupChats(Guid userId)
         { // exchange chatuserid on user id and chatId
+
+//            from cu in _context.ChatUsers
+//            join
+//c in _context.Chats on cu.ChatId equals c.ChatId
+//            join msg in _context.Messages on c.LastMessageId equals msg.MessageId
+//            join msgType in _context.MessageTypes on msg.MessageTypeId equals msgType.Id
+//            join cuu in _context.ChatUsers on msg.ChatUserId equals cuu.ChatUserId
+//            join u in _context.Users on cuu.UserId equals u.UserId
+//            where cu.UserId == userId
+//            select new ChatElementDTO
+//            {
+//                ChatId = c.ChatId,
+//                ChatName = c.ChatName,
+//                ChatCategory = "group",
+//                LastMessageSender = u.UserName,
+//                LastMessageText = msg.MessageText,
+//                LastMessageTime = msg.MessageTime,
+//                LastMessageType = msgType.Type,
+//                UnreadMsgs = cu.UnreadMessages
+//            };
+
             var result = from cu in _context.ChatUsers join
             c in _context.Chats on cu.ChatId equals c.ChatId
             join msg in _context.Messages on c.LastMessageId equals msg.MessageId
             join msgType in _context.MessageTypes on msg.MessageTypeId equals msgType.Id
-            join cuu in _context.ChatUsers on msg.ChatUserId equals cuu.ChatUserId
-            join u in _context.Users on cuu.UserId equals u.UserId
+            join u in _context.Users on msg.UserId equals u.UserId
             where cu.UserId == userId
             select new ChatElementDTO
             {
@@ -137,7 +157,7 @@ namespace TelegramClone.Data.Implementations
             return unreadMsgs;
         }
         
-        public void CleanUnreadMsgsOfDialog(Dialog dialog, Guid fromId)
+        public void CleanUnreadMsgsOfDialog(Dialog dialog, Guid fromId) // если нет диалога в контактах то ошибка (диалог пустой)
         {
             if (fromId == dialog.FirstParticipantId)
                 dialog.UnreadMsgsByFirst = 0;
