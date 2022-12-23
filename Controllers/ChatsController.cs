@@ -30,9 +30,8 @@ namespace TelegramClone.Controllers
         }
 
 
-
         [HttpGet("getprivatechat")]
-        public IActionResult GetPrivateChat(string fromId, string toId)
+        public IActionResult GetPrivateChat(string fromId, string toId) // +
         {
             var firstParticipantIdGuid = Guid.Parse(fromId);
             var secondParticipantIdGuid = Guid.Parse(toId);
@@ -41,22 +40,15 @@ namespace TelegramClone.Controllers
         }
 
         [HttpGet ("getgroupchat")]
-        public IActionResult GetGroupChat(string chatId)
+        public IActionResult GetGroupChat(string chatId) // +
         {
             Guid chatIdGuid = Guid.Parse(chatId);
-            var chat = _chatService.GetChat(chatIdGuid);
-            
-            var msgs = _chatService.GetMsgs(chatIdGuid); // получаем сообщения
-            return Ok(new GroupChatResponseDTO
-            {
-                ChatName = chat.ChatName,
-                GroupMembers = chat.GroupMembers.ToString(),
-                Messages = msgs
-            });
+            var groupChat = _chatService.GetGroupChat(chatIdGuid);
+            return Ok(groupChat);
         }
 
         [HttpGet]
-        public IActionResult GetChats(string userId)
+        public IActionResult GetChats(string userId) // +
         {
             var chats = _chatService.GetChats(Guid.Parse(userId));
             return Ok(chats);
@@ -65,25 +57,17 @@ namespace TelegramClone.Controllers
         [HttpPost ("addgroupchat")]
         public async Task<IActionResult> AddGroupChat([FromBody] GroupChatRequestDTO groupChat)
         {
-
-            var chat = await _chatService.AddGroupChat(groupChat.groupName, groupChat.membersIds.Count);
-            var currentUserId = User.Identity.Name;
+            var createrId = User.Identity.Name;
             var currentUserName = _userService.GetCurrentUser(HttpContext).UserName;
 
-            if (chat != null)
+            var addedChat = await _chatService.AddGroupChat(groupChat, Guid.Parse(createrId));
+            if (addedChat != null)
             {
                 Debug.WriteLine($"isauth: {HttpContext.User.Identity.IsAuthenticated}, name: {User.Identity.Name}"); // в user identity name - userId
-
-                var chatMembers = _chatService.FormChatUserList(chat.ChatId, groupChat.membersIds);
-                await _chatService.AddUsersToChat(chatMembers);
-                await _chatService.AddMessageInGroupChat(chat, Guid.Parse(currentUserId), "created a chat!", "notification");
-                _chatService.IncreaseUnreadMsgsOfChatMembers(chatMembers);
-                await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName, chat.ChatId.ToString().ToLower(), currentUserName);
-                
-                return Ok();
+                await _hubContext.Clients.Users(groupChat.membersIds).SendAsync("GroupChat", groupChat.groupName, addedChat.ChatId.ToString().ToLower(), currentUserName);
+                return Ok("Chat was added successfully!");
             }
-
-            return BadRequest("Something went wrong..."); 
+            return BadRequest("Chat wasn't added"); 
         }
 
         [HttpPost("sendgroupchat")]

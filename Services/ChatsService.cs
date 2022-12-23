@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
+using TelegramClone.Models.RequestDTO;
 using TelegramClone.Models.ResponseDTO;
 
 namespace TelegramClone.Services
@@ -63,20 +64,26 @@ namespace TelegramClone.Services
             return _chatCategoryRepository.GetChatCategoryById(chatCategoryId);
         }
 
-        public List<MessageResponseDTO> GetMsgs(Guid chatId)
-        {
-            return _messageRepository.GetMsgs(chatId);
-        }
-
         public async Task<Message> AddMsg(Guid chatId, Guid userId, string messageText, string messageType)
         {
             return await _messageRepository.AddMsg(chatId, userId, messageText, messageType);
         }
 
-
         public Chat GetChat(Guid chatId)
         {
             return _chatRepository.GetChat(chatId);
+        }
+
+        public GroupChatResponseDTO GetGroupChat(Guid chatId)
+        {
+            Chat chat = _chatRepository.GetChat(chatId); // mb vernut method v service
+            var msgs = _messageRepository.GetMsgs(chatId);
+            return new GroupChatResponseDTO
+            {
+                ChatName = chat.ChatName,
+                GroupMembers = chat.GroupMembers.ToString(),
+                Messages = msgs
+            };
         }
 
         public List<ChatUser> FormChatUserList(Guid newChatId, List<string> ids)
@@ -90,15 +97,21 @@ namespace TelegramClone.Services
             }).ToList();
         }
 
-        public async Task<bool> AddUsersToChat(List<ChatUser> members)
+        public async Task<Chat> AddGroupChat(GroupChatRequestDTO groupChatRequestDTO, Guid createrId)
         {
-            return await _chatUserRepository.AddUsersToChat(members);
-        }
-
-
-        public async Task<Chat> AddGroupChat(string chatName, int groupMembers)
-        {
-            return await _chatRepository.AddGroupChat(chatName, groupMembers);
+            try
+            {
+                var chat = await _chatRepository.AddGroupChat(groupChatRequestDTO.groupName, groupChatRequestDTO.membersIds.Count);
+                var chatMembers = FormChatUserList(chat.ChatId, groupChatRequestDTO.membersIds);
+                await _chatUserRepository.AddUsersToChat(chatMembers);
+                await AddMessageInGroupChat(chat, createrId, "created a chat!", "notification");
+                _chatUserRepository.IncreaseUnreadMsgsOfChatMembers(chatMembers);
+                return chat;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<Dialog> AddPrivateChat(Guid fromId, Guid toId)
