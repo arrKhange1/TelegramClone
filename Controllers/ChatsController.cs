@@ -150,8 +150,10 @@ namespace TelegramClone.Controllers
             var fromIdGuid = Guid.Parse(fromId);
             var toIdGuid = Guid.Parse(toId);
 
+
             var privateChat = _chatService.GetPrivateChat(fromIdGuid, toIdGuid);
-            _chatService.CleanUnreadMsgsOfPrivateChat(privateChat, fromIdGuid);
+            if (privateChat != null)
+                _chatService.CleanUnreadMsgsOfPrivateChat(privateChat, fromIdGuid);
             return Ok();
         }
 
