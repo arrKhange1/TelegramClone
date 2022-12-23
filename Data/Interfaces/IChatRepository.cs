@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Models;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.ResponseDTO;
 
 namespace TelegramClone.Data.Interfaces
 {
@@ -13,9 +13,9 @@ namespace TelegramClone.Data.Interfaces
         public Chat GetChat(Guid chatId);
         public Task<Dialog> AddPrivateChat(Guid fromId, Guid toId);
         public Task<Chat> AddGroupChat(string chatName, int groupMembers);
-        public List<ChatElementDTO> GetPrivateChats(Guid userId);
+        public List<ChatElementResponseDTO> GetPrivateChats(Guid userId);
         public Dialog GetPrivateChat(Guid firstParticipantId, Guid secondParticipantId);
-        public List<ChatElementDTO> GetGroupChats(Guid userId);
+        public List<ChatElementResponseDTO> GetGroupChats(Guid userId);
         public void UpdatePrivateChatLastMessage(Dialog dialog, Guid lastMessageId);
         public void UpdateGroupChatLastMessage(Chat chat, Guid lastMessageId);
         public int IncreaseUnreadMsgsOfDialog(Dialog dialog, Guid toId);

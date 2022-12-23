@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TelegramClone.Models.DTO
+namespace TelegramClone.Models.ResponseDTO
 {
-    public class ContactDTO
+    public class ContactElementResponseDTO
     {
-       public string ContactId { get; set; }
+        public Guid ContactId { get; set; }
         public string ContactName { get; set; }
     }
 }

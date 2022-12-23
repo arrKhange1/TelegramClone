@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.ResponseDTO;
 
 namespace TelegramClone.Data.Implementations
 {
@@ -37,18 +37,16 @@ namespace TelegramClone.Data.Implementations
             }
         }
 
-        public List<ContactElement> GetContacts(Guid userId)
+        public List<ContactElementResponseDTO> GetContacts(Guid userId)
         {
             var contacts = from uc in _context.UserContacts
                        join u in _context.Users on uc.ContactId equals u.UserId
                        where uc.UserId == userId
                        orderby uc.CreateTime descending
-                       select new ContactElement
+                       select new ContactElementResponseDTO
                        {
                            ContactId = u.UserId,
                            ContactName = u.UserName,
-                           ContactPhoto = u.UserPhoto,
-                           ConnectionStatus = u.ConnectionStatus,
                        };
             return contacts.ToList();
         }

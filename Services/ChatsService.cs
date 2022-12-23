@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.ResponseDTO;
 
 namespace TelegramClone.Services
 {
@@ -63,7 +63,7 @@ namespace TelegramClone.Services
             return _chatCategoryRepository.GetChatCategoryById(chatCategoryId);
         }
 
-        public List<MessageDTO> GetMsgs(Guid chatId)
+        public List<MessageResponseDTO> GetMsgs(Guid chatId)
         {
             return _messageRepository.GetMsgs(chatId);
         }
@@ -106,7 +106,7 @@ namespace TelegramClone.Services
             return await _chatRepository.AddPrivateChat(fromId, toId);
         }
 
-        public List<ChatElementDTO> GetChats(Guid userId)
+        public List<ChatElementResponseDTO> GetChats(Guid userId)
         {
             var privateChats = _chatRepository.GetPrivateChats(userId);
             var groupChats = _chatRepository.GetGroupChats(userId);
@@ -117,20 +117,20 @@ namespace TelegramClone.Services
             return chats;
         }
 
-        public PrivateChatDTO GetPrivateChat(Guid fromId, Guid toId)
+        public PrivateChatResponseDTO GetPrivateChat(Guid fromId, Guid toId)
         {
             var dialog = _chatRepository.GetPrivateChat(fromId, toId);
             var user = _userRepository.GetUserById(toId);
             if (dialog == null)
-                return new PrivateChatDTO
+                return new PrivateChatResponseDTO
                 {
                     UserId = toId.ToString().ToLower(),
                     UserName = user.UserName,
                     ConnectionStatus = user.ConnectionStatus,
-                    Messages = new List<MessageDTO>()
+                    Messages = new List<MessageResponseDTO>()
                 };
             var msgs = _messageRepository.GetDialogMessages(dialog.DialogId);
-            return new PrivateChatDTO
+            return new PrivateChatResponseDTO
             {
                 UserId = toId.ToString().ToLower(),
                 UserName = user.UserName,

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TelegramClone.Models.DTO
+namespace TelegramClone.Models.ResponseDTO
 {
-    public class ChatElementDTO : IComparable<ChatElementDTO>
+    public class ChatElementResponseDTO : IComparable<ChatElementResponseDTO>
     {
         public Guid ChatId { get; set; }
         public string ChatName { get; set; }
@@ -16,7 +16,7 @@ namespace TelegramClone.Models.DTO
         public string LastMessageType { get; set; }
         public int UnreadMsgs { get; set; }
 
-        public int CompareTo(ChatElementDTO chatElement)
+        public int CompareTo(ChatElementResponseDTO chatElement)
         {
             return (LastMessageTime != chatElement.LastMessageTime) ?
                 (LastMessageTime < chatElement.LastMessageTime ? 1 : -1) : 0;

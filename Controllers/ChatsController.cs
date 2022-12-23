@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using TelegramClone.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using TelegramClone.Services;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.ResponseDTO;
 using System.Diagnostics;
-using System.Security.Claims;
+using TelegramClone.Models.RequestDTO;
 
 namespace TelegramClone.Controllers
 {
@@ -47,7 +47,7 @@ namespace TelegramClone.Controllers
             var chat = _chatService.GetChat(chatIdGuid);
             
             var msgs = _chatService.GetMsgs(chatIdGuid); // получаем сообщения
-            return Ok(new GroupChatDTO
+            return Ok(new GroupChatResponseDTO
             {
                 ChatName = chat.ChatName,
                 GroupMembers = chat.GroupMembers.ToString(),
@@ -63,7 +63,7 @@ namespace TelegramClone.Controllers
         }
 
         [HttpPost ("addgroupchat")]
-        public async Task<IActionResult> AddGroupChat([FromBody] GroupChat groupChat)
+        public async Task<IActionResult> AddGroupChat([FromBody] GroupChatRequestDTO groupChat)
         {
 
             var chat = await _chatService.AddGroupChat(groupChat.groupName, groupChat.membersIds.Count);
@@ -102,7 +102,7 @@ namespace TelegramClone.Controllers
             await _hubContext.Clients.Users(chatMembersIds).SendAsync("AddMessageGroupChat", senderName, messageText, chatId);
             
             foreach(var chatMember in updatedChatMembers) 
-                await _hubContext.Clients.User(chatMember.UserId.ToString().ToLower()).SendAsync("NewMsgInChat", new ChatElementDTO
+                await _hubContext.Clients.User(chatMember.UserId.ToString().ToLower()).SendAsync("NewMsgInChat", new ChatElementResponseDTO
                 {
                     ChatId = chat.ChatId,
                     ChatName = chat.ChatName,
@@ -135,7 +135,7 @@ namespace TelegramClone.Controllers
             var senderName = _userService.GetCurrentUser(HttpContext).UserName;
             await _hubContext.Clients.Users(memberIds).SendAsync("AddMessagePrivateChat", senderName, messageText, fromId, toId);
             
-            await _hubContext.Clients.User(fromId).SendAsync("NewMsgInChat", new ChatElementDTO
+            await _hubContext.Clients.User(fromId).SendAsync("NewMsgInChat", new ChatElementResponseDTO
             {
                 ChatId = toIdGuid,
                 ChatName = toName,
@@ -146,7 +146,7 @@ namespace TelegramClone.Controllers
                 LastMessageType = "message",
                 UnreadMsgs = 0
             });
-            await _hubContext.Clients.User(toId).SendAsync("NewMsgInChat", new ChatElementDTO
+            await _hubContext.Clients.User(toId).SendAsync("NewMsgInChat", new ChatElementResponseDTO
             {
                 ChatId = fromIdGuid,
                 ChatName = senderName,

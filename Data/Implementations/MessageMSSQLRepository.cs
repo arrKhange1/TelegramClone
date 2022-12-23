@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.ResponseDTO;
 
 namespace TelegramClone.Data.Implementations
 {
@@ -16,14 +16,14 @@ namespace TelegramClone.Data.Implementations
         {
             _context = context;
         }
-        public List<MessageDTO> GetMsgs(Guid chatId)
+        public List<MessageResponseDTO> GetMsgs(Guid chatId)
         {
             var msgs = from m in _context.Messages join
             u in _context.Users on m.UserId equals u.UserId
             join msgType in _context.MessageTypes on m.MessageTypeId equals msgType.Id
             where chatId == m.ChatId
             orderby m.MessageTime
-            select new MessageDTO
+            select new MessageResponseDTO
             {
                 UserName = u.UserName,
                 MessageText = m.MessageText,
@@ -34,14 +34,14 @@ namespace TelegramClone.Data.Implementations
             return msgs.ToList();
         }
 
-        public List<MessageDTO> GetDialogMessages(Guid dialogId)
+        public List<MessageResponseDTO> GetDialogMessages(Guid dialogId)
         { 
             var msgs = from m in _context.DialogMessages join
             d in _context.Dialogs on m.DialogId equals d.DialogId join
             u in _context.Users on m.SenderId equals u.UserId
             where m.DialogId == dialogId
             orderby m.MessageTime
-            select new MessageDTO
+            select new MessageResponseDTO
             {
                 UserName = u.UserName,
                 MessageText = m.MessageText,

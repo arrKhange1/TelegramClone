@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using TelegramClone.Data;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.RequestDTO;
 using TelegramClone.Services;
 
 namespace TelegramClone.Controllers
@@ -79,7 +79,7 @@ namespace TelegramClone.Controllers
 
         [AllowAnonymous]
         [HttpPost ("login")]
-        public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
+        public async Task<IActionResult> Login([FromBody] UserLoginRequestDTO userLogin)
         {
             var user = _userService.Authenticate(userLogin);
             if (user != null)
@@ -103,7 +103,7 @@ namespace TelegramClone.Controllers
 
         [AllowAnonymous]
         [HttpPost ("register")]
-        public async Task<IActionResult> Register([FromBody] UserRegister userLogin)
+        public async Task<IActionResult> Register([FromBody] UserRegisterRequestDTO userLogin)
         {
             var user = _userService.GetUserByUserName(userLogin.UserName);
             if (user == null)

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TelegramClone.Models.DTO
+namespace TelegramClone.Models.RequestDTO
 {
-    public class UserLogin
+    public class UserLoginRequestDTO
     {
         public string UserName { get; set; }
         public string Password { get; set; }

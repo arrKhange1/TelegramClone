@@ -16,7 +16,6 @@ namespace TelegramClone.Utils
         {
             
             Debug.WriteLine($"connection name: {connection.User.Identity.Name}");
-            string a;
             Debug.WriteLine($"auth header: {connection.GetHttpContext().Request.Headers.TryGetValue("Authorization", out StringValues v)}");
             Debug.WriteLine($"ishttpcontext: {connection.GetHttpContext() != null}");
             return connection.GetHttpContext().User.Identity.Name;

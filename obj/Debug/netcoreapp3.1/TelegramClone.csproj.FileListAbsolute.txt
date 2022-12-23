@@ -65,7 +65,6 @@ C:\Users\Артур\source\repos\TelegramClone\TelegramClone\bin\Debug\netcoreap
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Артур\source\repos\TelegramClone\TelegramClone\obj\Debug\netcoreapp3.1\TelegramClone.csproj.AssemblyReference.cache
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\obj\Debug\netcoreapp3.1\TelegramClone.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\obj\Debug\netcoreapp3.1\TelegramClone.AssemblyInfoInputs.cache
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\obj\Debug\netcoreapp3.1\TelegramClone.AssemblyInfo.cs

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.RequestDTO;
 
 namespace TelegramClone.Data.Implementations
 {
@@ -15,7 +15,7 @@ namespace TelegramClone.Data.Implementations
         {
             _context = context;
         }
-        public User GetUserByUsernameAndPassword(UserLogin userLogin)
+        public User GetUserByUsernameAndPassword(UserLoginRequestDTO userLogin)
         {
             return _context.Users.FirstOrDefault(user => user.UserName == userLogin.UserName &&
                 user.Password == userLogin.Password);

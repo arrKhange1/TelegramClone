@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TelegramClone.Models.DTO
+namespace TelegramClone.Models.ResponseDTO
 {
-    public class GroupChatDTO : ExpandedChatDTO
+    public class GroupChatResponseDTO : ExpandedChatResponseDTO
     {
         public string ChatName { get; set; }
         public string GroupMembers { get; set; }

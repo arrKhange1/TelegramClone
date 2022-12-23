@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TelegramClone.Models.DTO
+namespace TelegramClone.Models.ResponseDTO
 {
-    public class MessageDTO
+    public class MessageResponseDTO
     {
         public string UserName { get; set; }
         public string MessageText { get; set; }

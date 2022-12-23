@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using TelegramClone.Data;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.RequestDTO;
 
 namespace TelegramClone.Services
 {
@@ -51,7 +51,7 @@ namespace TelegramClone.Services
             return _userRepository.GetUserById(userId);
         }
 
-        public async Task<User> CreateUserFromDTO(UserLogin userLogin)
+        public async Task<User> CreateUserFromDTO(UserLoginRequestDTO userLogin)
         {
             var userRole = _roleRepository.GetRoleByName("user");
             var user = new User
@@ -65,12 +65,12 @@ namespace TelegramClone.Services
             return createdUser;
         }
 
-        public User GetUserByUsernameAndPassword(UserLogin userLogin)
+        public User GetUserByUsernameAndPassword(UserLoginRequestDTO userLogin)
         {
             return _userRepository.GetUserByUsernameAndPassword(userLogin);
         }
 
-        public User Authenticate(UserLogin userLogin)
+        public User Authenticate(UserLoginRequestDTO userLogin)
         {
             var authenticatedUser = _userRepository.GetUserByUsernameAndPassword(userLogin);
             if (authenticatedUser != null)

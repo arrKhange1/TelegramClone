@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.ResponseDTO;
 using TelegramClone.Services;
 
 namespace TelegramClone.Controllers
@@ -38,9 +38,9 @@ namespace TelegramClone.Controllers
 
                 var addStatus = await _contactsService.AddContact(userIdFromString, contact.UserId);
                 if (addStatus)
-                    return Ok(new ContactDTO
+                    return Ok(new ContactElementResponseDTO
                     {
-                        ContactId = contact.UserId.ToString().ToLower(),
+                        ContactId = contact.UserId,
                         ContactName = contactName
                     });
                 return BadRequest("Contact already exists");

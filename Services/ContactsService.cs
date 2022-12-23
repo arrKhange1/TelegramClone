@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
-using TelegramClone.Models.DTO;
+using TelegramClone.Models.ResponseDTO;
 
 namespace TelegramClone.Services
 {
@@ -20,7 +20,7 @@ namespace TelegramClone.Services
         {
             return await _userContactRepository.AddContact(userId, contactId);
         }
-        public List<ContactElement> GetContacts(Guid userId)
+        public List<ContactElementResponseDTO> GetContacts(Guid userId)
         {
             return _userContactRepository.GetContacts(userId);
         }
