@@ -19,9 +19,35 @@ namespace TelegramClone.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
-            modelBuilder.Entity("TelegramClone.Models.Chat", b =>
+            modelBuilder.Entity("TelegramClone.Models.ChatCategory", b =>
                 {
-                    b.Property<Guid>("ChatId")
+                    b.Property<Guid>("ChatCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ChatCategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ChatCategoryId");
+
+                    b.ToTable("ChatCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            ChatCategoryId = new Guid("5dee7a70-d366-4ee2-92ec-3779f47f0b52"),
+                            ChatCategoryName = "private"
+                        },
+                        new
+                        {
+                            ChatCategoryId = new Guid("c4084d91-3e88-49f6-a5d8-bbe6adafb284"),
+                            ChatCategoryName = "group"
+                        });
+                });
+
+            modelBuilder.Entity("TelegramClone.Models.GroupChat", b =>
+                {
+                    b.Property<Guid>("GroupChatId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -40,7 +66,7 @@ namespace TelegramClone.Migrations
                     b.Property<Guid?>("LastMessageId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ChatId");
+                    b.HasKey("GroupChatId");
 
                     b.HasIndex("ChatCategoryId");
 
@@ -48,42 +74,74 @@ namespace TelegramClone.Migrations
                         .IsUnique()
                         .HasFilter("[LastMessageId] IS NOT NULL");
 
-                    b.ToTable("Chats");
+                    b.ToTable("GroupChats");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.ChatCategory", b =>
+            modelBuilder.Entity("TelegramClone.Models.GroupChatMessage", b =>
                 {
-                    b.Property<Guid>("ChatCategoryId")
+                    b.Property<Guid>("GroupChatMessageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ChatCategoryName")
+                    b.Property<Guid>("GroupChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GroupChatMessageTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MessageText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ChatCategoryId");
+                    b.Property<DateTime>("MessageTime")
+                        .HasColumnType("datetime2");
 
-                    b.ToTable("ChatCategories");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("GroupChatMessageId");
+
+                    b.HasIndex("GroupChatId");
+
+                    b.HasIndex("GroupChatMessageTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GroupChatMessages");
+                });
+
+            modelBuilder.Entity("TelegramClone.Models.GroupChatMessageType", b =>
+                {
+                    b.Property<Guid>("GroupChatMessageTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GroupChatMessageTypeId");
+
+                    b.ToTable("GroupChatMessageTypes");
 
                     b.HasData(
                         new
                         {
-                            ChatCategoryId = new Guid("a9c68552-b9d7-41b2-b4f7-0b1cc0405878"),
-                            ChatCategoryName = "private"
+                            GroupChatMessageTypeId = new Guid("a89afbe2-9e3b-46d7-8131-be4d07553313"),
+                            Type = "message"
                         },
                         new
                         {
-                            ChatCategoryId = new Guid("8a726d61-3053-4fa5-a9a6-87714c18d775"),
-                            ChatCategoryName = "group"
+                            GroupChatMessageTypeId = new Guid("bd5733bd-ce03-4281-acdb-fe5c3e95cc40"),
+                            Type = "notification"
                         });
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.ChatUser", b =>
+            modelBuilder.Entity("TelegramClone.Models.GroupChatUser", b =>
                 {
-                    b.Property<Guid>("ChatUserId")
+                    b.Property<Guid>("GroupChatUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ChatId")
+                    b.Property<Guid>("GroupChatId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("UnreadMessages")
@@ -92,18 +150,18 @@ namespace TelegramClone.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ChatUserId");
+                    b.HasKey("GroupChatUserId");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("GroupChatId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatUsers");
+                    b.ToTable("GroupChatUsers");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.Dialog", b =>
+            modelBuilder.Entity("TelegramClone.Models.PrivateChat", b =>
                 {
-                    b.Property<Guid>("DialogId")
+                    b.Property<Guid>("PrivateChatId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -122,7 +180,7 @@ namespace TelegramClone.Migrations
                     b.Property<int>("UnreadMsgsBySecond")
                         .HasColumnType("int");
 
-                    b.HasKey("DialogId");
+                    b.HasKey("PrivateChatId");
 
                     b.HasIndex("FirstParticipantId");
 
@@ -132,16 +190,13 @@ namespace TelegramClone.Migrations
 
                     b.HasIndex("SecondParticipantId");
 
-                    b.ToTable("Dialogs");
+                    b.ToTable("PrivateChats");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.DialogMessage", b =>
+            modelBuilder.Entity("TelegramClone.Models.PrivateChatMessage", b =>
                 {
-                    b.Property<Guid>("MessageId")
+                    b.Property<Guid>("PrivateChatMessageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DialogId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MessageText")
@@ -149,75 +204,20 @@ namespace TelegramClone.Migrations
 
                     b.Property<DateTime>("MessageTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PrivateChatId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("MessageId");
+                    b.HasKey("PrivateChatMessageId");
 
-                    b.HasIndex("DialogId");
+                    b.HasIndex("PrivateChatId");
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("DialogMessages");
-                });
-
-            modelBuilder.Entity("TelegramClone.Models.Message", b =>
-                {
-                    b.Property<Guid>("MessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChatId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("MessageText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("MessageTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("MessageTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("MessageId");
-
-                    b.HasIndex("ChatId");
-
-                    b.HasIndex("MessageTypeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("TelegramClone.Models.MessageType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MessageTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("700774ce-ddbc-4b20-a71e-3359c800cb56"),
-                            Type = "message"
-                        },
-                        new
-                        {
-                            Id = new Guid("0cfbcc61-79a3-49b9-a471-2983015fb5be"),
-                            Type = "notification"
-                        });
+                    b.ToTable("PrivateChatMessages");
                 });
 
             modelBuilder.Entity("TelegramClone.Models.RefreshToken", b =>
@@ -261,12 +261,12 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = new Guid("27ae9391-c712-4f63-a2f6-4b9764e7e0e1"),
+                            RoleId = new Guid("11e9ff6f-e5f3-4d0d-82e0-393017290c50"),
                             RoleName = "admin"
                         },
                         new
                         {
-                            RoleId = new Guid("19ca66c4-c6e7-446c-aac8-61ed2432eada"),
+                            RoleId = new Guid("118d10a2-09ad-490e-974b-43ddf1a10b0e"),
                             RoleName = "user"
                         });
                 });
@@ -301,10 +301,10 @@ namespace TelegramClone.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("cc434f89-d58b-43ce-990c-601f4392d642"),
+                            UserId = new Guid("c4c534d5-4d37-47c4-916e-fa198d632f6a"),
                             ConnectionStatus = "online",
                             Password = "123456",
-                            RoleId = new Guid("27ae9391-c712-4f63-a2f6-4b9764e7e0e1"),
+                            RoleId = new Guid("11e9ff6f-e5f3-4d0d-82e0-393017290c50"),
                             UserName = "admin"
                         });
                 });
@@ -334,7 +334,7 @@ namespace TelegramClone.Migrations
                     b.ToTable("UserContacts");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.Chat", b =>
+            modelBuilder.Entity("TelegramClone.Models.GroupChat", b =>
                 {
                     b.HasOne("TelegramClone.Models.ChatCategory", "ChatCategory")
                         .WithMany()
@@ -342,9 +342,9 @@ namespace TelegramClone.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TelegramClone.Models.Message", "LastMessage")
-                        .WithOne("Chat")
-                        .HasForeignKey("TelegramClone.Models.Chat", "LastMessageId")
+                    b.HasOne("TelegramClone.Models.GroupChatMessage", "LastMessage")
+                        .WithOne("GroupChat")
+                        .HasForeignKey("TelegramClone.Models.GroupChat", "LastMessageId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("ChatCategory");
@@ -352,40 +352,65 @@ namespace TelegramClone.Migrations
                     b.Navigation("LastMessage");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.ChatUser", b =>
+            modelBuilder.Entity("TelegramClone.Models.GroupChatMessage", b =>
                 {
-                    b.HasOne("TelegramClone.Models.Chat", "Chat")
-                        .WithMany("ChatUsers")
-                        .HasForeignKey("ChatId")
+                    b.HasOne("TelegramClone.Models.GroupChat", null)
+                        .WithMany("GroupChatMessages")
+                        .HasForeignKey("GroupChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TelegramClone.Models.GroupChatMessageType", "GroupChatMessageType")
+                        .WithMany("GroupChatMessages")
+                        .HasForeignKey("GroupChatMessageTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TelegramClone.Models.User", "User")
-                        .WithMany("ChatUsers")
+                        .WithMany("GroupChatMessages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Chat");
+                    b.Navigation("GroupChatMessageType");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.Dialog", b =>
+            modelBuilder.Entity("TelegramClone.Models.GroupChatUser", b =>
+                {
+                    b.HasOne("TelegramClone.Models.GroupChat", "GroupChat")
+                        .WithMany("GroupChatUsers")
+                        .HasForeignKey("GroupChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TelegramClone.Models.User", "User")
+                        .WithMany("GroupChatUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GroupChat");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TelegramClone.Models.PrivateChat", b =>
                 {
                     b.HasOne("TelegramClone.Models.User", "FirstParticipant")
-                        .WithMany("DialogsFirstParticipants")
+                        .WithMany("PrivateChatsFirstParticipants")
                         .HasForeignKey("FirstParticipantId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TelegramClone.Models.DialogMessage", "LastMessage")
-                        .WithOne("Dialog")
-                        .HasForeignKey("TelegramClone.Models.Dialog", "LastMessageId")
+                    b.HasOne("TelegramClone.Models.PrivateChatMessage", "LastMessage")
+                        .WithOne("PrivateChat")
+                        .HasForeignKey("TelegramClone.Models.PrivateChat", "LastMessageId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("TelegramClone.Models.User", "SecondParticipant")
-                        .WithMany("DialogsSecondParticipants")
+                        .WithMany("PrivateChatsSecondParticipants")
                         .HasForeignKey("SecondParticipantId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -397,46 +422,21 @@ namespace TelegramClone.Migrations
                     b.Navigation("SecondParticipant");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.DialogMessage", b =>
+            modelBuilder.Entity("TelegramClone.Models.PrivateChatMessage", b =>
                 {
-                    b.HasOne("TelegramClone.Models.Dialog", null)
-                        .WithMany("DialogMessages")
-                        .HasForeignKey("DialogId")
+                    b.HasOne("TelegramClone.Models.PrivateChat", null)
+                        .WithMany("PrivateChatMessages")
+                        .HasForeignKey("PrivateChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TelegramClone.Models.User", "Sender")
-                        .WithMany("DialogMessages")
+                        .WithMany("PrivateChatMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("TelegramClone.Models.Message", b =>
-                {
-                    b.HasOne("TelegramClone.Models.Chat", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TelegramClone.Models.MessageType", "MessageType")
-                        .WithMany("Message")
-                        .HasForeignKey("MessageTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TelegramClone.Models.User", "User")
-                        .WithMany("Messages")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MessageType");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TelegramClone.Models.RefreshToken", b =>
@@ -478,31 +478,31 @@ namespace TelegramClone.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.Chat", b =>
+            modelBuilder.Entity("TelegramClone.Models.GroupChat", b =>
                 {
-                    b.Navigation("ChatUsers");
+                    b.Navigation("GroupChatMessages");
 
-                    b.Navigation("Messages");
+                    b.Navigation("GroupChatUsers");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.Dialog", b =>
+            modelBuilder.Entity("TelegramClone.Models.GroupChatMessage", b =>
                 {
-                    b.Navigation("DialogMessages");
+                    b.Navigation("GroupChat");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.DialogMessage", b =>
+            modelBuilder.Entity("TelegramClone.Models.GroupChatMessageType", b =>
                 {
-                    b.Navigation("Dialog");
+                    b.Navigation("GroupChatMessages");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.Message", b =>
+            modelBuilder.Entity("TelegramClone.Models.PrivateChat", b =>
                 {
-                    b.Navigation("Chat");
+                    b.Navigation("PrivateChatMessages");
                 });
 
-            modelBuilder.Entity("TelegramClone.Models.MessageType", b =>
+            modelBuilder.Entity("TelegramClone.Models.PrivateChatMessage", b =>
                 {
-                    b.Navigation("Message");
+                    b.Navigation("PrivateChat");
                 });
 
             modelBuilder.Entity("TelegramClone.Models.Role", b =>
@@ -512,15 +512,15 @@ namespace TelegramClone.Migrations
 
             modelBuilder.Entity("TelegramClone.Models.User", b =>
                 {
-                    b.Navigation("ChatUsers");
+                    b.Navigation("GroupChatMessages");
 
-                    b.Navigation("DialogMessages");
+                    b.Navigation("GroupChatUsers");
 
-                    b.Navigation("DialogsFirstParticipants");
+                    b.Navigation("PrivateChatMessages");
 
-                    b.Navigation("DialogsSecondParticipants");
+                    b.Navigation("PrivateChatsFirstParticipants");
 
-                    b.Navigation("Messages");
+                    b.Navigation("PrivateChatsSecondParticipants");
 
                     b.Navigation("RefreshTokens");
 

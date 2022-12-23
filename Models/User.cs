@@ -30,15 +30,15 @@ namespace TelegramClone.Models
             RefreshTokens = new List<RefreshToken>();
         }
 
-        public List<ChatUser> ChatUsers { get; set; }
+        public List<GroupChatUser> GroupChatUsers { get; set; }
 
         public List<UserContact> UserContactsUsers { get; set; }
         public List<UserContact> UserContactsContacts { get; set; }
 
-        public List<Dialog> DialogsFirstParticipants { get; set; }
-        public List<Dialog> DialogsSecondParticipants { get; set; }
-        public List<DialogMessage> DialogMessages { get; set; }
-        public List<Message> Messages { get; set; }
+        public List<PrivateChat> PrivateChatsFirstParticipants { get; set; }
+        public List<PrivateChat> PrivateChatsSecondParticipants { get; set; }
+        public List<PrivateChatMessage> PrivateChatMessages { get; set; }
+        public List<GroupChatMessage> GroupChatMessages { get; set; }
 
     }
 }

@@ -62,26 +62,26 @@ namespace TelegramClone.Data
                 RoleId = adminRole.RoleId
             });
 
-            modelBuilder.Entity<MessageType>().HasData(new MessageType
+            modelBuilder.Entity<GroupChatMessageType>().HasData(new GroupChatMessageType
             {
-               Id = Guid.NewGuid(),
+               GroupChatMessageTypeId = Guid.NewGuid(),
                Type = "message"
             });
 
-            modelBuilder.Entity<MessageType>().HasData(new MessageType
+            modelBuilder.Entity<GroupChatMessageType>().HasData(new GroupChatMessageType
             {
-                Id = Guid.NewGuid(),
+                GroupChatMessageTypeId = Guid.NewGuid(),
                 Type = "notification"
             });
 
-            modelBuilder.Entity<ChatUser>()
-                .HasOne(chat => chat.Chat)
-                .WithMany(cu => cu.ChatUsers)
-                .HasForeignKey(cu => cu.ChatId);
+            modelBuilder.Entity<GroupChatUser>()
+                .HasOne(chat => chat.GroupChat)
+                .WithMany(cu => cu.GroupChatUsers)
+                .HasForeignKey(cu => cu.GroupChatId);
 
-            modelBuilder.Entity<ChatUser>()
+            modelBuilder.Entity<GroupChatUser>()
                 .HasOne(user => user.User)
-                .WithMany(cu => cu.ChatUsers)
+                .WithMany(cu => cu.GroupChatUsers)
                 .HasForeignKey(cu => cu.UserId);
 
             modelBuilder.Entity<UserContact>()
@@ -96,28 +96,28 @@ namespace TelegramClone.Data
                 .HasForeignKey(uc => uc.ContactId)
                 .OnDelete(DeleteBehavior.NoAction);
             
-            modelBuilder.Entity<Dialog>()
+            modelBuilder.Entity<PrivateChat>()
                 .HasOne(member => member.FirstParticipant)
-                .WithMany(uc => uc.DialogsFirstParticipants)
+                .WithMany(uc => uc.PrivateChatsFirstParticipants)
                 .HasForeignKey(uc => uc.FirstParticipantId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Dialog>()
+            modelBuilder.Entity<PrivateChat>()
                 .HasOne(member => member.SecondParticipant)
-                .WithMany(uc => uc.DialogsSecondParticipants)
+                .WithMany(uc => uc.PrivateChatsSecondParticipants)
                 .HasForeignKey(uc => uc.SecondParticipantId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Dialog>()
+            modelBuilder.Entity<PrivateChat>()
                 .HasOne(dm => dm.LastMessage)
-                .WithOne(m => m.Dialog)
-                .HasForeignKey<Dialog>(d => d.LastMessageId)
+                .WithOne(m => m.PrivateChat)
+                .HasForeignKey<PrivateChat>(d => d.LastMessageId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Chat>()
+            modelBuilder.Entity<GroupChat>()
                 .HasOne(c => c.LastMessage)
-                .WithOne(m => m.Chat)
-                .HasForeignKey<Chat>(c => c.LastMessageId)
+                .WithOne(m => m.GroupChat)
+                .HasForeignKey<GroupChat>(c => c.LastMessageId)
                 .OnDelete(DeleteBehavior.NoAction);
 
 
@@ -126,14 +126,14 @@ namespace TelegramClone.Data
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Message> Messages { get; set; }
-        public DbSet<MessageType> MessageTypes { get; set; }
-        public DbSet<Chat> Chats { get; set; }
-        public DbSet<ChatUser> ChatUsers { get; set; }
+        public DbSet<GroupChatMessage> GroupChatMessages { get; set; }
+        public DbSet<GroupChatMessageType> GroupChatMessageTypes { get; set; }
+        public DbSet<GroupChat> GroupChats { get; set; }
+        public DbSet<GroupChatUser> GroupChatUsers { get; set; }
         public DbSet<ChatCategory> ChatCategories { get; set; }
         public DbSet<UserContact> UserContacts { get; set; }
-        public DbSet<Dialog> Dialogs { get; set; }
-        public DbSet<DialogMessage> DialogMessages { get; set; }
+        public DbSet<PrivateChat> PrivateChats { get; set; }
+        public DbSet<PrivateChatMessage> PrivateChatMessages { get; set; }
     }
 
     

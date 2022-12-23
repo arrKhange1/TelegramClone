@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace TelegramClone.Models
 {
-    public class ChatUser
+    public class GroupChatUser
     {
-        public Guid ChatUserId { get; set; }
+        public Guid GroupChatUserId { get; set; }
 
-        public Guid ChatId { get; set; }
-        public Chat Chat { get; set; }
+        public Guid GroupChatId { get; set; }
+        public GroupChat GroupChat { get; set; }
 
         public Guid UserId { get; set; }
         public User User { get; set; }

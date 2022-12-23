@@ -19,22 +19,22 @@ namespace TelegramClone.Data.Implementations
             _context = context;
         }
 
-        public Chat GetChat(Guid chatId)
+        public GroupChat GetGroupChat(Guid chatId)
         {
-            return _context.Chats.FirstOrDefault(chat => chat.ChatId == chatId);
+            return _context.GroupChats.FirstOrDefault(chat => chat.GroupChatId == chatId);
         }
 
         public List<ChatElementResponseDTO> GetGroupChats(Guid userId)
         { 
-            var result = from cu in _context.ChatUsers join
-            c in _context.Chats on cu.ChatId equals c.ChatId
-            join msg in _context.Messages on c.LastMessageId equals msg.MessageId
-            join msgType in _context.MessageTypes on msg.MessageTypeId equals msgType.Id
+            var result = from cu in _context.GroupChatUsers join
+            c in _context.GroupChats on cu.GroupChatId equals c.GroupChatId
+            join msg in _context.GroupChatMessages on c.LastMessageId equals msg.GroupChatMessageId
+            join msgType in _context.GroupChatMessageTypes on msg.GroupChatMessageTypeId equals msgType.GroupChatMessageTypeId
             join u in _context.Users on msg.UserId equals u.UserId
             where cu.UserId == userId
             select new ChatElementResponseDTO
             {
-                ChatId = c.ChatId,
+                ChatId = c.GroupChatId,
                 ChatName = c.ChatName,
                 ChatCategory = "group",
                 LastMessageSender = u.UserName,
@@ -49,18 +49,18 @@ namespace TelegramClone.Data.Implementations
             return groupChats;
         }
 
-        public Dialog GetPrivateChat(Guid firstParticipantId, Guid secondParticipantId)
+        public PrivateChat GetPrivateChat(Guid firstParticipantId, Guid secondParticipantId)
         {
-            var dialog = _context.Dialogs.FirstOrDefault(dial => dial.FirstParticipantId == firstParticipantId && dial.SecondParticipantId == secondParticipantId ||
+            var dialog = _context.PrivateChats.FirstOrDefault(dial => dial.FirstParticipantId == firstParticipantId && dial.SecondParticipantId == secondParticipantId ||
                 dial.FirstParticipantId == secondParticipantId && dial.SecondParticipantId == firstParticipantId);
             return dialog;
         }
  
         public List<ChatElementResponseDTO> GetPrivateChats(Guid userId)
         {
-            var firstParticipants = from pc in _context.Dialogs join
+            var firstParticipants = from pc in _context.PrivateChats join
             dialogUser in _context.Users on pc.FirstParticipantId equals dialogUser.UserId
-            join msg in _context.DialogMessages on pc.LastMessageId equals msg.MessageId
+            join msg in _context.PrivateChatMessages on pc.LastMessageId equals msg.PrivateChatMessageId
             join lastMsgUser in _context.Users on msg.SenderId equals lastMsgUser.UserId
             where pc.SecondParticipantId == userId
             select new ChatElementResponseDTO
@@ -75,9 +75,9 @@ namespace TelegramClone.Data.Implementations
                 UnreadMsgs = pc.UnreadMsgsBySecond
             };
 
-            var secondParticipants = from pc in _context.Dialogs join
+            var secondParticipants = from pc in _context.PrivateChats join
             u in _context.Users on pc.SecondParticipantId equals u.UserId
-            join msg in _context.DialogMessages on pc.LastMessageId equals msg.MessageId
+            join msg in _context.PrivateChatMessages on pc.LastMessageId equals msg.PrivateChatMessageId
             join lastMsgUser in _context.Users on msg.SenderId equals lastMsgUser.UserId
             where pc.FirstParticipantId == userId
             select new ChatElementResponseDTO
@@ -106,19 +106,19 @@ namespace TelegramClone.Data.Implementations
         }
 
         
-        public void UpdatePrivateChatLastMessage(Dialog dialog, Guid lastMessageId)
+        public void UpdatePrivateChatLastMessage(PrivateChat dialog, Guid lastMessageId)
         {
             dialog.LastMessageId = lastMessageId;
             _context.SaveChanges();
         }
 
-        public void UpdateGroupChatLastMessage(Chat chat, Guid lastMessageId)
+        public void UpdateGroupChatLastMessage(GroupChat chat, Guid lastMessageId)
         {
             chat.LastMessageId = lastMessageId;
             _context.SaveChanges();
         }
 
-        public int IncreaseUnreadMsgsOfDialog(Dialog dialog, Guid toId)
+        public int IncreaseUnreadMsgsOfPrivateChat(PrivateChat dialog, Guid toId)
         {
             int unreadMsgs = 0;
             if (toId == dialog.FirstParticipantId)
@@ -136,7 +136,7 @@ namespace TelegramClone.Data.Implementations
             return unreadMsgs;
         }
         
-        public void CleanUnreadMsgsOfDialog(Dialog dialog, Guid fromId) // если нет диалога в контактах то ошибка (диалог пустой)
+        public void CleanUnreadMsgsOfPrivateChat(PrivateChat dialog, Guid fromId) // если нет диалога в контактах то ошибка (диалог пустой)
         {
             if (fromId == dialog.FirstParticipantId)
                 dialog.UnreadMsgsByFirst = 0;
@@ -145,15 +145,15 @@ namespace TelegramClone.Data.Implementations
             _context.SaveChanges();
         }
 
-        public async Task<Dialog> AddPrivateChat(Guid fromId, Guid toId)
+        public async Task<PrivateChat> AddPrivateChat(Guid fromId, Guid toId)
         {
-            var newDialog = new Dialog
+            var newPrivateChat = new PrivateChat
             {
-                DialogId = Guid.NewGuid(),
+                PrivateChatId = Guid.NewGuid(),
                 FirstParticipantId = fromId,
                 SecondParticipantId = toId,
             };
-            var addedChat = await _context.Dialogs.AddAsync(newDialog);
+            var addedChat = await _context.PrivateChats.AddAsync(newPrivateChat);
             if (addedChat != null)
             {
                 _context.SaveChanges();
@@ -162,18 +162,18 @@ namespace TelegramClone.Data.Implementations
             return null;
         }
 
-        public async Task<Chat> AddGroupChat(string chatName, int groupMembers)
+        public async Task<GroupChat> AddGroupChat(string chatName, int groupMembers)
         {
             var newChatGuid = Guid.NewGuid();
-            var newChat = new Chat
+            var newChat = new GroupChat
             {
-                ChatId = newChatGuid,
+                GroupChatId = newChatGuid,
                 ChatName = chatName,
                 ChatCategoryId = _context.ChatCategories.FirstOrDefault(cat => cat.ChatCategoryName == "group").ChatCategoryId,
                 GroupMembers = groupMembers,
                 CreateTime = DateTime.UtcNow
             };
-            var addedChat = await _context.Chats.AddAsync(newChat);
+            var addedChat = await _context.GroupChats.AddAsync(newChat);
             if (addedChat != null)
             {
                 _context.SaveChanges();

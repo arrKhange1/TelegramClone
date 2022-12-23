@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 
 namespace TelegramClone.Models
 {
-    public class Dialog
+    public class PrivateChat
     {
-        public Guid DialogId { get; set; }
+        public Guid PrivateChatId { get; set; }
         public Guid FirstParticipantId { get; set; }
         public User FirstParticipant { get; set; }
         public Guid SecondParticipantId { get; set; }
         public User SecondParticipant { get; set; }
         public int UnreadMsgsByFirst { get; set; }
         public int UnreadMsgsBySecond { get; set; }
-        public List<DialogMessage> DialogMessages { get; set; }
+        public List<PrivateChatMessage> PrivateChatMessages { get; set; }
 
         public Guid? LastMessageId { get; set; }
-        public DialogMessage LastMessage { get; set; }
+        public PrivateChatMessage LastMessage { get; set; }
     }
 }

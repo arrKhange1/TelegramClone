@@ -16,12 +16,12 @@ namespace TelegramClone.Data.Implementations
         {
             _context = context;
         }
-        public List<MessageResponseDTO> GetMsgs(Guid chatId)
+        public List<MessageResponseDTO> GetGroupChatMsgs(Guid chatId)
         {
-            var msgs = from m in _context.Messages join
+            var msgs = from m in _context.GroupChatMessages join
             u in _context.Users on m.UserId equals u.UserId
-            join msgType in _context.MessageTypes on m.MessageTypeId equals msgType.Id
-            where chatId == m.ChatId
+            join msgType in _context.GroupChatMessageTypes on m.GroupChatMessageTypeId equals msgType.GroupChatMessageTypeId
+            where chatId == m.GroupChatId
             orderby m.MessageTime
             select new MessageResponseDTO
             {
@@ -34,12 +34,12 @@ namespace TelegramClone.Data.Implementations
             return msgs.ToList();
         }
 
-        public List<MessageResponseDTO> GetDialogMessages(Guid dialogId)
+        public List<MessageResponseDTO> GetPrivateChatMessages(Guid privateChatId)
         { 
-            var msgs = from m in _context.DialogMessages join
-            d in _context.Dialogs on m.DialogId equals d.DialogId join
+            var msgs = from m in _context.PrivateChatMessages join
+            d in _context.PrivateChats on m.PrivateChatId equals d.PrivateChatId join
             u in _context.Users on m.SenderId equals u.UserId
-            where m.DialogId == dialogId
+            where m.PrivateChatId == privateChatId
             orderby m.MessageTime
             select new MessageResponseDTO
             {
@@ -51,30 +51,30 @@ namespace TelegramClone.Data.Implementations
             return msgs.ToList();
         }
 
-        public async Task<Message> AddMsg(Guid chatId, Guid userId, string messageText, string messageType)
+        public async Task<GroupChatMessage> AddGroupChatMsg(Guid chatId, Guid userId, string messageText, string messageType)
         {
-            var msgTypeId = _context.MessageTypes.FirstOrDefault(msgType => msgType.Type == messageType).Id;
-            var added = await _context.Messages.AddAsync(new Message
+            var msgTypeId = _context.GroupChatMessageTypes.FirstOrDefault(msgType => msgType.Type == messageType).GroupChatMessageTypeId;
+            var added = await _context.GroupChatMessages.AddAsync(new GroupChatMessage
             {
-                MessageId = Guid.NewGuid(),
+                GroupChatMessageId = Guid.NewGuid(),
                 MessageText = messageText,
-                ChatId = chatId,
+                GroupChatId = chatId,
                 UserId = userId,
                 MessageTime = DateTime.UtcNow,
-                MessageTypeId = msgTypeId
+                GroupChatMessageTypeId = msgTypeId
             });
             await _context.SaveChangesAsync();
             return added.Entity;
         }
 
-        public async Task<DialogMessage> AddDialogMessage(Guid dialogId, Guid fromId, string messageText)
+        public async Task<PrivateChatMessage> AddPrivateChatMessage(Guid dialogId, Guid fromId, string messageText)
         {
-            var added = await _context.DialogMessages.AddAsync(new DialogMessage
+            var added = await _context.PrivateChatMessages.AddAsync(new PrivateChatMessage
             {
-                MessageId = Guid.NewGuid(),
+                PrivateChatMessageId = Guid.NewGuid(),
                 SenderId = fromId,
                 MessageText = messageText,
-                DialogId = dialogId,
+                PrivateChatId = dialogId,
                 MessageTime = DateTime.UtcNow
             });
             await _context.SaveChangesAsync();

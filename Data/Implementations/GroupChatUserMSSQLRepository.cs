@@ -8,23 +8,23 @@ using TelegramClone.Models;
 
 namespace TelegramClone.Data.Implementations
 {
-    public class ChatUserMSSQLRepository : IChatUserRepository
+    public class GroupChatUserMSSQLRepository : IGroupChatUserRepository
     {
         ApplicationContext _context;
 
-        public ChatUserMSSQLRepository(ApplicationContext context)
+        public GroupChatUserMSSQLRepository(ApplicationContext context)
         {
             _context = context;
         }
 
-        public List<ChatUser> GetChatMembers(Guid chatId)
+        public List<GroupChatUser> GetGroupChatMembers(Guid chatId)
         {
-            return _context.ChatUsers.Where(cu => cu.ChatId == chatId).ToList();
+            return _context.GroupChatUsers.Where(cu => cu.GroupChatId == chatId).ToList();
         }
 
-        public List<ChatUser> IncreaseUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
+        public List<GroupChatUser> IncreaseUnreadMsgsOfGroupChatMembers(List<GroupChatUser> chatMembers)
         {
-            List<ChatUser> updatedChatUsers = new List<ChatUser>();
+            List<GroupChatUser> updatedChatUsers = new List<GroupChatUser>();
             foreach(var chatMember in chatMembers)
             {
                 chatMember.UnreadMessages += 1;
@@ -34,21 +34,21 @@ namespace TelegramClone.Data.Implementations
             _context.SaveChanges();
             return updatedChatUsers;
         }
-        public void CleanUnreadMsgsOfChatMember(ChatUser chatUser)
+        public void CleanUnreadMsgsOfGroupChatMember(GroupChatUser chatUser)
         {
             chatUser.UnreadMessages = 0;
             _context.SaveChanges();
         }
 
-        public ChatUser GetChatUserByChatIdAndUserId(Guid chatId, Guid userId)
+        public GroupChatUser GetGroupChatUserByChatIdAndUserId(Guid chatId, Guid userId)
         {
-            return _context.ChatUsers.FirstOrDefault(cu => cu.ChatId == chatId && cu.UserId == userId);
+            return _context.GroupChatUsers.FirstOrDefault(cu => cu.GroupChatId == chatId && cu.UserId == userId);
         }
-        public async Task<bool> AddUsersToChat(List<ChatUser> members)
+        public async Task<bool> AddUsersToGroupChat(List<GroupChatUser> members)
         {
             try
             {
-                await _context.ChatUsers.AddRangeAsync(members);
+                await _context.GroupChatUsers.AddRangeAsync(members);
                 _context.SaveChanges();
                 return true;
             }

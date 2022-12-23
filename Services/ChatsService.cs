@@ -14,12 +14,12 @@ namespace TelegramClone.Services
     public class ChatsService
     {
         private readonly IChatRepository _chatRepository;
-        private readonly IChatUserRepository _chatUserRepository;
+        private readonly IGroupChatUserRepository _chatUserRepository;
         private readonly IMessageRepository _messageRepository;
         private readonly IChatCategoryRepository _chatCategoryRepository;
         private readonly IUserRepository _userRepository;
 
-        public ChatsService(IChatRepository chatRepository, IChatUserRepository chatUserRepository,
+        public ChatsService(IChatRepository chatRepository, IGroupChatUserRepository chatUserRepository,
             IMessageRepository messageRepository, IChatCategoryRepository chatCategoryRepository,
             IUserRepository userRepository)
         {
@@ -30,83 +30,83 @@ namespace TelegramClone.Services
             _userRepository = userRepository;
         }
 
-        public List<ChatUser> GetChatMembers(Guid chatId)
+        public List<GroupChatUser> GetGroupChatMembers(Guid chatId)
         {
-            return _chatUserRepository.GetChatMembers(chatId);
+            return _chatUserRepository.GetGroupChatMembers(chatId);
         }
 
-        public List<ChatUser> IncreaseUnreadMsgsOfChatMembers(List<ChatUser> chatMembers)
+        public List<GroupChatUser> IncreaseUnreadMsgsOfGroupChatMembers(List<GroupChatUser> chatMembers)
         {
-            return _chatUserRepository.IncreaseUnreadMsgsOfChatMembers(chatMembers);
+            return _chatUserRepository.IncreaseUnreadMsgsOfGroupChatMembers(chatMembers);
         }
 
-        public int IncreaseUnreadMsgsOfDialog(Dialog dialog, Guid toId)
+        public int IncreaseUnreadMsgsOfPrivateChat(PrivateChat privateChat, Guid toId)
         {
-            return _chatRepository.IncreaseUnreadMsgsOfDialog(dialog, toId);
+            return _chatRepository.IncreaseUnreadMsgsOfPrivateChat(privateChat, toId);
         }
-        public void CleanUnreadMsgsOfChatMember(ChatUser chatUser)
+        public void CleanUnreadMsgsOfGroupChatMember(GroupChatUser chatUser)
         {
-            _chatUserRepository.CleanUnreadMsgsOfChatMember(chatUser);
-        }
-
-        public void CleanUnreadMsgsOfDialog(Dialog dialog, Guid fromId)
-        {
-            _chatRepository.CleanUnreadMsgsOfDialog(dialog, fromId);
+            _chatUserRepository.CleanUnreadMsgsOfGroupChatMember(chatUser);
         }
 
-        public ChatUser GetChatUser(Guid chatId, Guid userId)
+        public void CleanUnreadMsgsOfPrivateChat(PrivateChat privateChat, Guid fromId)
         {
-            return _chatUserRepository.GetChatUserByChatIdAndUserId(chatId, userId);
+            _chatRepository.CleanUnreadMsgsOfPrivateChat(privateChat, fromId);
         }
 
-        public ChatCategory GetChatCategoryById(Guid chatCategoryId)
+        public GroupChatUser GetGroupChatUser(Guid chatId, Guid userId)
+        {
+            return _chatUserRepository.GetGroupChatUserByChatIdAndUserId(chatId, userId);
+        }
+
+        public ChatCategory GetGroupChatCategoryById(Guid chatCategoryId)
         {
             return _chatCategoryRepository.GetChatCategoryById(chatCategoryId);
         }
 
-        public async Task<Message> AddMsg(Guid chatId, Guid userId, string messageText, string messageType)
+        public async Task<GroupChatMessage> AddGroupChatMsg(Guid chatId, Guid userId, string messageText, string messageType)
         {
-            return await _messageRepository.AddMsg(chatId, userId, messageText, messageType);
+            return await _messageRepository.AddGroupChatMsg(chatId, userId, messageText, messageType);
         }
 
-        public Chat GetChat(Guid chatId)
+        public GroupChat GetGroupChat(Guid chatId)
         {
-            return _chatRepository.GetChat(chatId);
+            return _chatRepository.GetGroupChat(chatId);
         }
 
-        public GroupChatResponseDTO GetGroupChat(Guid chatId)
+        public GroupChatResponseDTO GetOpenedGroupChat(Guid chatId)
         {
-            Chat chat = _chatRepository.GetChat(chatId); // mb vernut method v service
-            var msgs = _messageRepository.GetMsgs(chatId);
+            GroupChat groupChat = GetGroupChat(chatId);
+            var msgs = _messageRepository.GetGroupChatMsgs(chatId);
             return new GroupChatResponseDTO
             {
-                ChatName = chat.ChatName,
-                GroupMembers = chat.GroupMembers.ToString(),
+                ChatName = groupChat.ChatName,
+                GroupMembers = groupChat.GroupMembers,
                 Messages = msgs
             };
         }
 
-        public List<ChatUser> FormChatUserList(Guid newChatId, List<string> ids)
+        public List<GroupChatUser> FormGroupChatUserList(Guid newChatId, List<string> ids)
         {
             var guidsList = ids.Select(id => Guid.Parse(id));
-            return guidsList.Select(userGuid => new ChatUser
+            return guidsList.Select(userGuid => new GroupChatUser
             {
-                ChatUserId = Guid.NewGuid(),
-                ChatId = newChatId,
+                GroupChatUserId = Guid.NewGuid(),
+                GroupChatId = newChatId,
                 UserId = userGuid
             }).ToList();
         }
 
-        public async Task<Chat> AddGroupChat(GroupChatRequestDTO groupChatRequestDTO, Guid createrId)
+        public async Task<GroupChat> AddGroupChat(GroupChatRequestDTO groupChatRequestDTO, Guid createrId)
         {
             try
             {
-                var chat = await _chatRepository.AddGroupChat(groupChatRequestDTO.groupName, groupChatRequestDTO.membersIds.Count);
-                var chatMembers = FormChatUserList(chat.ChatId, groupChatRequestDTO.membersIds);
-                await _chatUserRepository.AddUsersToChat(chatMembers);
-                await AddMessageInGroupChat(chat, createrId, "created a chat!", "notification");
-                _chatUserRepository.IncreaseUnreadMsgsOfChatMembers(chatMembers);
-                return chat;
+                var groupChat = await _chatRepository.AddGroupChat(groupChatRequestDTO.groupName, groupChatRequestDTO.membersIds.Count);
+                var chatMembers = FormGroupChatUserList(groupChat.GroupChatId, groupChatRequestDTO.membersIds);
+                await _chatUserRepository.AddUsersToGroupChat(chatMembers);
+                await AddMessageInGroupChat(groupChat, createrId, "created a chat!", "notification");
+                _chatUserRepository.IncreaseUnreadMsgsOfGroupChatMembers(chatMembers);
+                return groupChat;
             }
             catch
             {
@@ -114,12 +114,12 @@ namespace TelegramClone.Services
             }
         }
 
-        public async Task<Dialog> AddPrivateChat(Guid fromId, Guid toId)
+        public async Task<PrivateChat> AddPrivateChat(Guid fromId, Guid toId)
         {
             return await _chatRepository.AddPrivateChat(fromId, toId);
         }
 
-        public List<ChatElementResponseDTO> GetChats(Guid userId)
+        public List<ChatElementResponseDTO> GetAllChats(Guid userId)
         {
             var privateChats = _chatRepository.GetPrivateChats(userId);
             var groupChats = _chatRepository.GetGroupChats(userId);
@@ -130,11 +130,11 @@ namespace TelegramClone.Services
             return chats;
         }
 
-        public PrivateChatResponseDTO GetPrivateChat(Guid fromId, Guid toId)
+        public PrivateChatResponseDTO GetOpenedPrivateChat(Guid fromId, Guid toId)
         {
-            var dialog = _chatRepository.GetPrivateChat(fromId, toId);
+            var privateChat = _chatRepository.GetPrivateChat(fromId, toId);
             var user = _userRepository.GetUserById(toId);
-            if (dialog == null)
+            if (privateChat == null)
                 return new PrivateChatResponseDTO
                 {
                     UserId = toId.ToString().ToLower(),
@@ -142,7 +142,7 @@ namespace TelegramClone.Services
                     ConnectionStatus = user.ConnectionStatus,
                     Messages = new List<MessageResponseDTO>()
                 };
-            var msgs = _messageRepository.GetDialogMessages(dialog.DialogId);
+            var msgs = _messageRepository.GetPrivateChatMessages(privateChat.PrivateChatId);
             return new PrivateChatResponseDTO
             {
                 UserId = toId.ToString().ToLower(),
@@ -152,24 +152,24 @@ namespace TelegramClone.Services
             };
         }
 
-        public Dialog GetDialog(Guid fromId, Guid toId)
+        public PrivateChat GetPrivateChat(Guid fromId, Guid toId)
         {
-            var dialog = _chatRepository.GetPrivateChat(fromId, toId);
-            return dialog;
+            var privateChat = _chatRepository.GetPrivateChat(fromId, toId);
+            return privateChat;
         }
 
-        public async Task<DialogMessage> AddMessageInPrivateChat(Dialog dialog, Guid fromId, Guid toId, string messageText)
+        public async Task<PrivateChatMessage> AddMessageInPrivateChat(PrivateChat privateChat, Guid fromId, Guid toId, string messageText)
         {
-            var addedMessage = await _messageRepository.AddDialogMessage(dialog.DialogId, fromId, messageText);
-            _chatRepository.UpdatePrivateChatLastMessage(dialog, addedMessage.MessageId);
+            var addedMessage = await _messageRepository.AddPrivateChatMessage(privateChat.PrivateChatId, fromId, messageText);
+            _chatRepository.UpdatePrivateChatLastMessage(privateChat, addedMessage.PrivateChatMessageId);
 
             return addedMessage;
         }
 
-        public async Task<Message> AddMessageInGroupChat(Chat chat, Guid senderId, string messageText, string messageType)
+        public async Task<GroupChatMessage> AddMessageInGroupChat(GroupChat groupChat, Guid senderId, string messageText, string messageType)
         {
-            var addedMessage = await AddMsg(chat.ChatId, senderId, messageText, messageType);
-            _chatRepository.UpdateGroupChatLastMessage(chat, addedMessage.MessageId);
+            var addedMessage = await AddGroupChatMsg(groupChat.GroupChatId, senderId, messageText, messageType);
+            _chatRepository.UpdateGroupChatLastMessage(groupChat, addedMessage.GroupChatMessageId);
 
             return addedMessage;
         }

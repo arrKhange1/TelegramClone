@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace TelegramClone.Models
 {
-    public class DialogMessage
+    public class PrivateChatMessage
     {
-        [Key]
-        public Guid MessageId { get; set; }
+        public Guid PrivateChatMessageId { get; set; }
         public Guid SenderId { get; set; }
         public User Sender { get; set; }
-        public Guid DialogId { get; set; }
-        public Dialog Dialog { get; set; }
+        public Guid PrivateChatId { get; set; }
+        public PrivateChat PrivateChat { get; set; }
         public string MessageText { get; set; }
         public DateTime MessageTime { get; set; }
 
