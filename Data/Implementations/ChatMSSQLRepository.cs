@@ -25,24 +25,16 @@ namespace TelegramClone.Data.Implementations
         }
 
         public List<ChatElementResponseDTO> GetGroupChats(Guid userId)
-        { 
-            var result = from cu in _context.GroupChatUsers join
-            c in _context.GroupChats on cu.GroupChatId equals c.GroupChatId
+        {
+            var result = from cu in _context.GroupChatUsers
+            join c in _context.GroupChats on cu.GroupChatId equals c.GroupChatId
             join msg in _context.GroupChatMessages on c.LastMessageId equals msg.GroupChatMessageId
             join msgType in _context.GroupChatMessageTypes on msg.GroupChatMessageTypeId equals msgType.GroupChatMessageTypeId
             join u in _context.Users on msg.UserId equals u.UserId
             where cu.UserId == userId
-            select new ChatElementResponseDTO
-            {
-                ChatId = c.GroupChatId,
-                ChatName = c.ChatName,
-                ChatCategory = "group",
-                LastMessageSender = u.UserName,
-                LastMessageText = msg.MessageText,
-                LastMessageTime = msg.MessageTime,
-                LastMessageType = msgType.Type,
-                UnreadMsgs = cu.UnreadMessages
-            };
+            select new ChatElementResponseDTO(c.GroupChatId, c.ChatName, "group", u.UserName,
+            msg.MessageText, msg.MessageTime, msgType.Type, cu.UnreadMessages);
+            
             var groupChats = result.ToList();
             if (groupChats == null)
                 return new List<ChatElementResponseDTO>();
@@ -58,39 +50,22 @@ namespace TelegramClone.Data.Implementations
  
         public List<ChatElementResponseDTO> GetPrivateChats(Guid userId)
         {
-            var firstParticipants = from pc in _context.PrivateChats join
-            dialogUser in _context.Users on pc.FirstParticipantId equals dialogUser.UserId
+            var firstParticipants = from pc in _context.PrivateChats
+            join dialogUser in _context.Users on pc.FirstParticipantId equals dialogUser.UserId
             join msg in _context.PrivateChatMessages on pc.LastMessageId equals msg.PrivateChatMessageId
             join lastMsgUser in _context.Users on msg.SenderId equals lastMsgUser.UserId
             where pc.SecondParticipantId == userId
-            select new ChatElementResponseDTO
-            {
-                ChatId = dialogUser.UserId,
-                ChatName = dialogUser.UserName,
-                ChatCategory = "private",
-                LastMessageSender = lastMsgUser.UserName,
-                LastMessageText = msg.MessageText,
-                LastMessageTime = msg.MessageTime,
-                LastMessageType = "message",
-                UnreadMsgs = pc.UnreadMsgsBySecond
-            };
+            select new ChatElementResponseDTO(dialogUser.UserId, dialogUser.UserName, "private",
+            lastMsgUser.UserName, msg.MessageText, msg.MessageTime, "message", pc.UnreadMsgsBySecond);
+            
 
             var secondParticipants = from pc in _context.PrivateChats join
             u in _context.Users on pc.SecondParticipantId equals u.UserId
             join msg in _context.PrivateChatMessages on pc.LastMessageId equals msg.PrivateChatMessageId
             join lastMsgUser in _context.Users on msg.SenderId equals lastMsgUser.UserId
             where pc.FirstParticipantId == userId
-            select new ChatElementResponseDTO
-            {
-                ChatId = u.UserId,
-                ChatName = u.UserName,
-                ChatCategory = "private",
-                LastMessageSender = lastMsgUser.UserName,
-                LastMessageText = msg.MessageText,
-                LastMessageTime = msg.MessageTime,
-                LastMessageType = "message",
-                UnreadMsgs = pc.UnreadMsgsByFirst
-            };
+            select new ChatElementResponseDTO(u.UserId, u.UserName, "private",
+            lastMsgUser.UserName, msg.MessageText, msg.MessageTime, "message", pc.UnreadMsgsByFirst);
 
             if (firstParticipants == null && secondParticipants == null)
                 return new List<ChatElementResponseDTO>();
@@ -102,7 +77,7 @@ namespace TelegramClone.Data.Implementations
             {
                 return firstParticipants.ToList();
             }
-            return firstParticipants.Concat(secondParticipants).ToList();
+            return (firstParticipants.AsEnumerable()).Concat(secondParticipants.AsEnumerable()).ToList();
         }
 
         

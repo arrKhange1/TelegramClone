@@ -17,9 +17,9 @@ namespace TelegramClone.Data.Implementations
             _context = context;
         }
 
-        public List<GroupChatUser> GetGroupChatMembers(Guid chatId)
+        public List<GroupChatUser> GetGroupChatMembers(Guid groupChatId)
         {
-            return _context.GroupChatUsers.Where(cu => cu.GroupChatId == chatId).ToList();
+            return _context.GroupChatUsers.Where(cu => cu.GroupChatId == groupChatId).ToList();
         }
 
         public List<GroupChatUser> IncreaseUnreadMsgsOfGroupChatMembers(List<GroupChatUser> chatMembers)
@@ -40,9 +40,9 @@ namespace TelegramClone.Data.Implementations
             _context.SaveChanges();
         }
 
-        public GroupChatUser GetGroupChatUserByChatIdAndUserId(Guid chatId, Guid userId)
+        public GroupChatUser GetGroupChatUserByChatIdAndUserId(Guid groupChatId, Guid userId)
         {
-            return _context.GroupChatUsers.FirstOrDefault(cu => cu.GroupChatId == chatId && cu.UserId == userId);
+            return _context.GroupChatUsers.FirstOrDefault(cu => cu.GroupChatId == groupChatId && cu.UserId == userId);
         }
         public async Task<bool> AddUsersToGroupChat(List<GroupChatUser> members)
         {

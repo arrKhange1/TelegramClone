@@ -16,6 +16,19 @@ namespace TelegramClone.Models.ResponseDTO
         public string LastMessageType { get; set; }
         public int UnreadMsgs { get; set; }
 
+        public ChatElementResponseDTO(Guid chatId, string chatName, string chatCategory, string lastMsgSender, 
+            string lastMsgText, DateTime lastMsgTime, string lastMsgType, int unreadMsgs)
+        {
+            ChatId = chatId;
+            ChatName = chatName;
+            ChatCategory = chatCategory;
+            LastMessageSender = lastMsgSender;
+            LastMessageText = lastMsgText;
+            LastMessageTime = lastMsgTime;
+            LastMessageType = lastMsgType;
+            UnreadMsgs = unreadMsgs;
+        }
+
         public int CompareTo(ChatElementResponseDTO chatElement)
         {
             return (LastMessageTime != chatElement.LastMessageTime) ?
