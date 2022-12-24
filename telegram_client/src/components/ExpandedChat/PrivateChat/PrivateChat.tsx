@@ -28,7 +28,6 @@ function PrivateChat() {
 
     const [chat, setChat] = useState<IPrivateChat>({
         userName: '',
-        connectionStatus: '',
         messages: []
     });
     const  [textMsg, setTextMsg] = useState('');
@@ -66,7 +65,7 @@ function PrivateChat() {
         setChat(response.data)
     }
 
-    const sendMsg = async (e: React.MouseEvent<HTMLDivElement>) => {
+    const sendMsg = async (e:React.MouseEvent<HTMLDivElement>) => {
         const response = await $api.post(`chats/sendprivatechat?fromId=${user.userId}&toId=${params.chatId}&toName=${chat.userName}&messageText=${textMsg}`);
         setTextMsg('');
         console.log(response.data)
@@ -74,7 +73,7 @@ function PrivateChat() {
 
     return (
         <div className={msgs.messages_panel}>
-            <Header userName={chat.userName} conStatus={chat.connectionStatus}/>
+            <Header userName={chat.userName}/>
             <MessagesList messages={chat.messages}/>
             <Footer textMsg={textMsg} sendMsg={sendMsg} setTextMsg={setTextMsg}/>
         </div>

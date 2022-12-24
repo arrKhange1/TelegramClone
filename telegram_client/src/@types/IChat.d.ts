@@ -1,5 +1,4 @@
 export default interface IChat {
-    // img: string,
     chatId:string,
     chatName: string,
     chatCategory: string

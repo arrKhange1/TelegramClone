@@ -3,8 +3,7 @@ export interface IExpandedChat {
 }
 
 export interface IPrivateChat extends IExpandedChat {
-    userName: string,
-    connectionStatus: string
+    userName: string
 }
 
 export interface IGroupChat extends IExpandedChat {

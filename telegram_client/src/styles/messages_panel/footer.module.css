@@ -6,6 +6,8 @@
     background-color: none;
     align-self: center;
     padding: 1em;
+    width: 50%;
+    max-width: 650px;
 }
 .message {
     border-radius: 10px;
@@ -27,15 +29,23 @@
 .message_input {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-grow: 1;
     height: 100%;
 }
 
-.message_input input {
+.message_input textarea {
     border: none;
     outline: none;
     width: 100%;
     font-size: 1rem;
+    resize: none;
+    overflow: auto;
+    height: 1.2rem;
+}
+
+.message_input textarea::-webkit-scrollbar {
+    display: none;
 }
 
 .send {

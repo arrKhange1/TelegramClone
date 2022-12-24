@@ -11,9 +11,9 @@
 .side_panel {
     height: 100%;
     background-color: white;
-    width: 30%;
-    min-width: 10%;
     max-width: 30%;
+    min-width: 20%;
+    width: 30%;
     position: relative;
 }
 
@@ -106,7 +106,7 @@
     justify-content: space-between;
     flex-direction: column;
     gap: 0.5em;
-    overflow: hidden;
+    /* overflow: hidden; */
     text-decoration:none;
 }
 

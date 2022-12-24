@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { HtmlHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { $api } from '../../http/axios';
@@ -7,7 +7,7 @@ import footer from '../../styles/messages_panel/footer.module.css';
 
 
 function Footer({textMsg, setTextMsg, sendMsg} : {sendMsg: (e:React.MouseEvent<HTMLDivElement>) => Promise<void>,
-        textMsg: string, setTextMsg: React.Dispatch<React.SetStateAction<string>>}) {
+     textMsg: string, setTextMsg: React.Dispatch<React.SetStateAction<string>> }) {
 
     const chatId = useParams().chatId;
     const user = useAuth();
@@ -20,21 +20,21 @@ function Footer({textMsg, setTextMsg, sendMsg} : {sendMsg: (e:React.MouseEvent<H
         <div className={footer.container}>
             <div className={footer.message}>
                 <div className={footer.message_container}>
-                    <img  src="imgs/smile.png" alt="" />
+                    <img src="imgs/smile.png" alt="" />
                 </div>
 
                 <label className={footer.message_input}>
-                    <input
-                      type="text"
-                     placeholder='Message'
-                     onChange={
-                        (e: React.ChangeEvent<HTMLInputElement> ) =>
-                         setTextMsg(e.target.value)}
+                    <textarea
+                        placeholder='Message'
+                        value={textMsg}
+                        onChange={
+                            (e: React.ChangeEvent<HTMLTextAreaElement> ) =>
+                            setTextMsg(e.target.value)}
                      />
                 </label>
                 
                 <div className={footer.message_container}>
-                    <img  src="imgs/attachment.png" alt="" />
+                    <img src="imgs/attachment.png" alt="" />
                 </div>
                 
             </div>

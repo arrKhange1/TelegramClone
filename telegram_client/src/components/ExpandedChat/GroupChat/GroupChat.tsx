@@ -17,7 +17,6 @@ import { cleanChatUnreadMsgs, setChats } from '../../../store/reducers/chatListS
 function GroupChat() {
     const params = useParams();
     const user = useAuth();
-    const chats = useAppSelector(state => state.chatsReducer);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -67,11 +66,12 @@ function GroupChat() {
 
     const sendMsg = async (e: React.MouseEvent<HTMLDivElement>) => {
         const response = await $api.post(`chats/sendgroupchat?chatId=${params.chatId}&senderId=${user.userId}&messageText=${textMsg}`);
+        setTextMsg('');
         console.log(response.data)
     };
 
     return (
-        <div  className={msgs.messages_panel}>
+        <div className={msgs.messages_panel}>
             <Header chatName={chat.chatName} groupMembers={chat.groupMembers}/>
             <MessagesList messages={chat.messages}/>
             <Footer textMsg={textMsg} sendMsg={sendMsg} setTextMsg={setTextMsg}/>
