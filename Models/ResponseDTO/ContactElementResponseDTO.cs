@@ -9,5 +9,11 @@ namespace TelegramClone.Models.ResponseDTO
     {
         public Guid ContactId { get; set; }
         public string ContactName { get; set; }
+
+        public ContactElementResponseDTO(Guid contactId, string contactName)
+        {
+            ContactId = contactId;
+            ContactName = contactName;
+        }
     }
 }

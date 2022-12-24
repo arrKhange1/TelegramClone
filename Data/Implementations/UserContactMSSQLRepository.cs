@@ -43,11 +43,8 @@ namespace TelegramClone.Data.Implementations
                        join u in _context.Users on uc.ContactId equals u.UserId
                        where uc.UserId == userId
                        orderby uc.CreateTime descending
-                       select new ContactElementResponseDTO
-                       {
-                           ContactId = u.UserId,
-                           ContactName = u.UserName,
-                       };
+                       select new ContactElementResponseDTO(u.UserId, u.UserName);
+                      
             return contacts.ToList();
         }
     }

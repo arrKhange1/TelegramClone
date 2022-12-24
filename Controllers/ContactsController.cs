@@ -38,11 +38,8 @@ namespace TelegramClone.Controllers
 
                 var addStatus = await _contactsService.AddContact(userIdFromString, contact.UserId);
                 if (addStatus)
-                    return Ok(new ContactElementResponseDTO
-                    {
-                        ContactId = contact.UserId,
-                        ContactName = contactName
-                    });
+                    return Ok(new ContactElementResponseDTO(contact.UserId, contactName));
+                    
                 return BadRequest("Contact already exists");
             }
             else
