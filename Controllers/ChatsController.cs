@@ -31,7 +31,7 @@ namespace TelegramClone.Controllers
 
 
         [HttpGet("getprivatechat")]
-        public IActionResult GetPrivateChat(string fromId, string toId) // +
+        public IActionResult GetPrivateChat(string fromId, string toId) 
         {
             var firstParticipantIdGuid = Guid.Parse(fromId);
             var secondParticipantIdGuid = Guid.Parse(toId);
@@ -40,7 +40,7 @@ namespace TelegramClone.Controllers
         }
 
         [HttpGet ("getgroupchat")]
-        public IActionResult GetGroupChat(string chatId) // +
+        public IActionResult GetGroupChat(string chatId)
         {
             Guid chatIdGuid = Guid.Parse(chatId);
             var groupChat = _chatService.GetOpenedGroupChat(chatIdGuid);
@@ -48,14 +48,14 @@ namespace TelegramClone.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetChats(string userId) // +
+        public IActionResult GetChats(string userId) 
         {
             var chats = _chatService.GetAllChats(Guid.Parse(userId));
             return Ok(chats);
         }
 
         [HttpPost ("addgroupchat")]
-        public async Task<IActionResult> AddGroupChat([FromBody] GroupChatRequestDTO groupChat) // +
+        public async Task<IActionResult> AddGroupChat([FromBody] GroupChatRequestDTO groupChat) 
         {
             var createrId = User.Identity.Name;
             var currentUserName = _userService.GetCurrentUser(HttpContext).UserName;
@@ -71,8 +71,12 @@ namespace TelegramClone.Controllers
         }
 
         [HttpPost("sendgroupchat")]
-        public async Task<ActionResult> SendMessageInGroupChat(string chatId, string senderId, string messageText) // +
+        public async Task<ActionResult> SendMessageInGroupChat(GroupChatMessageRequestDTO groupChatMessage) 
         {
+            string chatId = groupChatMessage.ChatId;
+            string senderId = groupChatMessage.SenderId;
+            string messageText = groupChatMessage.MessageText;
+
             var chatIdGuid = Guid.Parse(chatId);
             var senderIdGuid = Guid.Parse(senderId);
 
@@ -96,10 +100,15 @@ namespace TelegramClone.Controllers
         }
 
         [HttpPost("sendprivatechat")]
-        public async Task<ActionResult> SendMessageInPrivateChat(string fromId, string toId, string toName, string messageText) // +
+        public async Task<ActionResult> SendMessageInPrivateChat(PrivateChatMessageRequestDTO privateChatMessage) 
         {
-            var fromIdGuid = Guid.Parse(fromId);
-            var toIdGuid = Guid.Parse(toId);
+            string fromId = privateChatMessage.FromId;
+            string toId = privateChatMessage.ToId;
+            string toName = privateChatMessage.ToName;
+            string messageText = privateChatMessage.MessageText;
+
+            var fromIdGuid = Guid.Parse(privateChatMessage.FromId);
+            var toIdGuid = Guid.Parse(privateChatMessage.ToId);
 
             var privateChat = _chatService.GetPrivateChat(fromIdGuid, toIdGuid);
             if (privateChat == null)
@@ -122,7 +131,7 @@ namespace TelegramClone.Controllers
         }
 
         [HttpPut("readprivatechat")]
-        public ActionResult ReadPrivateChat(string fromId, string toId) // +
+        public ActionResult ReadPrivateChat(string fromId, string toId) 
         {
             var fromIdGuid = Guid.Parse(fromId);
             var toIdGuid = Guid.Parse(toId);
@@ -135,7 +144,7 @@ namespace TelegramClone.Controllers
         }
 
         [HttpPut("readgroupchat")]
-        public ActionResult ReadGroupChat(string fromId, string chatId) // +
+        public ActionResult ReadGroupChat(string fromId, string chatId) 
         {
             var fromIdGuid = Guid.Parse(fromId);
             var chatIdGuid = Guid.Parse(chatId);

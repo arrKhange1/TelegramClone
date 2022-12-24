@@ -13,6 +13,7 @@ import IChat from '../../../@types/IChat';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { useDispatch } from 'react-redux';
 import { cleanChatUnreadMsgs, setChats } from '../../../store/reducers/chatListSlice';
+import IGroupChatMessage from '../../../@types/PrivateChatDTO/IGroupChatMessage';
 
 function GroupChat() {
     const params = useParams();
@@ -65,7 +66,12 @@ function GroupChat() {
     }
 
     const sendMsg = async (e: React.MouseEvent<HTMLDivElement>) => {
-        const response = await $api.post(`chats/sendgroupchat?chatId=${params.chatId}&senderId=${user.userId}&messageText=${textMsg}`);
+        const groupChatMessage: IGroupChatMessage = {
+            chatId: params.chatId!,
+            senderId: user.userId,
+            messageText: textMsg
+        }
+        const response = await $api.post('chats/sendgroupchat', groupChatMessage);
         setTextMsg('');
         console.log(response.data)
     };

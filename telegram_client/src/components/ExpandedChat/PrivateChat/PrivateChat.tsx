@@ -13,6 +13,7 @@ import { useAppSelector } from '../../../hooks/useAppSelector';
 import { cleanChatUnreadMsgs, setChats } from '../../../store/reducers/chatListSlice';
 import IChat from '../../../@types/IChat';
 import { useDispatch } from 'react-redux';
+import IPrivateChatMessage from '../../../@types/PrivateChatDTO/IPrivateChatMessage';
 
 function PrivateChat() {
     const params = useParams();
@@ -66,7 +67,13 @@ function PrivateChat() {
     }
 
     const sendMsg = async (e:React.MouseEvent<HTMLDivElement>) => {
-        const response = await $api.post(`chats/sendprivatechat?fromId=${user.userId}&toId=${params.chatId}&toName=${chat.userName}&messageText=${textMsg}`);
+        const privateChatMessage: IPrivateChatMessage = {
+            fromId: user.userId,
+            toId: params.chatId!,
+            toName: chat.userName,
+            messageText: textMsg
+        }
+        const response = await $api.post('chats/sendprivatechat', privateChatMessage);
         setTextMsg('');
         console.log(response.data)
     };
