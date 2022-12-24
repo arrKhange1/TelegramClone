@@ -19,9 +19,9 @@ namespace TelegramClone.Data.Implementations
             _context = context;
         }
 
-        public GroupChat GetGroupChat(Guid chatId)
+        public GroupChat GetGroupChat(Guid groupChatId)
         {
-            return _context.GroupChats.FirstOrDefault(chat => chat.GroupChatId == chatId);
+            return _context.GroupChats.FirstOrDefault(chat => chat.GroupChatId == groupChatId);
         }
 
         public List<ChatElementResponseDTO> GetGroupChats(Guid userId)
@@ -51,9 +51,9 @@ namespace TelegramClone.Data.Implementations
 
         public PrivateChat GetPrivateChat(Guid firstParticipantId, Guid secondParticipantId)
         {
-            var dialog = _context.PrivateChats.FirstOrDefault(dial => dial.FirstParticipantId == firstParticipantId && dial.SecondParticipantId == secondParticipantId ||
+            var privateChat = _context.PrivateChats.FirstOrDefault(dial => dial.FirstParticipantId == firstParticipantId && dial.SecondParticipantId == secondParticipantId ||
                 dial.FirstParticipantId == secondParticipantId && dial.SecondParticipantId == firstParticipantId);
-            return dialog;
+            return privateChat;
         }
  
         public List<ChatElementResponseDTO> GetPrivateChats(Guid userId)
@@ -106,42 +106,42 @@ namespace TelegramClone.Data.Implementations
         }
 
         
-        public void UpdatePrivateChatLastMessage(PrivateChat dialog, Guid lastMessageId)
+        public void UpdatePrivateChatLastMessage(PrivateChat privateChat, Guid lastMessageId)
         {
-            dialog.LastMessageId = lastMessageId;
+            privateChat.LastMessageId = lastMessageId;
             _context.SaveChanges();
         }
 
-        public void UpdateGroupChatLastMessage(GroupChat chat, Guid lastMessageId)
+        public void UpdateGroupChatLastMessage(GroupChat groupChat, Guid lastMessageId)
         {
-            chat.LastMessageId = lastMessageId;
+            groupChat.LastMessageId = lastMessageId;
             _context.SaveChanges();
         }
 
-        public int IncreaseUnreadMsgsOfPrivateChat(PrivateChat dialog, Guid toId)
+        public int IncreaseUnreadMsgsOfPrivateChat(PrivateChat privateChat, Guid toId)
         {
             int unreadMsgs = 0;
-            if (toId == dialog.FirstParticipantId)
+            if (toId == privateChat.FirstParticipantId)
             {
-                dialog.UnreadMsgsByFirst += 1;
-                unreadMsgs = dialog.UnreadMsgsByFirst;
+                privateChat.UnreadMsgsByFirst += 1;
+                unreadMsgs = privateChat.UnreadMsgsByFirst;
             }
-            else if (toId == dialog.SecondParticipantId)
+            else if (toId == privateChat.SecondParticipantId)
             {
-                dialog.UnreadMsgsBySecond += 1;
-                unreadMsgs = dialog.UnreadMsgsBySecond;
+                privateChat.UnreadMsgsBySecond += 1;
+                unreadMsgs = privateChat.UnreadMsgsBySecond;
             }
                
             _context.SaveChanges();
             return unreadMsgs;
         }
         
-        public void CleanUnreadMsgsOfPrivateChat(PrivateChat dialog, Guid fromId) // если нет диалога в контактах то ошибка (диалог пустой)
+        public void CleanUnreadMsgsOfPrivateChat(PrivateChat privateChat, Guid fromId) // если нет диалога в контактах то ошибка (диалог пустой)
         {
-            if (fromId == dialog.FirstParticipantId)
-                dialog.UnreadMsgsByFirst = 0;
-            else if (fromId == dialog.SecondParticipantId)
-                dialog.UnreadMsgsBySecond = 0;
+            if (fromId == privateChat.FirstParticipantId)
+                privateChat.UnreadMsgsByFirst = 0;
+            else if (fromId == privateChat.SecondParticipantId)
+                privateChat.UnreadMsgsBySecond = 0;
             _context.SaveChanges();
         }
 

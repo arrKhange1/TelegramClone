@@ -10,15 +10,15 @@ namespace TelegramClone.Data.Interfaces
 {
     public interface IChatRepository
     {
-        public GroupChat GetGroupChat(Guid chatId);
+        public GroupChat GetGroupChat(Guid groupChatId);
         public Task<PrivateChat> AddPrivateChat(Guid fromId, Guid toId);
         public Task<GroupChat> AddGroupChat(string chatName, int groupMembers);
         public List<ChatElementResponseDTO> GetPrivateChats(Guid userId);
         public PrivateChat GetPrivateChat(Guid firstParticipantId, Guid secondParticipantId);
         public List<ChatElementResponseDTO> GetGroupChats(Guid userId);
-        public void UpdatePrivateChatLastMessage(PrivateChat dialog, Guid lastMessageId);
-        public void UpdateGroupChatLastMessage(GroupChat chat, Guid lastMessageId);
-        public int IncreaseUnreadMsgsOfPrivateChat(PrivateChat dialog, Guid toId);
-        public void CleanUnreadMsgsOfPrivateChat(PrivateChat dialog, Guid fromId);
+        public void UpdatePrivateChatLastMessage(PrivateChat privateChat, Guid lastMessageId);
+        public void UpdateGroupChatLastMessage(GroupChat groupChat, Guid lastMessageId);
+        public int IncreaseUnreadMsgsOfPrivateChat(PrivateChat privateChat, Guid toId);
+        public void CleanUnreadMsgsOfPrivateChat(PrivateChat privateChat, Guid fromId);
     }
 }

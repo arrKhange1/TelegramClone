@@ -9,9 +9,9 @@ namespace TelegramClone.Data.Interfaces
 {
     public interface IMessageRepository
     {
-        public List<MessageResponseDTO> GetGroupChatMsgs(Guid chatId);
-        public List<MessageResponseDTO> GetPrivateChatMessages(Guid dialogId);
-        public Task<GroupChatMessage> AddGroupChatMsg(Guid chatId, Guid userId, string messageText, string messageType);
-        public Task<PrivateChatMessage> AddPrivateChatMessage(Guid dialogId, Guid fromId, string messageText);
+        public List<MessageResponseDTO> GetGroupChatMsgs(Guid groupChatId);
+        public List<MessageResponseDTO> GetPrivateChatMessages(Guid privateChatId);
+        public Task<GroupChatMessage> AddGroupChatMsg(Guid groupChatId, Guid userId, string messageText, string messageType);
+        public Task<PrivateChatMessage> AddPrivateChatMessage(Guid privateChatId, Guid fromId, string messageText);
     }
 }
