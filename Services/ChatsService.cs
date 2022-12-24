@@ -84,12 +84,7 @@ namespace TelegramClone.Services
         public List<GroupChatUser> FormGroupChatUserList(Guid newChatId, List<string> ids)
         {
             var guidsList = ids.Select(id => Guid.Parse(id));
-            return guidsList.Select(userGuid => new GroupChatUser
-            {
-                GroupChatUserId = Guid.NewGuid(),
-                GroupChatId = newChatId,
-                UserId = userGuid
-            }).ToList();
+            return guidsList.Select(userGuid => new GroupChatUser(newChatId, userGuid)).ToList();
         }
 
         public async Task<GroupChat> AddGroupChat(GroupChatRequestDTO groupChatRequestDTO, Guid createrId)

@@ -122,12 +122,7 @@ namespace TelegramClone.Data.Implementations
 
         public async Task<PrivateChat> AddPrivateChat(Guid fromId, Guid toId)
         {
-            var newPrivateChat = new PrivateChat
-            {
-                PrivateChatId = Guid.NewGuid(),
-                FirstParticipantId = fromId,
-                SecondParticipantId = toId,
-            };
+            var newPrivateChat = new PrivateChat(fromId, toId);
             var addedChat = await _context.PrivateChats.AddAsync(newPrivateChat);
             if (addedChat != null)
             {
@@ -139,15 +134,8 @@ namespace TelegramClone.Data.Implementations
 
         public async Task<GroupChat> AddGroupChat(string chatName, int groupMembers)
         {
-            var newChatGuid = Guid.NewGuid();
-            var newChat = new GroupChat
-            {
-                GroupChatId = newChatGuid,
-                ChatName = chatName,
-                ChatCategoryId = _context.ChatCategories.FirstOrDefault(cat => cat.ChatCategoryName == "group").ChatCategoryId,
-                GroupMembers = groupMembers,
-                CreateTime = DateTime.UtcNow
-            };
+            Guid chatCategoryId = _context.ChatCategories.FirstOrDefault(cat => cat.ChatCategoryName == "group").ChatCategoryId;
+            var newChat = new GroupChat(chatName, groupMembers, chatCategoryId, DateTime.UtcNow);
             var addedChat = await _context.GroupChats.AddAsync(newChat);
             if (addedChat != null)
             {

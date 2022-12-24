@@ -46,14 +46,7 @@ namespace TelegramClone.Services
         public async Task<string> RefreshToken(User user)
         {
             var newRefreshToken = GenerateRefreshToken();
-
-            RefreshToken newUserToken = new RefreshToken
-            {
-                Token = newRefreshToken,
-                UserId = user.UserId,
-                ExpireDate = DateTime.Now.AddMinutes(10)
-            };
-
+            RefreshToken newUserToken = new RefreshToken(newRefreshToken, user.UserId, DateTime.Now.AddMinutes(10));
             await _refreshTokenRepository.DeleteUserRefreshTokens(user.UserId);
             var token =  await _refreshTokenRepository.AddUserRefreshTokens(newUserToken); 
             return token.Token;
@@ -63,15 +56,8 @@ namespace TelegramClone.Services
         {
             var refreshToken = GenerateRefreshToken();
 
-            RefreshToken userToken = new RefreshToken
-            {
-                Token = refreshToken,
-                UserId = user.UserId,
-                ExpireDate = DateTime.Now.AddMinutes(10)
-            };
-
+            RefreshToken userToken = new RefreshToken(refreshToken, user.UserId, DateTime.Now.AddMinutes(10));
             await _refreshTokenRepository.AddUserRefreshTokens(userToken);
-
             return refreshToken;
         }
 

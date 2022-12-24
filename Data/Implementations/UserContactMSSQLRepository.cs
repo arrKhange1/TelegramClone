@@ -21,13 +21,7 @@ namespace TelegramClone.Data.Implementations
             try
             {
                 await _context.UserContacts.AddAsync(
-                new UserContact
-                {
-                    UserContactId = Guid.NewGuid(),
-                    UserId = userId,
-                    ContactId = contactId,
-                    CreateTime = DateTime.UtcNow
-                });
+                new UserContact(userId, contactId, DateTime.UtcNow));
                 await _context.SaveChangesAsync();
                 return true;
             }

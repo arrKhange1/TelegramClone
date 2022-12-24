@@ -9,5 +9,11 @@ namespace TelegramClone.Models
     {
         public Guid ChatCategoryId { get; set; }
         public string ChatCategoryName { get; set; }
+
+        public ChatCategory(string chatCategoryName)
+        {
+            ChatCategoryId = Guid.NewGuid();
+            ChatCategoryName = chatCategoryName;
+        }
     }
 }

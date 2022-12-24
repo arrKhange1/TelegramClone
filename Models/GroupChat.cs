@@ -19,5 +19,14 @@ namespace TelegramClone.Models
 
         public Guid? LastMessageId { get; set; }
         public GroupChatMessage LastMessage { get; set; }
+
+        public GroupChat(string chatName, int groupMembers, Guid chatCategoryId, DateTime createTime)
+        {
+            GroupChatId = Guid.NewGuid();
+            ChatName = chatName;
+            GroupMembers = groupMembers;
+            ChatCategoryId = chatCategoryId;
+            CreateTime = createTime;
+        }
     }
 }

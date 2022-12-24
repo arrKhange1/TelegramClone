@@ -30,13 +30,9 @@ namespace TelegramClone.Services
             {
                 var userClaims = identity.Claims;
                 var roleName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role).Value;
-
-                return new User
-                {
-                    UserName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name).Value,
-                    RoleId = _roleRepository.GetRoleByName(roleName).RoleId
-
-                };
+                var userName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name).Value;
+                var roleId = _roleRepository.GetRoleByName(roleName).RoleId;
+                return new User(userName, "", roleId);
             }
 
             return null;
@@ -54,14 +50,8 @@ namespace TelegramClone.Services
         public async Task<User> CreateUserFromDTO(UserLoginRequestDTO userLogin)
         {
             var userRole = _roleRepository.GetRoleByName("user");
-            var user = new User
-            {
-                UserName = userLogin.UserName,
-                Password = userLogin.Password,
-                RoleId = userRole.RoleId,
-            };
+            var user = new User(userLogin.UserName, userLogin.Password, userRole.RoleId);
             var createdUser = await _userRepository.AddUser(user);
-
             return createdUser;
         }
 

@@ -18,5 +18,12 @@ namespace TelegramClone.Models
 
         public Guid? LastMessageId { get; set; }
         public PrivateChatMessage LastMessage { get; set; }
+
+        public PrivateChat(Guid firstParticipantId, Guid secondParticipantId)
+        {
+            PrivateChatId = Guid.NewGuid();
+            FirstParticipantId = firstParticipantId;
+            SecondParticipantId = secondParticipantId;
+        }
     }
 }

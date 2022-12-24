@@ -13,8 +13,6 @@ namespace TelegramClone.Data
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             //Database.Migrate();
-
-           
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,57 +20,27 @@ namespace TelegramClone.Data
             base.OnModelCreating(modelBuilder);
 
             // private chat category
-            var privateCategory = new ChatCategory
-            {
-                ChatCategoryId = Guid.NewGuid(),
-                ChatCategoryName = "private"
-            };
+            var privateCategory = new ChatCategory("private");
 
             // group chat category
-            var groupCategory = new ChatCategory
-            {
-                ChatCategoryId = Guid.NewGuid(),
-                ChatCategoryName = "group"
-            };
+            var groupCategory = new ChatCategory("group");
 
             var priv = modelBuilder.Entity<ChatCategory>().HasData(privateCategory);
             var group = modelBuilder.Entity<ChatCategory>().HasData(groupCategory);
 
             // admin
-            var adminRole = new Role
-            {
-                RoleId = Guid.NewGuid(),
-                RoleName = "admin"
-            };
+            var adminRole = new Role("admin");
             // user
-            var userRole = new Role
-            {
-                RoleId = Guid.NewGuid(),
-                RoleName = "user"
-            };
+            var userRole = new Role("user");
+            
             var admin = modelBuilder.Entity<Role>().HasData(adminRole);
             var user = modelBuilder.Entity<Role>().HasData(userRole);
 
-            modelBuilder.Entity<User>().HasData(new User
-            {
-                UserId = Guid.NewGuid(),
-                UserName = "admin",
-                Password = "123456",
-                ConnectionStatus = "online",
-                RoleId = adminRole.RoleId
-            });
+            modelBuilder.Entity<User>().HasData(new User("admin", "123456", adminRole.RoleId));
 
-            modelBuilder.Entity<GroupChatMessageType>().HasData(new GroupChatMessageType
-            {
-               GroupChatMessageTypeId = Guid.NewGuid(),
-               Type = "message"
-            });
+            modelBuilder.Entity<GroupChatMessageType>().HasData(new GroupChatMessageType("message"));
 
-            modelBuilder.Entity<GroupChatMessageType>().HasData(new GroupChatMessageType
-            {
-                GroupChatMessageTypeId = Guid.NewGuid(),
-                Type = "notification"
-            });
+            modelBuilder.Entity<GroupChatMessageType>().HasData(new GroupChatMessageType("notification"));
 
             modelBuilder.Entity<GroupChatUser>()
                 .HasOne(chat => chat.GroupChat)

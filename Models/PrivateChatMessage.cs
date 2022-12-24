@@ -15,7 +15,15 @@ namespace TelegramClone.Models
         public PrivateChat PrivateChat { get; set; }
         public string MessageText { get; set; }
         public DateTime MessageTime { get; set; }
-
+    
+        public PrivateChatMessage(Guid senderId, string messageText, Guid privateChatId, DateTime messageTime)
+        {
+            PrivateChatMessageId = Guid.NewGuid();
+            SenderId = senderId;
+            MessageText = messageText;
+            PrivateChatId = privateChatId;
+            MessageTime = messageTime;
+        }
 
     }
 }

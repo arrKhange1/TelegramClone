@@ -18,5 +18,12 @@ namespace TelegramClone.Models
         
         public int UnreadMessages { get; set; }
 
+
+        public GroupChatUser(Guid groupChatId, Guid userId)
+        {
+            GroupChatUserId = Guid.NewGuid();
+            GroupChatId = groupChatId;
+            UserId = userId;
+        }
     }
 }

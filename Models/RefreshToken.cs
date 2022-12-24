@@ -19,5 +19,13 @@ namespace TelegramClone.Models
 
         [NotMapped]
         public bool IsExpired { get { return ExpireDate.Value.ToUniversalTime() <= DateTime.UtcNow; } }
+
+        public RefreshToken(string token, Guid userId, DateTime? expireDate)
+        {
+            Id = Guid.NewGuid();
+            Token = token;
+            UserId = userId;
+            ExpireDate = expireDate;
+        }
     }
 }

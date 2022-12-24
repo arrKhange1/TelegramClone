@@ -18,5 +18,12 @@ namespace TelegramClone.Models
         public User Contact { get; set; }
         public User User { get; set; }
 
+        public UserContact(Guid userId, Guid contactId, DateTime createTime)
+        {
+            UserContactId = Guid.NewGuid();
+            UserId = userId;
+            ContactId = contactId;
+        }
+
     }
 }

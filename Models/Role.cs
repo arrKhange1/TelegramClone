@@ -12,5 +12,11 @@ namespace TelegramClone.Models
 
         public List<User> Users { get; set; }
 
+        public Role(string roleName)
+        {
+            RoleId = Guid.NewGuid();
+            RoleName = roleName;
+        }
+
     }
 }
