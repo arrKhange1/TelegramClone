@@ -78,12 +78,7 @@ namespace TelegramClone.Services
         {
             GroupChat groupChat = GetGroupChat(chatId);
             var msgs = _messageRepository.GetGroupChatMsgs(chatId);
-            return new GroupChatResponseDTO
-            {
-                ChatName = groupChat.ChatName,
-                GroupMembers = groupChat.GroupMembers,
-                Messages = msgs
-            };
+            return new GroupChatResponseDTO(groupChat.ChatName, groupChat.GroupMembers, msgs);
         }
 
         public List<GroupChatUser> FormGroupChatUserList(Guid newChatId, List<string> ids)
@@ -135,21 +130,10 @@ namespace TelegramClone.Services
             var privateChat = _chatRepository.GetPrivateChat(fromId, toId);
             var user = _userRepository.GetUserById(toId);
             if (privateChat == null)
-                return new PrivateChatResponseDTO
-                {
-                    UserId = toId.ToString().ToLower(),
-                    UserName = user.UserName,
-                    ConnectionStatus = user.ConnectionStatus,
-                    Messages = new List<MessageResponseDTO>()
-                };
+                return new PrivateChatResponseDTO(toId.ToString().ToLower(), user.UserName, new List<MessageResponseDTO>());
+               
             var msgs = _messageRepository.GetPrivateChatMessages(privateChat.PrivateChatId);
-            return new PrivateChatResponseDTO
-            {
-                UserId = toId.ToString().ToLower(),
-                UserName = user.UserName,
-                ConnectionStatus = user.ConnectionStatus,
-                Messages = msgs
-            };
+            return new PrivateChatResponseDTO(toId.ToString().ToLower(), user.UserName, msgs);
         }
 
         public PrivateChat GetPrivateChat(Guid fromId, Guid toId)

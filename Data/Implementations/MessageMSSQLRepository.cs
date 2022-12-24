@@ -18,36 +18,25 @@ namespace TelegramClone.Data.Implementations
         }
         public List<MessageResponseDTO> GetGroupChatMsgs(Guid groupChatId)
         {
-            var msgs = from m in _context.GroupChatMessages join
-            u in _context.Users on m.UserId equals u.UserId
+            var msgs = from m in _context.GroupChatMessages
+            join u in _context.Users on m.UserId equals u.UserId
             join msgType in _context.GroupChatMessageTypes on m.GroupChatMessageTypeId equals msgType.GroupChatMessageTypeId
             where groupChatId == m.GroupChatId
             orderby m.MessageTime
-            select new MessageResponseDTO
-            {
-                UserName = u.UserName,
-                MessageText = m.MessageText,
-                MessageTime = m.MessageTime,
-                MessageType = msgType.Type
-            };
-
+            select new MessageResponseDTO(u.UserName, m.MessageText, msgType.Type, m.MessageTime);
+            
             return msgs.ToList();
         }
 
         public List<MessageResponseDTO> GetPrivateChatMessages(Guid privateChatId)
-        { 
-            var msgs = from m in _context.PrivateChatMessages join
-            d in _context.PrivateChats on m.PrivateChatId equals d.PrivateChatId join
-            u in _context.Users on m.SenderId equals u.UserId
+        {
+            var msgs = from m in _context.PrivateChatMessages
+            join d in _context.PrivateChats on m.PrivateChatId equals d.PrivateChatId
+            join u in _context.Users on m.SenderId equals u.UserId
             where m.PrivateChatId == privateChatId
             orderby m.MessageTime
-            select new MessageResponseDTO
-            {
-                UserName = u.UserName,
-                MessageText = m.MessageText,
-                MessageTime = m.MessageTime,
-                MessageType = "message"
-            };
+            select new MessageResponseDTO(u.UserName, m.MessageText, "message", m.MessageTime);
+            
             return msgs.ToList();
         }
 

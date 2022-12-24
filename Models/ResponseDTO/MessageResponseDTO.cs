@@ -11,5 +11,13 @@ namespace TelegramClone.Models.ResponseDTO
         public string MessageText { get; set; }
         public string MessageType { get; set; }
         public DateTime MessageTime { get; set; }
+
+        public MessageResponseDTO(string userName, string msgText, string msgType, DateTime msgTime)
+        {
+            UserName = userName;
+            MessageText = msgText;
+            MessageType = msgType;
+            MessageTime = msgTime;
+        }
     }
 }

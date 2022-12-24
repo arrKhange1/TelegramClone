@@ -9,6 +9,12 @@ namespace TelegramClone.Models.ResponseDTO
     {
         public string UserId { get; set; }
         public string UserName { get; set; }
-        public string ConnectionStatus { get; set; }
+
+        public PrivateChatResponseDTO(string userId, string userName, List<MessageResponseDTO> msgs)
+        {
+            UserId = userId;
+            UserName = userName;
+            Messages = msgs;
+        }
     }
 }

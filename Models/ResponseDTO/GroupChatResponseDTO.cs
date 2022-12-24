@@ -10,5 +10,12 @@ namespace TelegramClone.Models.ResponseDTO
         public string ChatName { get; set; }
         public int GroupMembers { get; set; }
 
+        public GroupChatResponseDTO(string chatName, int groupMembers, List<MessageResponseDTO> msgs)
+        {
+            ChatName = chatName;
+            GroupMembers = groupMembers;
+            Messages = msgs;
+        }
+
     }
 }
