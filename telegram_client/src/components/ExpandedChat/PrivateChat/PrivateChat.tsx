@@ -13,7 +13,7 @@ import { useAppSelector } from '../../../hooks/useAppSelector';
 import { cleanChatUnreadMsgs, setChats } from '../../../store/reducers/chatListSlice';
 import IChat from '../../../@types/IChat';
 import { useDispatch } from 'react-redux';
-import IPrivateChatMessage from '../../../@types/PrivateChatDTO/IPrivateChatMessage';
+import IPrivateChatMessage from '../../../@types/DTO/IPrivateChatMessage';
 
 function PrivateChat() {
     const params = useParams();

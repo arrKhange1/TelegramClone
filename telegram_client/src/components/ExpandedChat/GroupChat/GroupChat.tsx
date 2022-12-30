@@ -13,7 +13,7 @@ import IChat from '../../../@types/IChat';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { useDispatch } from 'react-redux';
 import { cleanChatUnreadMsgs, setChats } from '../../../store/reducers/chatListSlice';
-import IGroupChatMessage from '../../../@types/PrivateChatDTO/IGroupChatMessage';
+import IGroupChatMessage from '../../../@types/DTO/IGroupChatMessage';
 
 function GroupChat() {
     const params = useParams();

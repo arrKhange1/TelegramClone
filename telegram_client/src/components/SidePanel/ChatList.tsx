@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import home from '../../styles/home/home.module.css';
 import side from '../../styles/side_panel/side.module.css';
@@ -20,13 +20,11 @@ import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { setChats, addToChats, replaceExistingChat } from '../../store/reducers/chatListSlice';
 import { store } from '../..';
 import queryString from 'query-string';
+import { setSearchText } from '../../store/reducers/chatsSearchInputSlice';
 
-// let signalRService: SignalRService;
 
 function ChatList({modal, setModal} : { modal: boolean,
     setModal: React.Dispatch<React.SetStateAction<boolean>> }) {
-
-    console.log('in chatlist:', refreshPromise);
 
     const custom_scroll: string = ` ${home.bar_back} ${home.bar_thumb}`;
     const user = useAuth();
@@ -34,6 +32,7 @@ function ChatList({modal, setModal} : { modal: boolean,
     const dispatch = useAppDispatch();
 
     const chats = useAppSelector(state => state.chatsReducer);
+    const searchInputText = useAppSelector(state => state.chatsSearchInputReducer);
     const chatId: string = useParams().chatId!;
     const [activeChat, setActiveChat] = useState<string>(chatId);
 
@@ -51,6 +50,7 @@ function ChatList({modal, setModal} : { modal: boolean,
         console.log('chat added:', chats, groupName)
         dispatch(addToChats({chatId: chatId, chatName: groupName, chatCategory: 'group', lastMessageSender: senderName,
             lastMessageText: "created a chat!", lastMessageTime: new Date(Date.now()).toDateString(), lastMessageType: "notification", unreadMsgs: 1}));
+        dispatch(setSearchText(''));
     }
 
     const onNewMsgInChat = (chatElement: IChat) => {
@@ -58,7 +58,6 @@ function ChatList({modal, setModal} : { modal: boolean,
     }
 
     useEffect(() => {
-
         fetchChats();
 
         const signalRService = new ChatListSignalRService(onAddGroupChat, onNewMsgInChat);
@@ -68,10 +67,14 @@ function ChatList({modal, setModal} : { modal: boolean,
         return () => signalRService.stop();
     }, [])
 
+    const filteredChats = useMemo(() => {
+        console.log('search:', searchInputText)
+        return chats.filter(chat => chat.chatName.includes(searchInputText));
+    }, [searchInputText, chats]);
 
     return (
         <div className={side.chats + custom_scroll}>
-            {chats.length ? chats.map(chat => 
+            {filteredChats.length ? filteredChats.map(chat => 
                 <Link to={chat.chatId} key={chat.chatId} className={side.chat_open_link}
                 onClick={() => 
                     setActiveChat(chat.chatId)
