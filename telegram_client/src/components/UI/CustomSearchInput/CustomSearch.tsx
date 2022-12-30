@@ -1,17 +1,17 @@
+import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import React, { useEffect } from 'react';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { useAppSelector } from '../../../hooks/useAppSelector';
-import { setSearchText } from '../../../store/reducers/chatsSearchInputSlice';
 import search from './CustomSearch.module.css';
 
-function CustomSearch({isSearchActive, setIsSearchActive}:
+function CustomSearch({isSearchActive, setIsSearchActive, placeholder, setSearchText, searchText}:
     {isSearchActive:boolean, 
-    setIsSearchActive:React.Dispatch<React.SetStateAction<boolean>>}) {
+    setIsSearchActive:React.Dispatch<React.SetStateAction<boolean>>, placeholder: string,
+    setSearchText: ActionCreatorWithPayload<string, string>, searchText: string}) {
 
     const dispatch = useAppDispatch();
     const searchClasses: string[] = [search.search_input];
     const searchSvgClasses: string[] = [search.search_svg];
-    const searchInputText = useAppSelector(state => state.chatsSearchInputReducer);
 
     if (isSearchActive) {
         searchClasses.push(search['search_input-active']);
@@ -38,8 +38,9 @@ function CustomSearch({isSearchActive, setIsSearchActive}:
             </svg>
             <input 
                 type="text"
-                placeholder='Type chat name here...'
+                placeholder={placeholder}
                 id={search.input}
+                value={searchText}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch(setSearchText(e.target.value))}
             />
         </label>

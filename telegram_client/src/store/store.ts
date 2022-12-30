@@ -1,6 +1,6 @@
 import contactListReducer from './reducers/contactListSlice';
 import chatsReducer from './reducers/chatListSlice';
-import chatsSearchInputReducer from './reducers/chatsSearchInputSlice';
+import sidePanelSearchInputReducer from './reducers/sidePanelSearchInputSlice';
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from './reducers/authSlice';
 
@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
     authReducer,
     chatsReducer,
     contactListReducer,
-    chatsSearchInputReducer
+    sidePanelSearchInputReducer
 });
 
 export const setupStore = () => {

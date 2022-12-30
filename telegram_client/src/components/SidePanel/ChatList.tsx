@@ -20,7 +20,8 @@ import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { setChats, addToChats, replaceExistingChat } from '../../store/reducers/chatListSlice';
 import { store } from '../..';
 import queryString from 'query-string';
-import { setSearchText } from '../../store/reducers/chatsSearchInputSlice';
+import { setChatsSearchText, setContactsSearchText } from '../../store/reducers/sidePanelSearchInputSlice';
+import ISearchText from '../../@types/ISearchText';
 
 
 function ChatList({modal, setModal} : { modal: boolean,
@@ -32,7 +33,7 @@ function ChatList({modal, setModal} : { modal: boolean,
     const dispatch = useAppDispatch();
 
     const chats = useAppSelector(state => state.chatsReducer);
-    const searchInputText = useAppSelector(state => state.chatsSearchInputReducer);
+    const searchInput: ISearchText = useAppSelector(state => state.sidePanelSearchInputReducer);
     const chatId: string = useParams().chatId!;
     const [activeChat, setActiveChat] = useState<string>(chatId);
 
@@ -50,7 +51,7 @@ function ChatList({modal, setModal} : { modal: boolean,
         console.log('chat added:', chats, groupName)
         dispatch(addToChats({chatId: chatId, chatName: groupName, chatCategory: 'group', lastMessageSender: senderName,
             lastMessageText: "created a chat!", lastMessageTime: new Date(Date.now()).toDateString(), lastMessageType: "notification", unreadMsgs: 1}));
-        dispatch(setSearchText(''));
+        dispatch(setChatsSearchText(''));
     }
 
     const onNewMsgInChat = (chatElement: IChat) => {
@@ -58,6 +59,7 @@ function ChatList({modal, setModal} : { modal: boolean,
     }
 
     useEffect(() => {
+        dispatch(setContactsSearchText(''));
         fetchChats();
 
         const signalRService = new ChatListSignalRService(onAddGroupChat, onNewMsgInChat);
@@ -68,9 +70,8 @@ function ChatList({modal, setModal} : { modal: boolean,
     }, [])
 
     const filteredChats = useMemo(() => {
-        console.log('search:', searchInputText)
-        return chats.filter(chat => chat.chatName.includes(searchInputText));
-    }, [searchInputText, chats]);
+        return chats.filter(chat => chat.chatName.includes(searchInput.chatsSearchText));
+    }, [searchInput.chatsSearchText, chats]);
 
     return (
         <div className={side.chats + custom_scroll}>
