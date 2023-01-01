@@ -14,7 +14,6 @@ function Home() {
             <SidePanel/>
             <div className={home.border} onMouseDown={resize}></div>
             <Outlet/>
-
         </div>
     );
 }

@@ -1,14 +1,18 @@
 .search {
-    height: 5%;
+    /* height: 5%; */
     background-color: white;
     display: flex;
     align-items: center;
     gap: 0.5em;
-    box-shadow: 2px 0px 0px 0px #D9DCE0;
-    /* right outline to fill the space from delimiter */
+    padding: 0.25em;
 }
 
 .side_panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.05fr 1fr;
+    row-gap: 0.25em;
+    
     height: 100%;
     background-color: white;
     max-width: 30%;
@@ -59,10 +63,10 @@
 }
 
 .chats {
+
     display: flex;
     flex-direction: column;
     padding: 0 0.5em;
-    height: 95%;
     background-color: white;
     overflow: hidden;
     overflow-y: auto;
@@ -112,6 +116,7 @@
 .chat_center :nth-child(2) {
     font-size: 0.9rem;
     color: #707991;
+    white-space: nowrap;
 }
 
 .chat_end { 
@@ -130,6 +135,8 @@
 .chat_img {
     width: 48px;
     height: 48px;
+    min-width: 48px;
+    max-width: 48px;
     border-radius: 50%;
     fill: lightgray;
     object-fit: cover;

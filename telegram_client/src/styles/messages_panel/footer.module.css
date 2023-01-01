@@ -4,10 +4,12 @@
     gap: 1.5em;
     width: 50%;
     background-color: none;
-    align-self: center;
     padding: 1em;
     width: 50%;
     max-width: 650px;
+
+    justify-self: center;
+    grid-row: 3/4;
 }
 .message {
     border-radius: 10px;
