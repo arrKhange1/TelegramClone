@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IOption } from '../../../@types/IOption';
+import BurgerIcon from '../../../icons/BurgerIcon';
 import popup from './CustomPopup.module.css';
 import PopupElement from './PopupElement';
 
@@ -12,16 +13,17 @@ function CustomPopup({setSelectedOption, options} : {setSelectedOption:React.Dis
     return (
         <div>
             <div className={popup.popup}>
-                <img src="imgs/burger_icon.png" 
-                className={popup.butt} 
-                alt=""
-                onClick={(e:React.MouseEvent<HTMLDivElement>) => {setIsActive(true); e.stopPropagation()}}
-                />
+                <button
+                    className={popup.butt}
+                    onClick={(e:React.MouseEvent<HTMLButtonElement>) => {setIsActive(true); e.stopPropagation()}}
+                >
+                    <BurgerIcon className={popup.burger_icon} />
+                </button>
                 
                 <div className={isActive ? `${popup.content} ${popup.active}` :
                     popup.content}>
                     {options.map((option,i) => 
-                        <PopupElement key={i} img={option.img} text={option.name} onClick={() => { setSelectedOption(option.name); setIsActive(false)}}/>    
+                        <PopupElement key={i}  text={option.name} onClick={() => { setSelectedOption(option.name); setIsActive(false)}}/>    
                     )}
                 </div>
                 

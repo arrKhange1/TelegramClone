@@ -26,6 +26,27 @@
     padding: 1em;
 }
 
+.smile_icon {
+    width: 24px;
+    height: 24px;
+}
+
+.attachment_icon {
+    width: 24px;
+    height: 24px;
+    transform: rotate(45deg);
+}
+
+.voice_record_icon {
+    width: 24px;
+    height: 24px;
+}
+
+.send_icon {
+    width: 24px;
+    height: 24px;
+}
+
 .message_input {
     display: flex;
     align-items: center;

@@ -40,7 +40,21 @@
     gap: 0.5em;
 }
 
-.controls svg {
+.search_icon {
+    width: 24px;
+    height: 24px;
+    fill: #707991;
+    border-radius: 50%;
+}
+
+.call_icon {
+    width: 24px;
+    height: 24px;
+    fill: #707991;
+    border-radius: 50%;
+}
+
+.more_icon {
     width: 24px;
     height: 24px;
     fill: #707991;
@@ -48,6 +62,7 @@
 }
 
 .controls svg:hover {
+    cursor: pointer;
     background-color: #D9DCE0;
     outline: 5px solid #D9DCE0;
     transition: all 200ms ease-in-out;

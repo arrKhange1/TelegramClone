@@ -10,7 +10,7 @@ import { $api } from '../../http/axios';
 import { useAuth } from '../../hooks/useAuth';
 import ContactsService from '../../services/ContactsService';
 import AddButton from './AddButton';
-import AddContactIcon from '../../icons/AddContactIcon';
+import AddContactIcon from '../../icons/AddIcon';
 import ContactsAddForm from './ContactsAddForm';
 import ModalWindow from './ModalWindow';
 import { setContacts, addContacts } from '../../store/reducers/contactListSlice';

@@ -1,15 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import BackArrowIcon from '../../../icons/BackArrowIcon';
 import popup from './CustomPopup.module.css';
 
 function PopupBackArrow({setSelectedOption} : 
     {setSelectedOption:React.Dispatch<React.SetStateAction<string>>}) {
 
     return (
-        <img src="imgs/back_arrow.png" 
+        <button
         className={popup.butt} 
-        alt="" 
-        onClick={() => {setSelectedOption('')}}/>
+        onClick={() => {setSelectedOption('')}}
+        >
+            <BackArrowIcon className={popup.back_arrow_icon} />
+        </button>
     );
 }
 

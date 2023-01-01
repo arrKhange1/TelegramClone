@@ -4,7 +4,7 @@ import ContactList from './ContactList';
 import ChatList from './ChatList';
 import SidePanelHeader from './SidePanelHeader';
 import AddButton from './AddButton';
-import AddContactIcon from '../../icons/AddContactIcon';
+import AddIcon from '../../icons/AddIcon';
 import ModalWindow from './ModalWindow';
 import ContactsAddForm from './ContactsAddForm';
 
@@ -22,7 +22,7 @@ function SidePanel() {
             {selectedOption === '' && <ChatList modal={modal} setModal={setModal}/>}
 
             <AddButton addCallback={() => setModal(true)}>
-                <AddContactIcon/>
+                <AddIcon className={side.add_icon}/>
             </AddButton>
 
         </div>

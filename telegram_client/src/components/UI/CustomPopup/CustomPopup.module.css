@@ -3,15 +3,22 @@
 }
 
 .butt {
-    width: 1.5em;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     margin-left: 1em;
+    border: none;
     border-radius: 50%;
+    box-sizing: border-box;
+    background: none;
 }
 
 .butt:hover {
     background: #D9DCE0;
-    outline: 5px solid #D9DCE0;
+    outline: 2px solid #D9DCE0;
     transition: background 200ms ease-in-out, outline 200ms ease-in-out ;
 }
 
@@ -37,10 +44,6 @@
     font-family: sans-serif;
 }
 
-.element img {
-    width: 20px;
-}
-
 .element:hover {
     transition: background 150ms ease-in-out;
     background: rgb(244, 244, 244, 0.95);
@@ -62,4 +65,18 @@
     z-index: 1000;
 }
 
+.contact_icon {
+    width: 24px;
+    height: 24px;
+    fill: lightgray;
+}
 
+.burger_icon {
+    width: 32px;
+    height: 32px;
+}
+
+.back_arrow_icon {
+    width: 32px;
+    height: 32px;
+}

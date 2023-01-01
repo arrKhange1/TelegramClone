@@ -5,7 +5,7 @@ import side from '../../styles/side_panel/side.module.css';
 import ChatListElement from './ChatListElement';
 import IChat from '../../@types/IChat';
 import AddButton from './AddButton';
-import AddContactIcon from '../../icons/AddContactIcon';
+import AddContactIcon from '../../icons/AddIcon';
 import ModalWindow from './ModalWindow';
 import ContactsAddForm from './ContactsAddForm';
 import SignalRService from '../../services/SignalRService';

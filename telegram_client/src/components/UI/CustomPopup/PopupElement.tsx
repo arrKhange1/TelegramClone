@@ -1,11 +1,12 @@
 import React from 'react';
+import ContactIcon from '../../../icons/ContactIcon';
 import popup from './CustomPopup.module.css';
 
-function PopupElement({img, text, onClick} :
-     {img: string, text: string, onClick: () => void}) {
+function PopupElement({ text, onClick} :
+     { text: string, onClick: () => void}) {
     return (
         <div onClick={onClick} className={popup.element}>
-            <img src={img} alt="contacts" />
+            <ContactIcon className={popup.contact_icon}/>
             <div>{text}</div>
         </div>
     );

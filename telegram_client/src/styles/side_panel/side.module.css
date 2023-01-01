@@ -17,6 +17,12 @@
     position: relative;
 }
 
+.add_icon {
+    width: 24px;
+    height: 24px;
+    fill: white;
+}
+
 .modal {
     position: fixed;
     top: 0;
@@ -50,12 +56,6 @@
     position: absolute;
     bottom: 1em;
     right: 1em;
-}
-
-.add_icon {
-    width: 24px;
-    height: 24px;
-    fill: white;
 }
 
 .chats {
@@ -94,13 +94,6 @@
     text-decoration: inherit;
 }
 
-.chat_img {
-    width: 48px;
-    height:48px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
 .chat_content {
     display: flex;
     justify-content: space-between;
@@ -132,6 +125,14 @@
     background-color: #78E378;
     color: white;
     padding: 0.35em; 
+}
+
+.chat_img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    fill: lightgray;
+    object-fit: cover;
 }
 
 /* .chat_end :first-child { // time, unreadmsgs were second child
