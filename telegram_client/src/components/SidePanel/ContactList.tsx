@@ -31,7 +31,6 @@ function ContactList({modal, setModal} : { modal: boolean,
     
     const contacts = useAppSelector(state => state.contactListReducer);
     const searchInput: ISearchText = useAppSelector(state => state.sidePanelSearchInputReducer);
-    const [contactToAdd, setContactToAdd] = useState('');
 
     const fetchContacts = async () => {
         const response = await ContactsService.getContacts(user.userId);
@@ -53,18 +52,6 @@ function ContactList({modal, setModal} : { modal: boolean,
         setActiveChat(chatId);
     }, [chatId])
 
-    useEffect(() => {
-        if (!modal)
-            setContactToAdd('');
-    }, [modal])
-
-    const addContact = async () => {
-        const response = await ContactsService.addContact(user.userId, contactToAdd);
-        dispatch(addContacts(response.data));
-        setModal(false);
-        dispatch(setContactsSearchText(''));
-    }
-
     return (
         <div className={side.chats + custom_scroll}>
             {filteredContacts.length ? filteredContacts.map(contact => 
@@ -80,9 +67,8 @@ function ContactList({modal, setModal} : { modal: boolean,
             <ModalWindow modal={modal} setModal={setModal}>
                 <ContactsAddForm 
                 setModal={setModal}
-                cb={addContact}
-                setContactName={setContactToAdd}
-                contactName={contactToAdd}
+                modal={modal}
+                setContactsSearchText={setContactsSearchText}
                 />
             </ModalWindow>
         </div>

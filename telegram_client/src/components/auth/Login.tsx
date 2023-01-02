@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { authenticate } from '../../store/reducers/authSlice';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAppSelector } from '../../hooks/useAppSelector';
@@ -12,11 +12,14 @@ import AuthService from '../../services/AuthService';
 import classes from '../../styles/auth/auth.module.css';
 import CustomInput from '../UI/CustomInput/CustomInput';
 import CustomButton from '../UI/CustomButton/CustomButton';
+import FormInput from '../UI/FormInput/FormInput';
+import FormButton from '../UI/FormButton/FormButton';
 
 function Login() {
 
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
      const userRedux: IUser = useAuth();
      const userLocalStorage = localStorage.getItem('userInfo');
@@ -33,9 +36,21 @@ function Login() {
 
     return (
         <form onSubmit={login} className={classes.form}>
-            <CustomInput type="text" placeholder='username' name='username'/>
-            <CustomInput type="password" placeholder='password' name='password' />
-            <CustomButton type='submit' value='Sign In'/>
+            <FormInput 
+                type="text"
+                placeholder='username'
+                name='username'
+                value={username}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} 
+            />
+            <FormInput
+            type="password" 
+            placeholder='password' 
+            name='password'
+            value={password}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} 
+             />
+            <FormButton type='submit' onClick={() => {}}>Sign In</FormButton>
             <Link to='/auth/reg'>Don't have an account yet?</Link>
         </form>
     );

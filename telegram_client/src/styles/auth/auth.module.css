@@ -11,9 +11,40 @@
 .form {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1em;
+}
+
+.form button, input {
+    width: 100%;
 }
 
 .tg_logo {
     width: 12em;
+}
+
+.server_error {
+    display: block;
+    padding: 0.25em;
+    text-align: center;
+    color: rgb(236, 234, 234);
+    font-weight: 700;
+}
+
+.server_error__hidden {
+    display: none;
+}
+
+.reg_error {
+    width: 100%;
+    display: block;
+    border: 1px solid rgb(247, 243, 243);
+    padding: 0.25em;
+    text-align: center;
+    color: rgb(236, 234, 234)
+}
+
+.reg_error__hidden {
+    display: none;
+    visibility: hidden;
 }

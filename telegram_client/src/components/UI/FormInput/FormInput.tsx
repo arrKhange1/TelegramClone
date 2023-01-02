@@ -1,15 +1,16 @@
 import React from 'react';
 import classes from './FormInput.module.css';
 
-function FormInput({placeholder, onChange, value, name} : {placeholder : string,
-    onChange: any, value: string, name: string}) {
+function FormInput({placeholder, type, name, value, onChange} : {placeholder : string, type: string,
+     name: string, value: string, onChange: (e:React.ChangeEvent<HTMLInputElement>) => void}) {
     return (
-        <input type="text"
-        value={value}
+        <input
+        type={type}
         placeholder={placeholder}
         className={classes.forminput}
-        onChange={onChange}
         name={name}
+        value={value}
+        onChange={onChange}
         />
     );
 }

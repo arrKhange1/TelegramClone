@@ -1,5 +1,5 @@
 import home from '../styles/home/home.module.css';
-import {resize} from '../services/ResizeService';
+import {resize} from '../utils/ResizeUtil';
 import SidePanel from './SidePanel/SidePanel';
 import { Outlet } from 'react-router-dom';
 import { useAppSelector } from '../hooks/useAppSelector';

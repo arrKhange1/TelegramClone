@@ -14,7 +14,7 @@ function ChatsAddForm({setModal, modal} : {
 
     const user = useAuth();
     const [contacts, setContacts] = useState<IContact[]>();
-    const [chatToAdd, setChatToAdd] = useState<string>('');
+    const [chatToAdd, setChatToAdd] = useState('');
         
     const fetchContacts = async () => {
         const response = await ContactsService.getContacts(user.userId);
@@ -23,8 +23,7 @@ function ChatsAddForm({setModal, modal} : {
     }
 
     useEffect(() => {
-        if (modal)
-            fetchContacts();
+        modal ? fetchContacts() : setChatToAdd('');
     }, [modal])
 
     const addGroupChat = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,10 +53,11 @@ function ChatsAddForm({setModal, modal} : {
             <main className={modalForm.form_content}>
                 <label>
                     <FormInput 
+                        type='text'
                         value={chatToAdd}
-                        name={'groupName'}
+                        onChange={(e:React.ChangeEvent<HTMLInputElement>) => setChatToAdd(e.target.value)}
+                        name='groupName'
                         placeholder='group name'
-                        onChange={(e:ChangeEvent<HTMLInputElement>) => setChatToAdd(e.target.value)}
                     />
                 </label>
                 <p>Choose members from your contacts:</p>
