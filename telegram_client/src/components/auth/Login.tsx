@@ -14,12 +14,13 @@ import CustomInput from '../UI/CustomInput/CustomInput';
 import CustomButton from '../UI/CustomButton/CustomButton';
 import FormInput from '../UI/FormInput/FormInput';
 import FormButton from '../UI/FormButton/FormButton';
+import IAuthLoginFormFields from '../../@types/IAuthLoginFields';
 
 function Login() {
 
     const navigate = useNavigate();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [formFields, setFormFields] = useState<IAuthLoginFormFields>({username: '', password: ''});
+    const [serverError, setServerError] = useState('');
 
      const userRedux: IUser = useAuth();
      const userLocalStorage = localStorage.getItem('userInfo');
@@ -27,8 +28,14 @@ function Login() {
     const login = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        await AuthService.login(e);
-        navigate('/');
+        try {
+            await AuthService.login(e);
+            navigate('/');
+        }
+        catch(e) {
+           const errorText = (e as AxiosError).response?.data as string;
+           setServerError(errorText);
+        }
     }
 
     console.log('Login (redux):', userRedux);
@@ -40,17 +47,19 @@ function Login() {
                 type="text"
                 placeholder='username'
                 name='username'
-                value={username}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} 
+                value={formFields.username}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormFields({...formFields, username: e.target.value})} 
             />
             <FormInput
             type="password" 
             placeholder='password' 
             name='password'
-            value={password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} 
+            value={formFields.password}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormFields({...formFields, password: e.target.value})} 
              />
             <FormButton type='submit' onClick={() => {}}>Sign In</FormButton>
+            <div className={serverError.length ? classes.server_error : 
+                `${classes.server_error} ${classes.server_error__hidden}`}>{serverError}</div>
             <Link to='/auth/reg'>Don't have an account yet?</Link>
         </form>
     );

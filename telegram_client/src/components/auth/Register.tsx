@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import React, { FormEvent, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import IAuthFormErrors from '../../@types/IAuthFormErrors';
+import IAuthFormFields from '../../@types/IAuthRegFormFields';
 import { ILoginResponse, IUser } from '../../@types/IUser';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAuth } from '../../hooks/useAuth';
