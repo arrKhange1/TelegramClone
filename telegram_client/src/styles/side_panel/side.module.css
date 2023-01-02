@@ -103,7 +103,6 @@
     justify-content: space-between;
     flex-direction: column;
     gap: 0.5em;
-    /* overflow: hidden; */
     text-decoration:none;
 }
 
@@ -151,6 +150,7 @@
     justify-content: center;
     align-items: center;
     width: 1rem;
+    height: 1rem;
     border-radius: 50%;
     background-color: #78E378;
     color: white;

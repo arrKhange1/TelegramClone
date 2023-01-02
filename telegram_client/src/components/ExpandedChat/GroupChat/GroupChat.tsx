@@ -43,7 +43,6 @@ function GroupChat() {
 
         const signalRService = new GroupChatSignalRService(onAddMsgInGroupChat);
         signalRService.start();
-        console.log('conn to groupchat:', signalRService.connection);
 
         window.addEventListener('keydown', closeChat);
 
@@ -61,7 +60,6 @@ function GroupChat() {
 
     const getChat = async () => {
         const response = await $api.get<IGroupChat>(`chats/getgroupchat?chatid=${params.chatId}`);
-        console.log(response.data)
         setChat(response.data)
     }
 
@@ -73,7 +71,6 @@ function GroupChat() {
         }
         const response = await $api.post('chats/sendgroupchat', groupChatMessage);
         setTextMsg('');
-        console.log(response.data)
     };
 
     return (

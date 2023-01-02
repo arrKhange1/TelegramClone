@@ -18,7 +18,6 @@ function ChatsAddForm({setModal, modal} : {
         
     const fetchContacts = async () => {
         const response = await ContactsService.getContacts(user.userId);
-        console.log(response);
         setContacts([...response.data]);
     }
 
@@ -43,8 +42,6 @@ function ChatsAddForm({setModal, modal} : {
           };
         
         await $api.post('chats/addgroupchat', payload);
-
-        console.log(membersIds, membersNames, groupName);
     }
 
     return (

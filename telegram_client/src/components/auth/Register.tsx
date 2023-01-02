@@ -18,10 +18,6 @@ function Register() {
 
     const navigate = useNavigate();
 
-    // for dev purposes
-    const userRedux: IUser = useAuth();
-    const userLocalStorage = localStorage.getItem('userInfo');
-    
     const [formFields, setFormFields] = useState<IAuthFormFields>({username: '', password: '', confirmPassword: ''});
     const [formErrors, setFormErrors] = useState<IAuthFormErrors>({usernameError: '', passwordError: '', confirmPasswordError: ''});
     const [serverError, setServerError] = useState<string>('');
@@ -63,7 +59,6 @@ function Register() {
     const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormFields({...formFields, password: e.target.value});
         if (e.target.value.length < 8) {
-            console.log(e.target.value)
             setFormErrors({...formErrors, passwordError: "Password is less 8 symbols!"});
         }
         else 
@@ -82,10 +77,6 @@ function Register() {
         else 
             setFormErrors({...formErrors, confirmPasswordError: ""});
     }
-
-     // for dev purposes
-    console.log('Login (redux):', userRedux);
-    console.log('Login (localStorage): ', userLocalStorage);
 
     return (
         <form onSubmit={register} className={classes.form}>

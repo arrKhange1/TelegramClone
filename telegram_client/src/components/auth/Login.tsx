@@ -22,9 +22,6 @@ function Login() {
     const [formFields, setFormFields] = useState<IAuthLoginFormFields>({username: '', password: ''});
     const [serverError, setServerError] = useState('');
 
-     const userRedux: IUser = useAuth();
-     const userLocalStorage = localStorage.getItem('userInfo');
-
     const login = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
@@ -37,9 +34,6 @@ function Login() {
            setServerError(errorText);
         }
     }
-
-    console.log('Login (redux):', userRedux);
-    console.log('Login (localStorage): ', userLocalStorage);
 
     return (
         <form onSubmit={login} className={classes.form}>

@@ -32,7 +32,7 @@ namespace TelegramClone.Services
 			httpContext.Response.Cookies.Append("access", token, new CookieOptions
 			{
 				Expires = DateTimeOffset.Now.AddYears(1)
-			});; // add permanent cookie
+			}); 
 			
 		}
 

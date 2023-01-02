@@ -44,7 +44,6 @@ function PrivateChat() {
 
         const signalRService = new PrivateChatSignalRService(onAddMsgInPrivateChat);
         signalRService.start();
-        console.log('conn to privatechat:', signalRService.connection);
 
         window.addEventListener('keydown', closeChat);
 
@@ -62,7 +61,6 @@ function PrivateChat() {
 
     const getChat = async () => {
         const response = await $api.get<IPrivateChat>(`chats/getprivatechat?fromId=${user.userId}&toId=${params.chatId}`);
-        console.log(response.data)
         setChat(response.data)
     }
 
@@ -75,7 +73,6 @@ function PrivateChat() {
         }
         const response = await $api.post('chats/sendprivatechat', privateChatMessage);
         setTextMsg('');
-        console.log(response.data)
     };
 
     return (

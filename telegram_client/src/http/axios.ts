@@ -21,7 +21,6 @@ $api.interceptors.response.use(config => {
 
         if (!refreshPromise.refresh) {
             refreshPromise.refresh = axios.post<string>('auth/refresh').then(res => {
-                console.log('send refresh from axios interceptor');
                 refreshPromise.refresh = null;
                 store.dispatch(setAccessToken(res.data));
             })
@@ -33,7 +32,6 @@ $api.interceptors.response.use(config => {
         })
         .catch(async (e: AxiosError) => {
             if (e.response?.status === 401) {
-                console.log('refresh error on axios interceptor'); // force logout
                 refreshPromise.refresh = null;
                 await AuthService.logout();
             }

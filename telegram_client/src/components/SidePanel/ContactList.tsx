@@ -34,7 +34,6 @@ function ContactList({modal, setModal} : { modal: boolean,
 
     const fetchContacts = async () => {
         const response = await ContactsService.getContacts(user.userId);
-        console.log(response);
         dispatch(setContacts([...response.data]));
     }
 

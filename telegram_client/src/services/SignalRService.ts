@@ -24,7 +24,6 @@ export default class SignalRService {
 
             if (!refreshPromise.refresh) {
               refreshPromise.refresh = axios.post<string>('auth/refresh').then(res => {
-                console.log('send refresh from signalr interceptor');
                 refreshPromise.refresh = null;
                 store.dispatch(setAccessToken(res.data));
                 return res.data;
@@ -37,7 +36,6 @@ export default class SignalRService {
             })
             .catch(async (e: AxiosError) => {
               if ((e as AxiosError).response?.status === 401) {
-                        console.log('refresh error on signalr interceptor'); // force logout
                         refreshPromise.refresh = null;
                         await AuthService.logout();
                     }
@@ -46,9 +44,6 @@ export default class SignalRService {
     }
 
     stop() {
-      this.connection.stop().then((res) => {
-          console.log('stop: ', this.connection);
-      });
-      
+      this.connection.stop();
     }
 }

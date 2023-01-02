@@ -14,18 +14,15 @@ import PrivateChat from './PrivateChat/PrivateChat';
 import GroupChat from './GroupChat/GroupChat';
 
 function ExpandedChat() {
-    const navigate = useNavigate();
     const chatId = useParams().chatId;
     const chatList = useAppSelector(state => state.chatsReducer);
     const contactList = useAppSelector(state => state.contactListReducer);
 
     if (contactList.some(contact => contact.contactId === chatId) ||
          chatList.find(chat => chat.chatId === chatId)?.chatCategory === 'private') {
-        console.log('priv', chatList.find(chat => chat.chatId === chatId))
         return <PrivateChat/>;
     }
     else if (chatList.some(chat => chat.chatId === chatId)) {
-        console.log('group')
         return <GroupChat/>;
     }
     return <div>Page unavailable</div>;
