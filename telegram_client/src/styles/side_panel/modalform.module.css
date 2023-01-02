@@ -21,7 +21,19 @@
 }
 
 label {
-    display: block;
+    display: flex; 
+    width: 100%;
+}
+
+.list_label {
+    justify-content: space-between;
+    cursor: pointer;
+    padding-bottom: 0.3em;
+}
+
+.list_label input {
+    margin: 0;
+    width: 1em;
 }
 
 main {

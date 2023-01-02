@@ -64,9 +64,9 @@ function ChatsAddForm({setModal, modal} : {
                 <ul>
                     {
                     contacts?.map(contact => 
-                        <label key={contact.contactId}>
-                            <input type="checkbox" name='ids' value={contact.contactId}/>
+                        <label className={modalForm.list_label} key={contact.contactId}>
                             {contact.contactName}
+                            <input type="checkbox" name='ids' value={contact.contactId}/>
                             <input type="hidden" name='names' value={contact.contactName}/> 
                         </label>
                         )

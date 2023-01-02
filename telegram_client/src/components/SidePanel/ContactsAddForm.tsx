@@ -35,7 +35,6 @@ function ContactsAddForm({setModal, modal, setContactsSearchText} : {setModal:Re
     return (
         <form onSubmit={addContact} className={modalForm.form}> 
             <header className={modalForm.form_header}>New Contact</header>
-            <main className={modalForm.form_content}>
                 <FormInput 
                 type='text'
                 value={contactToAdd}
@@ -43,7 +42,6 @@ function ContactsAddForm({setModal, modal, setContactsSearchText} : {setModal:Re
                 placeholder='username'
                 name='username'
                 />
-            </main>
             <footer className={modalForm.form_footer}>
                 <FormButton type='button' onClick={() => setModal(false)}>CANCEL</FormButton>
                 <FormButton type='submit' onClick={() => setModal(false)}>DONE</FormButton>
