@@ -50,10 +50,12 @@
 
 .username {
     color: #4578EE;
+    height: fit-content;
 }
 
 .owner_msg {
     align-self: flex-end;
+    background-color: #EEFFDEFF;
 }
 
 .others_msg {

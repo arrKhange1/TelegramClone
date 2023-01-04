@@ -4,7 +4,7 @@ import IExpandedChat, { IGroupChat, IPrivateChat } from '../../../@types/IExpand
 import { $api } from '../../../http/axios';
 import Footer from '../Footer';
 import Header from './Header';
-import MessagesList from '../MessagesList';
+import MessagesList from './MessagesList';
 import msgs from '../../../styles/messages_panel/messages.module.css';
 import PrivateChatSignalRService from '../../../services/PrivateChatSignalRService';
 import { useAuth } from '../../../hooks/useAuth';
