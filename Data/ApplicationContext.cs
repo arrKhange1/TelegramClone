@@ -36,7 +36,7 @@ namespace TelegramClone.Data
             var admin = modelBuilder.Entity<Role>().HasData(adminRole);
             var user = modelBuilder.Entity<Role>().HasData(userRole);
 
-            modelBuilder.Entity<User>().HasData(new User("admin", "123456", adminRole.RoleId));
+            modelBuilder.Entity<User>().HasData(new User("admin", BCrypt.Net.BCrypt.HashPassword("12345678"), adminRole.RoleId));
 
             modelBuilder.Entity<GroupChatMessageType>().HasData(new GroupChatMessageType("message"));
 

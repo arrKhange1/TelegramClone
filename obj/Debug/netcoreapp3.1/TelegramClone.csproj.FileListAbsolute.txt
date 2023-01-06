@@ -80,3 +80,4 @@ C:\Users\Артур\source\repos\TelegramClone\TelegramClone\obj\Debug\netcoreap
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\obj\Debug\netcoreapp3.1\TelegramClone.pdb
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\obj\Debug\netcoreapp3.1\TelegramClone.genruntimeconfig.cache
 C:\Users\Артур\source\repos\TelegramClone\TelegramClone\obj\Debug\netcoreapp3.1\TelegramClone.csproj.AssemblyReference.cache
+C:\Users\Артур\source\repos\TelegramClone\TelegramClone\bin\Debug\netcoreapp3.1\BCrypt.Net-Next.dll

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "XO5F9u+vFJxSV/O0ftmAh4ajSBbCkyBlwL5ITuYz+DE3xl19VDG7lxezC/tw38gP3cClejUK+iLdjNTSIQdyoA==",
+  "dgSpecHash": "966fFkjocGLLo3un9uP72xV2gbOmSNap3jKM8ngs8LSobonBW+X3fJWka2X2biD660JCAgqu6VZ2yahdWsA4qg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Артур\\source\\repos\\TelegramClone\\TelegramClone\\TelegramClone.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Артур\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Артур\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Артур\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.30\\microsoft.aspnetcore.authentication.jwtbearer.3.1.30.nupkg.sha512",
     "C:\\Users\\Артур\\.nuget\\packages\\microsoft.aspnetcore.nodeservices\\3.1.30\\microsoft.aspnetcore.nodeservices.3.1.30.nupkg.sha512",

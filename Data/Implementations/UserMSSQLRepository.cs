@@ -15,14 +15,17 @@ namespace TelegramClone.Data.Implementations
         {
             _context = context;
         }
-        public User GetUserByUsernameAndPassword(UserLoginRequestDTO userLogin)
+        public bool VerifyUserPassword(UserLoginRequestDTO userLogin, User user)
         {
-            return _context.Users.FirstOrDefault(user => user.UserName == userLogin.UserName &&
-                user.Password == userLogin.Password);
+            return BCrypt.Net.BCrypt.Verify(userLogin.Password, user.Password);
         }
         public User GetUserByUsername(string userName)
         {
             return _context.Users.FirstOrDefault(user => user.UserName == userName);
+        }
+        public User GetUserByUserLoginDTO(UserLoginRequestDTO userLogin)
+        {
+            return _context.Users.FirstOrDefault(user => user.UserName == userLogin.UserName);
         }
 
         public User GetUserById(Guid userId)

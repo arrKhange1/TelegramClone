@@ -16,6 +16,7 @@ using TelegramClone.Data;
 using TelegramClone.Data.Interfaces;
 using TelegramClone.Models;
 using TelegramClone.Models.RequestDTO;
+using TelegramClone.Models.ResponseDTO;
 using TelegramClone.Services;
 
 namespace TelegramClone.Controllers
@@ -86,16 +87,12 @@ namespace TelegramClone.Controllers
             {
                 var accessToken = _jwtService.GenerateAccessToken(user);
                 string newRefreshToken = await _refreshTokenService.RefreshToken(user);
+                var role = _roleService.GetRoleById(user).RoleName;
 
                 _jwtService.AddAccessTokenInCookie(HttpContext, accessToken);
                 _refreshTokenService.AddRefreshTokenInCookie(HttpContext, newRefreshToken);
 
-                return Ok(new {
-                    userId = user.UserId,
-                    userName = user.UserName, 
-                    role = _roleService.GetRoleById(user).RoleName,
-                    accessToken = accessToken
-                });
+                return Ok(new AuthenticatedUserResponseDTO(user.UserId, user.UserName, role, accessToken));
             }
 
             return NotFound("User not found");
@@ -105,24 +102,17 @@ namespace TelegramClone.Controllers
         [HttpPost ("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterRequestDTO userLogin)
         {
-            var user = _userService.GetUserByUserName(userLogin.UserName);
+            var user = _userService.GetUserByUserLoginDTO(userLogin);
             if (user == null)
             {
                 var createdUser = await _userService.CreateUserFromDTO(userLogin);
-
                 var accessToken = _jwtService.GenerateAccessToken(createdUser);
                 var refreshToken = await _refreshTokenService.AddNewRefreshToken(createdUser);
 
                 _jwtService.AddAccessTokenInCookie(HttpContext, accessToken);
                 _refreshTokenService.AddRefreshTokenInCookie(HttpContext, refreshToken);
 
-                return Ok(new
-                {
-                    userId = createdUser.UserId,
-                    userName = createdUser.UserName,
-                    role = "user",
-                    accessToken = accessToken
-                });
+                return Ok(new AuthenticatedUserResponseDTO(createdUser.UserId, createdUser.UserName, "user", accessToken));
             }
 
             return BadRequest("User already exists");

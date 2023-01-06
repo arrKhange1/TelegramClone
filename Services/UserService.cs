@@ -41,6 +41,9 @@ namespace TelegramClone.Services
         public User GetUserByUserName (string userName) {
             return _userRepository.GetUserByUsername(userName);
         }
+         public User GetUserByUserLoginDTO (UserLoginRequestDTO userLogin) {
+            return _userRepository.GetUserByUserLoginDTO(userLogin);
+        }
 
         public User GetUserById(Guid userId)
         {
@@ -50,22 +53,22 @@ namespace TelegramClone.Services
         public async Task<User> CreateUserFromDTO(UserLoginRequestDTO userLogin)
         {
             var userRole = _roleRepository.GetRoleByName("user");
-            var user = new User(userLogin.UserName, userLogin.Password, userRole.RoleId);
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userLogin.Password, "salt", false, BCrypt.Net.HashType.SHA384);
+            var user = new User(userLogin.UserName, hashedPassword, userRole.RoleId);
             var createdUser = await _userRepository.AddUser(user);
             return createdUser;
         }
 
-        public User GetUserByUsernameAndPassword(UserLoginRequestDTO userLogin)
-        {
-            return _userRepository.GetUserByUsernameAndPassword(userLogin);
-        }
-
         public User Authenticate(UserLoginRequestDTO userLogin)
         {
-            var authenticatedUser = _userRepository.GetUserByUsernameAndPassword(userLogin);
-            if (authenticatedUser != null)
-                return authenticatedUser;
+            var databaseUser = _userRepository.GetUserByUserLoginDTO(userLogin);
+            if (databaseUser == null)
+                return null;
+            if (_userRepository.VerifyUserPassword(userLogin, databaseUser))
+                return databaseUser;
             return null;
+
+           
         }
     }
 }
