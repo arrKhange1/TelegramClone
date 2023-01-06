@@ -53,7 +53,7 @@ namespace TelegramClone.Services
         public async Task<User> CreateUserFromDTO(UserLoginRequestDTO userLogin)
         {
             var userRole = _roleRepository.GetRoleByName("user");
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userLogin.Password, "salt", false, BCrypt.Net.HashType.SHA384);
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userLogin.Password);
             var user = new User(userLogin.UserName, hashedPassword, userRole.RoleId);
             var createdUser = await _userRepository.AddUser(user);
             return createdUser;
