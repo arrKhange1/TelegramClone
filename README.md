@@ -27,7 +27,7 @@ If one of the members has a chat closed, unread messages will be collecting in t
 
 ### Database scheme
 <p align="center">
-  <img width="720" height="720" src="https://user-images.githubusercontent.com/73338488/211146002-e17a1d69-b59a-48e0-874a-52b3c6809d3e.jpg"/>
+  <img width="720" height="720" src="https://user-images.githubusercontent.com/73338488/211146315-fd004f9b-872c-4aae-9d79-e3334cb0e78c.jpg"/>
 </p>
 
 ### Additional features
