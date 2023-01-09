@@ -44,6 +44,7 @@ If one of the members has a chat closed, unread messages will be collecting in t
 * HTML & CSS
 * TypeScript
 * React TS
+* Redux Toolkit
 * CSS Modules
 
 ## Challenges
